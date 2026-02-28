@@ -73,7 +73,10 @@ export async function generateMetadata(props: PageProps<'/blog/[slug]'>): Promis
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return blog.getPages().map((page) => ({
-    slug: page.slugs[0],
-  }));
+  return blog
+    .getPages()
+    .filter((page) => page.slugs[0] !== undefined)
+    .map((page) => ({
+      slug: page.slugs[0] as string,
+    }));
 }
