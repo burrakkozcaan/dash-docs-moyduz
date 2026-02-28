@@ -1,0 +1,210 @@
+---
+title: Social Media Entegrasyonu
+description: Facebook, Instagram, TikTok ve diğer sosyal medya platformları ile entegrasyon.
+---
+
+## Social Media Entegrasyonları
+
+E-ticaret için sosyal medya pazarlama ve satış entegrasyonları.
+
+---
+
+## Facebook / Instagram
+
+### Facebook Pixel
+
+Temel pixel kurulumu:
+
+```html
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'PIXEL_ID');
+fbq('track', 'PageView');
+</script>
+```
+
+### Standard Events
+
+| Event | JavaScript |
+|-------|------------|
+| Ürün görüntüleme | `fbq('track', 'ViewContent')` |
+| Sepete ekleme | `fbq('track', 'AddToCart')` |
+| Checkout | `fbq('track', 'InitiateCheckout')` |
+| Satın alma | `fbq('track', 'Purchase')` |
+
+### Purchase Event Detay
+
+```javascript
+fbq('track', 'Purchase', {
+  value: 599.99,
+  currency: 'TRY',
+  content_ids: ['SKU-001', 'SKU-002'],
+  content_type: 'product',
+  num_items: 2
+});
+```
+
+---
+
+## Instagram Shopping
+
+### Ürün Kataloğu
+
+Commerce Manager için ürün feed:
+
+```json
+{
+  "id": "SKU-001",
+  "title": "Ürün Adı",
+  "description": "Ürün açıklaması",
+  "availability": "in stock",
+  "condition": "new",
+  "price": "299.99 TRY",
+  "link": "https://www.example.com/urun/sku-001",
+  "image_link": "https://cdn.example.com/images/sku-001.jpg",
+  "brand": "Marka Adı"
+}
+```
+
+### Shop Özellikleri
+
+- Ürün etiketleme
+- Story'de ürün linki
+- Checkout on Instagram (ABD)
+- Live Shopping
+
+---
+
+## TikTok
+
+### TikTok Pixel
+
+```javascript
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;
+  var ttq=w[t]=w[t]||[];
+  ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
+  // ...
+}(window, document, 'ttq');
+
+ttq.load('PIXEL_ID');
+ttq.page();
+```
+
+### TikTok Shop
+
+- Ürün kataloğu entegrasyonu
+- Canlı yayın satış
+- Affiliate programı
+- Shoppable video
+
+---
+
+## Pinterest
+
+### Pinterest Tag
+
+```javascript
+!function(e){
+  if(!window.pintrk){
+    window.pintrk = function () {
+      window.pintrk.queue.push(Array.prototype.slice.call(arguments))
+    };
+    var n=window.pintrk;
+    n.queue=[],n.version="3.0";
+    var t=document.createElement("script");
+    t.async=!0,t.src=e;
+    var r=document.getElementsByTagName("script")[0];
+    r.parentNode.insertBefore(t,r)
+  }
+}("https://s.pinimg.com/ct/core.js");
+
+pintrk('load', 'TAG_ID');
+pintrk('page');
+```
+
+### Rich Pins
+
+Ürün bilgilerinin otomatik gösterimi:
+
+- Fiyat
+- Stok durumu
+- Ürün açıklaması
+
+---
+
+## Social Commerce Metrikleri
+
+| Platform | Metrik | Hedef |
+|----------|--------|-------|
+| Facebook | ROAS | > 3x |
+| Instagram | Engagement Rate | > 3% |
+| TikTok | Video Views | > 10K |
+| Pinterest | Pin Saves | > 5% |
+
+---
+
+## Influencer Entegrasyonu
+
+### Takip Parametreleri
+
+```
+https://www.example.com/urun/sku-001?
+utm_source=instagram
+&utm_medium=influencer
+&utm_campaign=yaz2026
+&utm_content=influencer_adi
+```
+
+### Affiliate Tracking
+
+| Alan | Açıklama |
+|------|----------|
+| `ref` | Influencer referans kodu |
+| `discount` | İndirim kodu |
+| `commission` | Komisyon oranı |
+
+---
+
+## Ürün Feed Senkronizasyonu
+
+### Çoklu Platform Feed
+
+```
+E-Ticaret Ürün DB
+    ↓
+Feed Generator
+    ↓
+├── Facebook Catalog
+├── Google Merchant
+├── TikTok Catalog
+└── Pinterest Catalog
+```
+
+### Otomatik Güncelleme
+
+- Stok değişikliği → Anlık
+- Fiyat değişikliği → Anlık
+- Yeni ürün → Saatlik
+- Silinen ürün → Günlük
+
+---
+
+<Callout type="info">
+  **Not:** Her platform için ayrı ürün feed gereksinimi olabilir. Format farklılıklarına dikkat edin.
+</Callout>
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

@@ -1,0 +1,85 @@
+---
+title: Marketplace Projesi
+description: Çoklu satıcı marketplace platformu çözümleri.
+---
+
+## Marketplace Projesi
+
+Birden fazla satıcının tek platformda satış yapabildiği marketplace çözümü.
+
+---
+
+## Platform Özellikleri
+
+### Satıcı Yönetimi
+
+- **Satıcı Kayıt** - Onay süreçli kayıt sistemi
+- **Satıcı Paneli** - Bağımsız yönetim paneli
+- **Komisyon Sistemi** - Kategori bazlı komisyon
+- **Ödeme Dağıtımı** - Otomatik hakediş hesaplama
+
+### Ürün Yönetimi
+
+- **Katalog Entegrasyonu** - Merkezi ürün kataloğu
+- **Varyant Yönetimi** - Satıcı bazlı stok ve fiyat
+- **Onay Akışı** - Ürün onay mekanizması
+- **Toplu Yükleme** - Excel/API ile toplu ürün
+
+---
+
+## Komisyon Modelleri
+
+| Model | Açıklama | Örnek |
+|-------|----------|-------|
+| **Sabit Komisyon** | Her satıştan sabit oran | %10 |
+| **Kategori Bazlı** | Kategoriye göre değişen | Elektronik %8, Moda %15 |
+| **Satıcı Bazlı** | Satıcıya özel oran | Premium satıcı %5 |
+| **Hacim Bazlı** | Satış hacmine göre | 100K+ satış %7 |
+
+---
+
+## Teknik Özellikler
+
+### Sipariş Akışı
+
+```
+Müşteri Siparişi
+    ↓
+Platform Onay
+    ↓
+Satıcıya Bildirim
+    ↓
+Satıcı Kargolama
+    ↓
+Teslimat
+    ↓
+Hakediş Hesaplama
+    ↓
+Satıcıya Ödeme
+```
+
+### Ödeme Dağıtımı
+
+- **Havuz Hesabı** - Tüm ödemeler merkezi hesapta
+- **Komisyon Kesintisi** - Otomatik komisyon hesaplama
+- **Hakediş Periyodu** - Haftalık/aylık ödeme
+- **Fatura Yönetimi** - Otomatik fatura oluşturma
+
+---
+
+## Satıcı Dashboard
+
+| Modül | Özellikler |
+|-------|------------|
+| **Ürünler** | Ürün ekleme, düzenleme, stok |
+| **Siparişler** | Sipariş listesi, kargo, iade |
+| **Finansal** | Hakediş, komisyon, fatura |
+| **Raporlar** | Satış, performans, trend |
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

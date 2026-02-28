@@ -1,0 +1,146 @@
+---
+title: AEO (Answer Engine Optimization)
+description: Sesli asistanlar ve soru-cevap motorları için e-ticaret optimizasyonu. Google Assistant, Siri, Alexa rehberi.
+---
+
+## AEO Nedir?
+
+AEO (Answer Engine Optimization), sesli asistanlar ve direkt cevap veren arama motorları için optimizasyondur. Google Assistant, Siri, Alexa ve Featured Snippets'ta görünmenizi hedefler.
+
+## Neden AEO Önemli? (Veriler)
+ 
+Sesli ve asistif aramaların yükselişi:
+ 
+> **Sesli Arama:** ComScore verilerine göre, 2024 yılı itibariyle tüm mobil aramaların **%50'si** sesli komutlarla yapılıyor.
+ 
+> **Sıfırıncı Sıra:** Google aramalarının **%30'undan fazlası**, kullanıcı bir siteye tıklamadan (Zero-click searches) doğrudan sonuç sayfasında cevaplanıyor. Bu alanda ("Sıfırıncı Sıra") yer almak, marka bilinirliği için en değerli yatırımdır.
+
+---
+
+## Sesli Arama Davranışı
+
+| Özellik | Metin Arama | Sesli Arama |
+|---------|------------|-------------|
+| Sorgu uzunluğu | 2-3 kelime | 5-7 kelime |
+| Sorgu tipi | Anahtar kelime | Doğal soru |
+| Beklenti | Sonuç listesi | Tek cevap |
+
+### Örnekler
+
+```
+Metin: "iphone 15 fiyat"
+Sesli: "iPhone 15'in fiyatı ne kadar?"
+
+Metin: "en iyi kulaklık"
+Sesli: "Gürültü engelleyen en iyi kulaklık hangisi?"
+```
+
+---
+
+## AEO İçerik Stratejisi
+
+### 1. FAQ Sayfaları
+
+```markdown
+### Kargo ne kadar sürer?
+İstanbul içi 1-2 iş günü, şehir dışı 2-4 iş günü.
+
+### Kargo ücreti ne kadar?
+500 TL üzeri siparişlerde ücretsiz.
+```
+
+### 2. Direkt Cevap Formatı
+
+```markdown
+❌ Zayıf:
+"iPhone 15 Pro, Apple'ın 2023 yılında çıkardığı..."
+
+✓ Güçlü:
+"iPhone 15 Pro 48 megapiksel ana kameraya sahiptir."
+```
+
+---
+
+## Teknik Gereksinimler
+
+### FAQ Schema
+
+```json
+{
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "Kargo ücretsiz mi?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "500 TL üzeri ücretsiz."
+    }
+  }]
+}
+```
+
+### Speakable Schema
+
+```json
+{
+  "@type": "WebPage",
+  "speakable": {
+    "cssSelector": [".faq-answer"]
+  }
+}
+```
+
+---
+
+## Featured Snippet Kazanma
+
+### Paragraf Snippet
+
+```markdown
+## E-ticaret sitesi nedir?
+
+E-ticaret sitesi, internet üzerinden ürün satışı
+yapılmasını sağlayan online mağaza platformudur.
+```
+
+### Liste Snippet
+
+```markdown
+## E-ticaret kurma adımları
+
+1. Domain seçimi
+2. Platform belirleme
+3. Tasarım ve kurulum
+4. Ürün ekleme
+```
+
+---
+
+## AEO Checklist
+
+- [ ] FAQ sayfası soru-cevap formatında
+- [ ] Cevaplar direkt ve kısa
+- [ ] FAQ schema eklendi
+- [ ] Speakable schema
+- [ ] Mobile-first tasarım
+
+---
+
+## Sonraki Adımlar
+
+<Cards>
+  <Card title="GEO Rehberi" href="/docs/karar-rehberi/geo">
+    AI arama motorları için optimizasyon.
+  </Card>
+  <Card title="Normal SEO" href="/docs/karar-rehberi/normal-seo">
+    AEO'nun temeli güçlü normal SEO'dur.
+  </Card>
+</Cards>
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

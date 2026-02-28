@@ -1,0 +1,84 @@
+"use client"
+
+import { useRef } from "react"
+import { UploadSimple } from "@phosphor-icons/react/dist/ssr"
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@repo/ui/components/ui/dialog"
+
+type UploadAudioModalProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onFileSelect: (fileName: string) => void
+}
+
+export function UploadAudioModal({
+  open,
+  onOpenChange,
+  onFileSelect,
+}: UploadAudioModalProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    const files = e.dataTransfer.files
+    const file = files[0]
+    if (files.length > 0 && file) {
+      onFileSelect(file.name)
+      onOpenChange(false)
+    }
+  }
+
+  const handleClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    const file = files?.[0]
+    if (file) {
+      onFileSelect(file.name)
+      onOpenChange(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[600px] z-[60] p-6 gap-0 rounded-3xl border border-border shadow-2xl">
+        <DialogHeader>
+          <DialogTitle className="sr-only">Ses Dosyası Yükle</DialogTitle>
+          <div className="flex items-center gap-2 text-base font-medium">
+            <UploadSimple className="h-4 w-4" />
+            Yeni Ses Dosyası Yükle
+          </div>
+        </DialogHeader>
+
+        <div
+          className="mt-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border p-12 cursor-pointer hover:border-primary/50 transition-colors"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}
+          onClick={handleClick}
+        >
+          <UploadSimple className="h-10 w-10 text-muted-foreground/50 mb-4" />
+          <p className="text-sm font-medium text-foreground">
+            Ses veya video dosyanızı buraya sürükleyin ya da göz atmak için tıklayın
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            MP3, WAV, M4A, FLAC, AAC, MP4, MOV, AVI, MKV ve daha fazlasını destekler
+          </p>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="audio/*,video/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+      </DialogContent>
+    </Dialog>
+  )
+}

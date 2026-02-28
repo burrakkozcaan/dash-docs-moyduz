@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "E-Ticaret Sözlüğü",
+  "description": "E-ticaret terimleri ve teknik rehberler",
+  "icon": "BookOpen",
+  "pages": [
+    "index",
+    "fiyat-hesaplama",
+    "siparis-akisi",
+    "teknik-rehber"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Fumadocs Core",
+  "description": "The headless library",
+  "icon": "Cuboid",
+  "root": true,
+  "pages": [
+    "---Rehber---",
+    "index",
+    "search",
+    "---API Referansı---",
+    "page-tree",
+    "internationalization",
+    "components",
+    "utils",
+    "mdx",
+    "---Kaynaklar---",
+    "source-api",
+    "page-conventions",
+    "content-collections/index"
+  ]
+}

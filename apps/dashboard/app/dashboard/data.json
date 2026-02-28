@@ -1,0 +1,14 @@
+[
+  {"id":1,"header":"Starter Website","type":"Starter","status":"ACTIVE","target":"$150.00","limit":"Monthly","reviewer":"ayse.yilmaz@example.com"},
+  {"id":2,"header":"Commerce Suite","type":"Commerce","status":"ACTIVE","target":"$225.00","limit":"Monthly","reviewer":"mert.demir@example.com"},
+  {"id":3,"header":"Marketplace Suite","type":"Marketplace","status":"ACTIVE","target":"$350.00","limit":"Monthly","reviewer":"zeynep.kaya@example.com"},
+  {"id":4,"header":"Local SEO Boost","type":"Add-on","status":"Done","target":"$800.00","limit":"One-time","reviewer":"onur.arslan@example.com"},
+  {"id":5,"header":"AI Content Generator","type":"Add-on","status":"Done","target":"$1,500.00","limit":"One-time","reviewer":"elif.koc@example.com"},
+  {"id":6,"header":"Admin Panel","type":"Add-on","status":"In Progress","target":"$1,200.00","limit":"One-time","reviewer":"hakan.celik@example.com"},
+  {"id":7,"header":"ERP / PIM Integration","type":"Integration","status":"In Progress","target":"$3,500.00","limit":"One-time","reviewer":"irem.turan@example.com"},
+  {"id":8,"header":"Vendor Experience Pack","type":"Marketplace","status":"Done","target":"$1,200.00","limit":"One-time","reviewer":"can.kurt@example.com"},
+  {"id":9,"header":"Pro Analytics Dashboard","type":"Analytics","status":"ACTIVE","target":"$2,000.00","limit":"One-time","reviewer":"seda.polat@example.com"},
+  {"id":10,"header":"Secure Login (2FA)","type":"Security","status":"Done","target":"$400.00","limit":"One-time","reviewer":"baris.ozkan@example.com"},
+  {"id":11,"header":"Content Automation","type":"Automation","status":"In Progress","target":"$900.00","limit":"One-time","reviewer":"nisa.aydin@example.com"},
+  {"id":12,"header":"International SEO & GEO","type":"SEO","status":"Done","target":"$500.00","limit":"One-time","reviewer":"kaan.sahin@example.com"}
+]

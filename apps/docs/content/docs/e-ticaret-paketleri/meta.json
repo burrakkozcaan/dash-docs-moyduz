@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "Paketler ve Bileşenler",
+  "description": "E-ticaret paketleri ve özellikleri.",
+  "icon": "PanelsTopLeft",
+  "root": true,
+  "pages": [  
+    "---E-ticaret Paketlerine Giriş---",
+    "index",
+    "component-library",
+    "theme",
+    "---Referanslar ve Özellikler---",
+    "..."
+  ]
+}

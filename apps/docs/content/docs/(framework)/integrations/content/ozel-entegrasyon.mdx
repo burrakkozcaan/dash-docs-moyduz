@@ -1,0 +1,263 @@
+---
+title: Özel Entegrasyon
+description: Özel sistemler için entegrasyon geliştirme rehberi.
+---
+
+## Özel Entegrasyon Geliştirme
+
+Mevcut entegrasyonlar dışında özel sistemleriniz için entegrasyon geliştirme rehberi.
+
+---
+
+## Entegrasyon Mimarisi
+
+### Temel Yapı
+
+```
+E-Ticaret Sistemi
+    ↓
+API Gateway / Middleware
+    ↓
+Harici Sistem (ERP, CRM, vb.)
+```
+
+### Entegrasyon Katmanları
+
+| Katman | Sorumluluk |
+|--------|------------|
+| **Transport** | HTTP, SOAP, FTP, vb. |
+| **Protocol** | REST, GraphQL, XML-RPC |
+| **Authentication** | API Key, OAuth, JWT |
+| **Data Mapping** | Veri dönüşümü |
+| **Error Handling** | Hata yönetimi |
+
+---
+
+## Adım 1: Analiz
+
+### Gereksinim Belirleme
+
+Entegrasyon öncesi cevaplanması gereken sorular:
+
+- Hangi veriler aktarılacak?
+- Hangi yönde veri akışı olacak? (tek yönlü / çift yönlü)
+- Ne sıklıkta senkronizasyon gerekli?
+- Hata durumunda ne olacak?
+- Güvenlik gereksinimleri neler?
+
+### Veri Mapping Tablosu
+
+| E-Ticaret | Harici Sistem | Dönüşüm |
+|-----------|---------------|---------|
+| SKU | ProductCode | Birebir |
+| Price | UnitPrice | Birebir |
+| Category | GroupCode | Lookup tablosu |
+| Stock | AvailableQty | Birebir |
+
+---
+
+## Adım 2: Adapter Geliştirme
+
+### Adapter Interface
+
+```typescript
+interface IntegrationAdapter {
+  // Bağlantı
+  connect(): Promise<void>;
+  disconnect(): Promise<void>;
+
+  // Veri okuma
+  fetchProducts(params: FetchParams): Promise<Product[]>;
+  fetchOrders(params: FetchParams): Promise<Order[]>;
+
+  // Veri yazma
+  createOrder(order: Order): Promise<OrderResult>;
+  updateStock(sku: string, quantity: number): Promise<void>;
+
+  // Durum
+  getStatus(): ConnectionStatus;
+}
+```
+
+### Örnek Implementasyon
+
+```typescript
+class CustomERPAdapter implements IntegrationAdapter {
+  private client: ERPClient;
+  private config: ERPConfig;
+
+  constructor(config: ERPConfig) {
+    this.config = config;
+  }
+
+  async connect() {
+    this.client = new ERPClient({
+      host: this.config.host,
+      username: this.config.username,
+      password: this.config.password
+    });
+    await this.client.authenticate();
+  }
+
+  async fetchProducts(params: FetchParams) {
+    const erpProducts = await this.client.query('Products', params);
+
+    // Veri dönüşümü
+    return erpProducts.map(p => ({
+      sku: p.ProductCode,
+      name: p.Description,
+      price: p.UnitPrice,
+      stock: p.AvailableQty
+    }));
+  }
+
+  async createOrder(order: Order) {
+    // E-ticaret order → ERP order dönüşümü
+    const erpOrder = this.mapToERPOrder(order);
+    return await this.client.create('SalesOrder', erpOrder);
+  }
+}
+```
+
+---
+
+## Adım 3: Senkronizasyon
+
+### Real-time Senkronizasyon
+
+Webhook veya event-driven mimari:
+
+```typescript
+// Webhook handler
+app.post('/webhook/order-created', async (req, res) => {
+  const order = req.body;
+
+  try {
+    await erpAdapter.createOrder(order);
+    res.json({ success: true });
+  } catch (error) {
+    // Kuyruğa al, sonra tekrar dene
+    await queue.add('sync-order', { orderId: order.id });
+    res.json({ success: false, queued: true });
+  }
+});
+```
+
+### Batch Senkronizasyon
+
+Periyodik işlemler için:
+
+```typescript
+// Her 5 dakikada bir çalışan job
+cron.schedule('*/5 * * * *', async () => {
+  // Son senkronizasyondan bu yana değişen ürünler
+  const lastSync = await getLastSyncTime('products');
+  const products = await ecommerce.getModifiedProducts(lastSync);
+
+  for (const product of products) {
+    await erpAdapter.updateProduct(product);
+  }
+
+  await setLastSyncTime('products', new Date());
+});
+```
+
+---
+
+## Adım 4: Hata Yönetimi
+
+### Retry Stratejisi
+
+```typescript
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delay: number = 1000
+): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      await sleep(delay * Math.pow(2, i)); // Exponential backoff
+    }
+  }
+}
+```
+
+### Dead Letter Queue
+
+Başarısız işlemler için:
+
+```typescript
+async function processOrder(order: Order) {
+  try {
+    await withRetry(() => erpAdapter.createOrder(order));
+  } catch (error) {
+    // Dead letter queue'ya ekle
+    await dlq.add({
+      type: 'order',
+      data: order,
+      error: error.message,
+      attempts: 3
+    });
+
+    // Bildirim gönder
+    await notify.admin('Sipariş senkronizasyonu başarısız', {
+      orderId: order.id,
+      error: error.message
+    });
+  }
+}
+```
+
+---
+
+## Adım 5: Monitoring
+
+### Log Kaydı
+
+```typescript
+const logger = createLogger({
+  integration: 'custom-erp',
+  level: 'info'
+});
+
+async function syncProduct(product: Product) {
+  logger.info('Product sync started', { sku: product.sku });
+
+  try {
+    await erpAdapter.updateProduct(product);
+    logger.info('Product sync completed', { sku: product.sku });
+  } catch (error) {
+    logger.error('Product sync failed', {
+      sku: product.sku,
+      error: error.message
+    });
+    throw error;
+  }
+}
+```
+
+### Metrikler
+
+| Metrik | Açıklama |
+|--------|----------|
+| Sync success rate | Başarılı senkronizasyon oranı |
+| Avg sync duration | Ortalama senkronizasyon süresi |
+| Queue depth | Kuyrukta bekleyen işlem sayısı |
+| Error rate | Hata oranı |
+
+---
+
+<Callout type="info">
+  **Not:** Özel entegrasyon projeleri için teknik danışmanlık alabilirsiniz.
+</Callout>
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

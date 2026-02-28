@@ -1,0 +1,184 @@
+---
+title: E-Ticaret Fiyat Hesaplama
+description: E-ticarette fiyatlandırma stratejileri, kar marjı hesaplama, KDV ve komisyon dahil fiyat belirleme rehberi.
+---
+
+## Fiyatlandırma Temelleri
+
+E-ticarette doğru fiyatlandırma, karlılığın temelidir. Tüm maliyetleri hesaba katarak fiyat belirlemelisiniz.
+
+---
+
+## Maliyet Kalemleri
+
+### Ürün Maliyeti
+
+| Kalem | Açıklama |
+|-------|----------|
+| Alış fiyatı | Tedarikçiden satın alma |
+| Nakliye | Deponuza geliş maliyeti |
+| Gümrük | İthalatta vergiler |
+| Depolama | Stok tutma maliyeti |
+
+### Operasyonel Maliyetler
+
+| Kalem | Ortalama Oran |
+|-------|---------------|
+| Kargo | %5-10 |
+| Paketleme | %1-3 |
+| İade | %2-5 |
+| Personel | Değişken |
+
+### Platform/Satış Maliyetleri
+
+| Kalem | Ortalama Oran |
+|-------|---------------|
+| Sanal POS | %1.5-3 |
+| Marketplace komisyon | %8-25 |
+| Reklam | %5-15 |
+| Hosting/Platform | Sabit |
+
+---
+
+## Fiyat Hesaplama Formülü
+
+```
+Satış Fiyatı = (Maliyet + Hedef Kar) / (1 - Toplam Kesinti Oranı)
+```
+
+### Örnek Hesaplama
+
+**Ürün bilgileri:**
+- Alış fiyatı: 100 TL
+- Hedef kar marjı: %30
+- Sanal POS: %2
+- Kargo: %8
+- Reklam: %10
+
+**Hesaplama:**
+
+```
+Toplam kesinti = %2 + %8 + %10 = %20
+Hedef kar = 100 × 0.30 = 30 TL
+Satış fiyatı = (100 + 30) / (1 - 0.20) = 162.5 TL
+```
+
+**KDV dahil fiyat (%20 KDV):**
+
+```
+KDV dahil = 162.5 × 1.20 = 195 TL
+```
+
+---
+
+## Kar Marjı Türleri
+
+### Brüt Kar Marjı
+
+```
+Brüt Kar = Satış Fiyatı - Ürün Maliyeti
+Brüt Kar Marjı = (Brüt Kar / Satış Fiyatı) × 100
+```
+
+### Net Kar Marjı
+
+```
+Net Kar = Satış Fiyatı - Tüm Maliyetler
+Net Kar Marjı = (Net Kar / Satış Fiyatı) × 100
+```
+
+---
+
+## Kategori Bazlı Kar Marjları
+
+| Kategori | Ortalama Brüt Kar | Ortalama Net Kar |
+|----------|------------------|------------------|
+| Elektronik | %10-20 | %5-10 |
+| Giyim | %40-60 | %15-25 |
+| Kozmetik | %50-70 | %20-35 |
+| Gıda | %15-30 | %5-15 |
+| Mobilya | %30-50 | %10-20 |
+
+---
+
+## Psikolojik Fiyatlandırma
+
+### Tek Sayı Kuralı
+
+```
+❌ 200 TL
+✓ 199 TL veya 199.90 TL
+```
+
+### Karşılaştırmalı Fiyatlandırma
+
+```
+İndirimli fiyat gösterimi:
+Eski fiyat: 299 TL (üstü çizili)
+Yeni fiyat: 199 TL
+İndirim: %33
+```
+
+---
+
+## B2B Fiyatlandırma
+
+B2B'de fiyatlandırma daha karmaşıktır:
+
+### Müşteri Segmentleri
+
+| Segment | İndirim Oranı |
+|---------|---------------|
+| Perakende | Liste fiyatı |
+| Bayii Bronze | %15 |
+| Bayii Silver | %20 |
+| Bayii Gold | %25 |
+| OEM | %30+ |
+
+### Miktar İndirimi
+
+| Miktar | Birim Fiyat |
+|--------|-------------|
+| 1-10 | 100 TL |
+| 11-50 | 95 TL |
+| 51-100 | 90 TL |
+| 100+ | Teklif |
+
+---
+
+## Hazır Platform vs Özel Yazılım
+
+| Fiyatlandırma Özelliği | Hazır Platform | Özel Yazılım |
+|------------------------|---------------|--------------|
+| Müşteriye özel fiyat | Sınırlı/Yok | Tam destek |
+| Miktar indirimi | Basit | Karmaşık kurallar |
+| Kampanya mantığı | Standart | Özel kurallar |
+| Dinamik fiyatlandırma | Zor | Kolay |
+| ERP senkron | Eklenti | Native |
+
+---
+
+## Önerilen Araçlar
+
+### Excel/Sheets Şablonu
+
+Basit fiyat hesaplama için formül:
+
+```
+=((Maliyet*(1+KarMarji))/(1-ToplamKesinti))*(1+KDV)
+```
+
+### Özel Yazılım Avantajı
+
+- Otomatik maliyet güncelleme
+- Dinamik kar marjı hesaplama
+- Rakip fiyat takibi
+- Kampanya simülasyonu
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

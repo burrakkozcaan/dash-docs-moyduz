@@ -1,0 +1,229 @@
+---
+title: E-Ticaret Teknik Altyapı Rehberi
+description: E-ticaret sitesi teknik gereksinimleri, hosting, güvenlik, performans ve ölçeklenebilirlik rehberi.
+---
+
+## Teknik Altyapı Nedir?
+
+E-ticaret teknik altyapısı, sitenizin güvenli, hızlı ve kesintisiz çalışmasını sağlayan tüm teknik bileşenlerdir.
+
+---
+
+## Hosting ve Sunucu
+
+### Hosting Türleri
+
+| Tür | Avantaj | Dezavantaj | Uygunluk |
+|-----|---------|-----------|----------|
+| Shared | Ucuz | Yavaş, sınırlı | Başlangıç |
+| VPS | Orta fiyat, esnek | Yönetim gerekir | Orta ölçek |
+| Dedicated | Tam kontrol | Pahalı | Büyük ölçek |
+| Cloud | Ölçeklenebilir | Karmaşık | Kurumsal |
+
+### Sunucu Gereksinimleri
+
+| Bileşen | Minimum | Önerilen |
+|---------|---------|----------|
+| CPU | 2 core | 4+ core |
+| RAM | 4 GB | 8+ GB |
+| Depolama | 50 GB SSD | 100+ GB NVMe |
+| Bandwidth | 1 TB/ay | Unlimited |
+
+---
+
+## Güvenlik
+
+### SSL/TLS
+
+```
+HTTP → HTTPS yönlendirme zorunlu
+TLS 1.3 tercih edilmeli
+HSTS header aktif
+```
+
+### Güvenlik Önlemleri
+
+| Önlem | Açıklama |
+|-------|----------|
+| WAF | Web Application Firewall |
+| DDoS koruma | Saldırı engelleme |
+| SQL injection | Parametreli sorgular |
+| XSS | Input sanitization |
+| CSRF | Token doğrulama |
+| Rate limiting | İstek sınırlama |
+
+### PCI DSS Uyumu
+
+Kredi kartı işleyen siteler için:
+
+- Kart verisi depolamayın
+- 3D Secure kullanın
+- Tokenization tercih edin
+- Düzenli güvenlik taraması
+
+---
+
+## Performans
+
+### Core Web Vitals Hedefleri
+
+| Metrik | Hedef | Ölçüm |
+|--------|-------|-------|
+| LCP | < 2.5s | En büyük içerik |
+| FID/INP | < 100ms | Etkileşim yanıtı |
+| CLS | < 0.1 | Görsel kararlılık |
+
+### Performans Optimizasyonu
+
+**Frontend:**
+- Görsel optimizasyonu (WebP, lazy load)
+- CSS/JS minification
+- Critical CSS inline
+- Code splitting
+
+**Backend:**
+- Database indeksleme
+- Query optimizasyonu
+- Caching (Redis/Memcached)
+- CDN kullanımı
+
+**Server:**
+- Gzip/Brotli sıkıştırma
+- HTTP/2 veya HTTP/3
+- Keep-alive connections
+
+---
+
+## Veritabanı
+
+### Veritabanı Seçenekleri
+
+| Tür | Kullanım | Örnek |
+|-----|----------|-------|
+| RDBMS | Ana veri | PostgreSQL, MySQL |
+| NoSQL | Ürün kataloğu | MongoDB |
+| Cache | Oturum, sepet | Redis |
+| Search | Arama | Elasticsearch |
+
+### Ölçeklendirme
+
+```
+Dikey ölçeklendirme:
+- Daha güçlü sunucu
+
+Yatay ölçeklendirme:
+- Read replicas
+- Sharding
+- Load balancing
+```
+
+---
+
+## Yedekleme ve Felaket Kurtarma
+
+### Yedekleme Stratejisi
+
+| Tür | Sıklık | Saklama |
+|-----|--------|---------|
+| Full backup | Haftalık | 4 hafta |
+| Incremental | Günlük | 30 gün |
+| Transaction log | Saatlik | 7 gün |
+
+### Felaket Kurtarma
+
+```
+RTO (Recovery Time Objective): 4 saat
+RPO (Recovery Point Objective): 1 saat
+
+Gereksinimler:
+- Farklı datacenter'da replica
+- Otomatik failover
+- Düzenli test
+```
+
+---
+
+## Monitoring ve Logging
+
+### İzlenecek Metrikler
+
+| Kategori | Metrik |
+|----------|--------|
+| Sunucu | CPU, RAM, Disk |
+| Uygulama | Response time, error rate |
+| İş | Sipariş sayısı, sepet terk |
+| Güvenlik | Failed login, suspicious activity |
+
+### Araçlar
+
+- **APM:** New Relic, Datadog
+- **Log:** ELK Stack, Graylog
+- **Uptime:** Pingdom, UptimeRobot
+- **Analytics:** Google Analytics 4
+
+---
+
+## Entegrasyon Mimarisi
+
+### API Yapısı
+
+```
+REST API standartları:
+- Versiyonlama (/api/v1/)
+- HTTP metodları doğru kullanım
+- Pagination
+- Rate limiting
+- Authentication (JWT/OAuth)
+```
+
+### Entegrasyon Patternleri
+
+| Pattern | Kullanım |
+|---------|----------|
+| Sync API | Anlık veri |
+| Async Queue | Ağır işlemler |
+| Webhook | Event bildirimi |
+| Batch | Toplu veri aktarımı |
+
+---
+
+## Hazır Platform vs Özel Yazılım
+
+| Teknik Özellik | Hazır Platform | Özel Yazılım |
+|----------------|---------------|--------------|
+| Sunucu kontrolü | Yok | Tam |
+| Güvenlik yönetimi | Platform | Siz |
+| Performans ayarı | Sınırlı | Tam |
+| Veritabanı erişimi | Kısıtlı | Tam |
+| Özel entegrasyon | API bağımlı | Sınırsız |
+| Ölçeklendirme | Plan bazlı | İhtiyaç bazlı |
+
+---
+
+## Teknik Checklist
+
+### Başlangıç
+- [ ] SSL sertifikası aktif
+- [ ] Hosting yeterli kapasitede
+- [ ] Yedekleme kuruldu
+- [ ] Monitoring aktif
+
+### Güvenlik
+- [ ] WAF konfigüre edildi
+- [ ] Rate limiting aktif
+- [ ] Güvenlik taraması yapıldı
+- [ ] PCI DSS uyumu sağlandı
+
+### Performans
+- [ ] CDN aktif
+- [ ] Caching konfigüre edildi
+- [ ] Core Web Vitals yeşil
+- [ ] Database optimize edildi
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

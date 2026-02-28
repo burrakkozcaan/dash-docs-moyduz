@@ -1,0 +1,204 @@
+---
+title: Analytics Entegrasyonları
+description: Web analitik ve e-ticaret tracking araçları ile entegrasyon.
+---
+
+## Analytics Entegrasyonları
+
+E-ticaret performansını ölçmek için analitik araç entegrasyonları.
+
+---
+
+## Google Analytics 4
+
+### Temel Kurulum
+
+GA4 e-ticaret tracking için gerekli eventler:
+
+| Event | Açıklama |
+|-------|----------|
+| `view_item` | Ürün görüntüleme |
+| `add_to_cart` | Sepete ekleme |
+| `remove_from_cart` | Sepetten çıkarma |
+| `begin_checkout` | Checkout başlangıç |
+| `purchase` | Satın alma |
+| `refund` | İade |
+
+### Event Örneği
+
+```javascript
+gtag('event', 'purchase', {
+  transaction_id: 'ORD-12345',
+  value: 599.99,
+  currency: 'TRY',
+  items: [
+    {
+      item_id: 'SKU-001',
+      item_name: 'Ürün Adı',
+      price: 299.99,
+      quantity: 2
+    }
+  ]
+});
+```
+
+### Enhanced Ecommerce
+
+- Ürün impression tracking
+- Promotion tracking
+- Product click tracking
+- Checkout step tracking
+
+---
+
+## Facebook Pixel
+
+### Standard Events
+
+| Event | Kullanım |
+|-------|----------|
+| `PageView` | Sayfa görüntüleme |
+| `ViewContent` | Ürün görüntüleme |
+| `AddToCart` | Sepete ekleme |
+| `InitiateCheckout` | Checkout başlangıç |
+| `Purchase` | Satın alma |
+
+### Conversion API (CAPI)
+
+Server-side tracking için:
+
+```javascript
+// Server-side event
+fetch('https://graph.facebook.com/v18.0/PIXEL_ID/events', {
+  method: 'POST',
+  body: JSON.stringify({
+    data: [{
+      event_name: 'Purchase',
+      event_time: Math.floor(Date.now() / 1000),
+      user_data: {
+        em: hashEmail(email),
+        ph: hashPhone(phone)
+      },
+      custom_data: {
+        currency: 'TRY',
+        value: 599.99
+      }
+    }],
+    access_token: ACCESS_TOKEN
+  })
+});
+```
+
+---
+
+## Google Ads
+
+### Conversion Tracking
+
+```javascript
+gtag('event', 'conversion', {
+  send_to: 'AW-XXXXXXXX/XXXXXX',
+  value: 599.99,
+  currency: 'TRY',
+  transaction_id: 'ORD-12345'
+});
+```
+
+### Remarketing
+
+Dinamik remarketing için ürün feed:
+
+```xml
+<item>
+  <g:id>SKU-001</g:id>
+  <g:title>Ürün Adı</g:title>
+  <g:price>299.99 TRY</g:price>
+  <g:availability>in stock</g:availability>
+  <g:image_link>https://cdn.example.com/img.jpg</g:image_link>
+</item>
+```
+
+---
+
+## Hotjar / Microsoft Clarity
+
+### Session Recording
+
+Kullanıcı davranışı analizi:
+
+- Sayfa scroll heatmaps
+- Click heatmaps
+- Session recordings
+- Funnel analizi
+
+### Tracking Kodları
+
+```javascript
+// Hotjar
+(function(h,o,t,j,a,r){
+  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+  h._hjSettings={hjid:XXXXXX,hjsv:6};
+  // ...
+})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+
+// Clarity
+(function(c,l,a,r,i,t,y){
+  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+  // ...
+})(window, document, "clarity", "script", "XXXXXX");
+```
+
+---
+
+## E-Ticaret Dashboard
+
+### Temel Metrikler
+
+| Metrik | Formül |
+|--------|--------|
+| Conversion Rate | Orders / Sessions × 100 |
+| AOV | Revenue / Orders |
+| Revenue per Session | Revenue / Sessions |
+| Cart Abandonment | (Carts - Orders) / Carts × 100 |
+
+### Funnel Analizi
+
+```
+Site Ziyareti: 10.000
+    ↓ (30%)
+Ürün Görüntüleme: 3.000
+    ↓ (20%)
+Sepete Ekleme: 600
+    ↓ (50%)
+Checkout: 300
+    ↓ (70%)
+Satın Alma: 210
+
+Conversion Rate: 2.1%
+```
+
+---
+
+## Attribution Modelleri
+
+| Model | Açıklama |
+|-------|----------|
+| Last Click | Son tıklama |
+| First Click | İlk tıklama |
+| Linear | Eşit dağılım |
+| Time Decay | Zaman bazlı |
+| Data-Driven | Veri bazlı |
+
+---
+
+<Callout type="info">
+  **Not:** KVKK uyumu için cookie consent yönetimi gereklidir.
+</Callout>
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

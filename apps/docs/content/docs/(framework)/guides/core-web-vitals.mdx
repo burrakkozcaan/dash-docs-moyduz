@@ -1,0 +1,120 @@
+---
+title: Core Web Vitals E-Ticaret Rehberi
+description: E-ticaret sitelerinde Core Web Vitals optimizasyonu. LCP, FID, CLS metrikleri ve performans iyileştirme stratejileri.
+---
+
+## Core Web Vitals Nedir?
+
+Core Web Vitals, Google'ın sayfa deneyimini ölçen 3 temel metriktir: LCP (yükleme), FID (etkileşim), CLS (görsel kararlılık). Özel e-ticaret sitesi, Moyduz yaklaşımıyla bu metrikler en baştan optimize edilir.
+
+## Core Web Vitals Neden Önemli?
+
+- **SEO sıralama faktörü** - Google algoritmasında yer alır
+- **Dönüşüm oranı** - Hızlı site = yüksek satış
+- **Kullanıcı deneyimi** - Memnun müşteri = tekrar alışveriş
+- **Bounce rate** - Yavaş site = terk eden ziyaretçi
+
+<Callout type="info">
+  **İstatistik:** 1 saniyelik gecikme, dönüşüm oranını %7 düşürür.
+</Callout>
+
+---
+
+## 3 Temel Metrik
+
+### 1. LCP (Largest Contentful Paint)
+
+| Özellik | Detay |
+|---------|-------|
+| **Ne** | En büyük içeriğin yüklenme süresi |
+| **Hedef** | 2.5 saniyenin altında |
+| **E-ticarette** | Ana görsel, slider, hero alanı |
+
+**İyileştirme:**
+- Görsel optimizasyonu (WebP, lazy load)
+- CDN kullanımı
+- Server response time düşürme
+- Critical CSS inline
+
+### 2. FID (First Input Delay) / INP
+
+| Özellik | Detay |
+|---------|-------|
+| **Ne** | İlk etkileşime yanıt süresi |
+| **Hedef** | 100ms altında |
+| **E-ticarette** | Sepete ekle, filtre, arama |
+
+**İyileştirme:**
+- JavaScript optimizasyonu
+- Code splitting
+- Async/defer kullanımı
+- Third-party script'leri minimuma indirme
+
+### 3. CLS (Cumulative Layout Shift)
+
+| Özellik | Detay |
+|---------|-------|
+| **Ne** | Görsel kayma miktarı |
+| **Hedef** | 0.1 altında |
+| **E-ticarette** | Reklam banner'ları, lazy load görseller |
+
+**İyileştirme:**
+- Görsel boyutları belirtme (width/height)
+- Font yükleme stratejisi
+- Reklam alanlarını rezerve etme
+- Skeleton loader kullanımı
+
+---
+
+## E-Ticarette Yaygın Sorunlar
+
+### Hazır Platformlarda
+- Aşırı plugin/eklenti
+- Optimize edilmemiş temalar
+- Kontrolsüz third-party script'ler
+- Sınırlı performans ayarları
+
+### Özel Yazılımda (Moyduz)
+- Baştan optimize mimari
+- Minimum dependency
+- Kontrollü asset yönetimi
+- Edge rendering / SSG desteği
+
+---
+
+## Performans Checklist
+
+### Görseller
+- [ ] WebP format kullanımı
+- [ ] Lazy loading aktif
+- [ ] Boyutlar belirtilmiş
+- [ ] CDN üzerinden servis
+
+### JavaScript
+- [ ] Code splitting yapıldı
+- [ ] Unused code kaldırıldı
+- [ ] Async/defer kullanıldı
+- [ ] Third-party minimize edildi
+
+### CSS
+- [ ] Critical CSS inline
+- [ ] Unused CSS kaldırıldı
+- [ ] Font preload
+
+### Server
+- [ ] Caching aktif
+- [ ] CDN kullanımı
+- [ ] Gzip/Brotli sıkıştırma
+- [ ] HTTP/2 veya HTTP/3
+
+---
+
+> **Performans için özel yazılım mı?** [Hazır mı Özel mi?](/docs/comparisons) karar rehberine bakın.
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>

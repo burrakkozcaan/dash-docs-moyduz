@@ -1,0 +1,51 @@
+---
+title: Site İçi Arama Motoru
+description: Yapay zeka destekli akıllı ürün arama ve filtreleme.
+---
+
+# Site İçi Arama Motoru
+
+E-ticaret sitenizde müşterilerinizin aradıkları ürünleri saniyeler içinde bulmasını sağlayan **gelişmiş site içi arama motoru**.
+
+## Akıllı Arama Özellikleri
+
+### 1. Hızlı ve Doğru Sonuçlar
+Binlerce ürün arasından milisaniyeler içinde sonuç getiren performanslı altyapı. Yazım hatalarını otomatik düzelterek (Did you mean?) doğru ürüne yönlendirir.
+
+### 2. Detaylı Filtreleme
+Müşterileriniz ürünleri şunlara göre filtreleyebilir:
+*   Fiyat Aralığı
+*   Marka
+*   Renk, Beden, Numara
+*   Kategori
+*   Teknik Özellikler
+
+### 3. Görsel Arama ve Öneriler
+Arama çubuğuna yazarken çıkan **otomatik tamamlama (autocomplete)** ve ürün görselli öneriler ile satın alma yolculuğunu kısaltın.
+
+## Entegrasyon Örneği
+
+Sitenize akıllı arama modülünü eklemek çok kolaydır.
+
+```tsx title="app/layout.tsx"
+import { RootProvider } from 'e-ticaret-ui/provider';
+import { SmartSearch } from '@/components/smart-search';
+
+export default function Layout({ children }) {
+  return (
+    <RootProvider
+      search={{
+        enabled: true,
+        SearchDialog: SmartSearch, // Akıllı arama bileşenini aktif et
+        placeholder: "Ürün, kategori veya marka ara...",
+      }}
+    >
+      {children}
+    </RootProvider>
+  );
+}
+```
+
+## Performans Raporları
+
+Hangi kelimelerin arandığını, hangilerinin "sonuç bulunamadı" sayfasına gittiğini panelden takip ederek ürün gamınızı optimize edin.

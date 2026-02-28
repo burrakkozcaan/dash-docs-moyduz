@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "Karar Rehberleri",
+  "description": "E-ticaret ve SEO kararlarınız için rehberler",
+  "icon": "Compass",
+  "pages": [
+    "index",
+    "---SEO Rehberleri---",
+    "normal-seo",
+    "programmatic-seo",
+    "geo",
+    "aeo"
+  ]
+}

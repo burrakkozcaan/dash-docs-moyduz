@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "Teknik Rehberler",
+  "description": "E-ticaret teknik rehberleri ve stratejileri",
+  "icon": "Book",
+  "pages": [
+    "index",
+    "e-ticaret-seo",
+    "core-web-vitals",
+    "b2b-fiyatlama"
+  ]
+}

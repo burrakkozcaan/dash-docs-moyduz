@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "İş Fikirleri",
+  "description": "E-ticaret iş fikirleri ve niş pazarlar",
+  "icon": "Lightbulb",
+  "pages": [
+    "index",
+    "---Niş Pazarlar---",
+    "evcil-hayvan",
+    "organik-urunler"
+  ]
+}

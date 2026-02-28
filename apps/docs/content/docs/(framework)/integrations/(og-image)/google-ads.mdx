@@ -1,0 +1,185 @@
+---
+title: Google Ads Entegrasyonu
+description: Google Ads kampanya yönetimi ve dönüşüm takibi entegrasyonu.
+---
+
+## Google Ads Entegrasyonu
+
+E-ticaret için Google Ads kampanya optimizasyonu ve dönüşüm takibi.
+
+---
+
+## Dönüşüm Takibi
+
+### Temel Kurulum
+
+Google Ads dönüşüm takibi için gtag kurulumu:
+
+```html
+<!-- Global site tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-XXXXXXXX');
+</script>
+```
+
+### Dönüşüm Eventleri
+
+| Event | Tetiklenme Zamanı |
+|-------|-------------------|
+| `purchase` | Satın alma sonrası |
+| `add_to_cart` | Sepete ekleme |
+| `begin_checkout` | Checkout başlangıcı |
+| `sign_up` | Üyelik oluşturma |
+
+### Purchase Event
+
+```javascript
+gtag('event', 'conversion', {
+  send_to: 'AW-XXXXXXXX/YYYYYY',
+  value: 599.99,
+  currency: 'TRY',
+  transaction_id: 'ORD-12345'
+});
+```
+
+---
+
+## Dinamik Remarketing
+
+### Ürün Feed
+
+Google Merchant Center için ürün feed formatı:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+<channel>
+  <title>Mağaza Adı</title>
+  <link>https://www.example.com</link>
+  <description>Ürün Kataloğu</description>
+  <item>
+    <g:id>SKU-001</g:id>
+    <g:title>Ürün Adı</g:title>
+    <g:description>Ürün açıklaması</g:description>
+    <g:link>https://www.example.com/urun/sku-001</g:link>
+    <g:image_link>https://cdn.example.com/images/sku-001.jpg</g:image_link>
+    <g:price>299.99 TRY</g:price>
+    <g:availability>in stock</g:availability>
+    <g:brand>Marka</g:brand>
+    <g:gtin>8691234567890</g:gtin>
+    <g:condition>new</g:condition>
+  </item>
+</channel>
+</rss>
+```
+
+### Remarketing Tag
+
+```javascript
+gtag('event', 'view_item', {
+  send_to: 'AW-XXXXXXXX',
+  value: 299.99,
+  items: [{
+    id: 'SKU-001',
+    google_business_vertical: 'retail'
+  }]
+});
+```
+
+---
+
+## Kampanya Türleri
+
+### Performance Max
+
+- Otomatik optimizasyon
+- Tüm Google ağlarında gösterim
+- Smart bidding
+
+### Shopping Kampanyaları
+
+- Ürün listeleme reklamları
+- Fiyat karşılaştırma
+- Görsel odaklı
+
+### Search Kampanyaları
+
+- Anahtar kelime hedefleme
+- Metin reklamları
+- Arama ağı
+
+---
+
+## Bid Stratejileri
+
+| Strateji | Amaç |
+|----------|------|
+| **Maximize Conversions** | Dönüşüm sayısını artır |
+| **Target CPA** | Hedef maliyet/dönüşüm |
+| **Target ROAS** | Hedef reklam getirisi |
+| **Manual CPC** | Manuel tıklama başı maliyet |
+
+---
+
+## Raporlama
+
+### Temel Metrikler
+
+| Metrik | Açıklama |
+|--------|----------|
+| **ROAS** | Reklam harcaması getirisi |
+| **CPA** | Dönüşüm başı maliyet |
+| **CTR** | Tıklama oranı |
+| **Conversion Rate** | Dönüşüm oranı |
+
+### Performans Hedefleri
+
+| Sektör | Hedef ROAS |
+|--------|------------|
+| Moda | 4-6x |
+| Elektronik | 3-5x |
+| Kozmetik | 5-8x |
+
+---
+
+## Entegrasyon Akışı
+
+```
+E-Ticaret Sistemi
+    ↓
+Google Tag Manager
+    ↓
+Google Ads
+    ↓
+Google Analytics 4
+```
+
+### Offline Conversion Import
+
+```
+Telefon siparişi
+    ↓
+CRM'e kaydet
+    ↓
+GCLID ile eşleştir
+    ↓
+Google Ads'e import
+```
+
+---
+
+<Callout type="info">
+  **Not:** Enhanced Conversions kurulumu için müşteri izni (KVKK) gereklidir.
+</Callout>
+
+---
+
+<Callout type="warning">
+  **Bu içerik Moyduz teknik ekibi tarafından hazırlanmıştır.**
+
+  Son güncelleme: Ocak 2026
+</Callout>
