@@ -1,9 +1,6 @@
 import { type Registry } from '@fumadocs/cli/build';
-import * as ui from '../../../packages/ui/src/_registry';
-import * as radixUi from '../../../packages/radix-ui/src/_registry';
 import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
-import { resolveFromRemote } from '@fumadocs/cli/build';
 
 const baseDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../');
 
@@ -19,25 +16,7 @@ export const registry: Registry = {
     if (filePath.startsWith('lib/source.')) return false;
   },
   onResolve(ref) {
-    if (ref.type === 'file') {
-      const filePath = path.relative(baseDir, ref.file);
-
-      if (filePath === 'lib/cn.ts') {
-        return resolveFromRemote(ui.registry, 'cn', (file) => file.path === 'cn.ts')!;
-      }
-    }
-
-    if (ref.type === 'dependency' && ref.dep === 'fumadocs-ui') {
-      const match = /fumadocs-ui\/components\/ui\/(.*)/.exec(ref.specifier);
-      if (match) {
-        return resolveFromRemote(
-          radixUi.registry,
-          match[1],
-          (file) => path.basename(file.path, path.extname(file.path)) === match[1],
-        )!;
-      }
-    }
-
+    // Harici paket registry'leri (ui, radix-ui) bu projede yok; referansı olduğu gibi döndür
     return ref;
   },
   components: [
