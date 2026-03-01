@@ -10,7 +10,7 @@ async function checkLinks() {
       '(home)/blog/[slug]': await Promise.all(
         blog.getPages().map(async (page) => ({
           value: {
-            slug: page.slugs[0],
+            slug: page.slugs[0] ?? '',
           },
           hashes: await getHeadings(page),
         })),

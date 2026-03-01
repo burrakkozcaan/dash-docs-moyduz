@@ -77,12 +77,7 @@ interface LLMStorage {
   isLLM: boolean;
 }
 
-const llmStorage = new AsyncLocalStorage<LLMStorage>({
-  name: 'llm-storage',
-  defaultValue: {
-    isLLM: false,
-  },
-});
+const llmStorage = new AsyncLocalStorage<LLMStorage>();
 
 async function renderToString(node: ReactNode): Promise<string> {
   const { renderToReadableStream } = await import('react-dom/server.edge');
@@ -96,7 +91,7 @@ async function renderToString(node: ReactNode): Promise<string> {
 }
 
 export function isLLM() {
-  return llmStorage.getStore()!.isLLM;
+  return llmStorage.getStore()?.isLLM ?? false;
 }
 
 function evaluateEstreeExpression(astNode: Program, context = {}) {

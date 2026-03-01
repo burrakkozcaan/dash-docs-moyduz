@@ -3,10 +3,25 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "fumadocs-mdx:collections/*": [".source/*"]
+      "@/*": [
+        "./*"
+      ],
+      "fumadocs-mdx:collections/*": [
+        ".source/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "content/**/*.mdx", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "eslint.config.mjs", "components/registry/**/*"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "content/**/*.mdx",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "eslint.config.mjs",
+    "components/registry/**/*",
+    "scripts/preload.ts"
+  ]
 }

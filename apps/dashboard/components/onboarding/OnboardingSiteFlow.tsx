@@ -1,7 +1,10 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
+
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   RiArrowLeftSLine,
   RiCloseLine,
@@ -30,7 +33,9 @@ type OnboardingStep = {
 };
 
 type WebsiteChoice = "yes" | "no" | "";
-type RememberedOnboardingState = {
+type PreviewMode = "template" | "current";
+
+interface RememberedOnboardingState {
   currentStep: number;
   hasWebsite: WebsiteChoice;
   domain: string;
@@ -39,16 +44,50 @@ type RememberedOnboardingState = {
   scanBlocked: boolean;
   nextScanAtHuman: string | null;
   scanRequestError: string | null;
+  previewMode: PreviewMode;
   selectedPlanId: number | null;
   selectedAddonIds: number[];
   businessType: string;
   targetAudience: string;
   mainGoal: string;
   primaryMetric: string;
-};
+}
 
 interface ScanSummary {
   bullets?: string[];
+  impact?: string | null;
+  recommendation?: string | null;
+}
+
+interface ScanTechnical {
+  robots_txt?: boolean;
+  sitemap_xml?: boolean;
+  sitemap_url?: string | null;
+  open_graph?: boolean;
+  twitter_cards?: boolean;
+  schema_org?: boolean;
+  favicon?: boolean;
+}
+
+interface ScanPreview {
+  provider?: string;
+  screenshot_url?: string | null;
+  open_graph_image_url?: string | null;
+}
+
+interface ScanPerformance {
+  available?: boolean;
+  source?: string;
+  strategy?: string;
+  performance_score?: number | null;
+  first_contentful_paint?: string | null;
+  largest_contentful_paint?: string | null;
+  speed_index?: string | null;
+  total_blocking_time?: string | null;
+  cumulative_layout_shift?: string | null;
+  status_code?: number | null;
+  failure_reason?: string | null;
+  failure_message?: string | null;
 }
 
 interface ScanResult {
@@ -57,9 +96,15 @@ interface ScanResult {
   score: number;
   seo: Record<string, boolean>;
   presence: Record<string, boolean>;
+  technical?: ScanTechnical;
+  preview?: ScanPreview;
+  performance?: ScanPerformance;
   title?: string;
   h1?: string;
   meta_title?: string;
+  meta_description?: string;
+  estimated?: boolean;
+  error?: string | null;
   summary?: ScanSummary | null;
 }
 
@@ -93,19 +138,19 @@ interface BriefPreset {
 }
 
 const STEPS: OnboardingStep[] = [
-  { id: "scan", title: "Canlı Site Analizi" },
-  { id: "package", title: "Paket Seçimi" },
-  { id: "addons", title: "Eklenti Seçimi" },
-  { id: "questions", title: "Kısa Sorular" },
-  { id: "summary", title: "Özet" },
-  { id: "payment", title: "Ödeme" },
+  { id: "scan", title: "Live Site Analysis" },
+  { id: "package", title: "Package Selection" },
+  { id: "addons", title: "Add-on Selection" },
+  { id: "questions", title: "Quick Questions" },
+  { id: "summary", title: "Summary" },
+  { id: "payment", title: "Payment" },
 ];
 
 const MOCK_PLANS: PlanFromApi[] = [
   {
     id: 1,
     name: "Starter",
-    description: "Kurumsal tanıtım sitesi",
+    description: "Corporate showcase website",
     setup_price: 4990,
     monthly_price: 990,
     addons: [],
@@ -113,7 +158,7 @@ const MOCK_PLANS: PlanFromApi[] = [
   {
     id: 2,
     name: "Business",
-    description: "Profesyonel iş sitesi + SEO",
+    description: "Professional business website + SEO",
     setup_price: 7990,
     monthly_price: 1490,
     addons: [],
@@ -121,7 +166,7 @@ const MOCK_PLANS: PlanFromApi[] = [
   {
     id: 3,
     name: "Commerce Suite",
-    description: "E-ticaret + ödeme entegrasyonu",
+    description: "Ecommerce + payment integration",
     setup_price: 12990,
     monthly_price: 1990,
     addons: [],
@@ -132,83 +177,83 @@ const PACKAGE_BRIEF_PRESETS: Record<string, BriefPreset[]> = {
   starter: [
     {
       id: "starter-visibility",
-      label: "Kurumsal görünürlük",
-      subtitle: "Tanıtım odaklı başlangıç",
-      businessType: "Kurumsal tanıtım sitesi",
-      targetAudience: "Google'dan şirketi arayan potansiyel müşteriler",
-      mainGoal: "Kurumsal güven ve iletişim formu dönüşümünü artırmak",
-      primaryMetric: "Aylık iletişim formu başvurusu",
+      label: "Corporate visibility",
+      subtitle: "Showcase-first start",
+      businessType: "Corporate showcase website",
+      targetAudience: "Potential customers searching for your company on Google",
+      mainGoal: "Increase trust and contact form conversions",
+      primaryMetric: "Monthly contact form submissions",
     },
     {
       id: "starter-local",
-      label: "Yerel müşteri kazanımı",
-      subtitle: "Bölgesel müşteri hedefi",
-      businessType: "Yerel hizmet işletmesi",
-      targetAudience: "Bulunduğumuz şehirde hizmet arayan kullanıcılar",
-      mainGoal: "Telefon araması ve WhatsApp başlatma oranını artırmak",
-      primaryMetric: "Aylık telefon/WhatsApp lead sayısı",
+      label: "Local customer growth",
+      subtitle: "Regional demand focus",
+      businessType: "Local service business",
+      targetAudience: "Users looking for services in your city",
+      mainGoal: "Increase phone calls and WhatsApp starts",
+      primaryMetric: "Monthly phone/WhatsApp leads",
     },
   ],
   business: [
     {
       id: "business-lead",
-      label: "Lead toplama",
-      subtitle: "Satış görüşmesi akışı",
-      businessType: "B2B hizmet şirketi",
-      targetAudience: "Karar verici yönetici ve ekip liderleri",
-      mainGoal: "Demo ve teklif talep sayısını düzenli artırmak",
-      primaryMetric: "Aylık demo/teklif talebi",
+      label: "Lead generation",
+      subtitle: "Sales call pipeline",
+      businessType: "B2B service company",
+      targetAudience: "Decision-makers and team leads",
+      mainGoal: "Consistently increase demo and quote requests",
+      primaryMetric: "Monthly demo/quote requests",
     },
     {
       id: "business-authority",
-      label: "Uzmanlık konumlama",
-      subtitle: "İçerik + SEO büyümesi",
-      businessType: "Profesyonel danışmanlık markası",
-      targetAudience: "Araştırma yaparak hizmet karşılaştıran müşteriler",
-      mainGoal: "Organik trafik ve içerik kaynaklı lead üretmek",
-      primaryMetric: "SEO kaynaklı aylık lead",
+      label: "Authority positioning",
+      subtitle: "Content + SEO growth",
+      businessType: "Professional consulting brand",
+      targetAudience: "Customers comparing services through research",
+      mainGoal: "Generate organic traffic and content-driven leads",
+      primaryMetric: "Monthly SEO-driven leads",
     },
   ],
   commerce: [
     {
       id: "commerce-sales",
-      label: "Satış büyümesi",
-      subtitle: "Ürün odaklı e-ticaret",
-      businessType: "E-ticaret mağazası",
-      targetAudience: "Mobil ağırlıklı ürün karşılaştıran online alıcılar",
-      mainGoal: "Sepetten ödeme tamamlamaya geçişi yükseltmek",
-      primaryMetric: "Aylık sipariş adedi ve dönüşüm oranı",
+      label: "Sales growth",
+      subtitle: "Product-led ecommerce",
+      businessType: "Ecommerce store",
+      targetAudience: "Mobile-first online shoppers comparing products",
+      mainGoal: "Improve cart-to-checkout completion",
+      primaryMetric: "Monthly orders and conversion rate",
     },
     {
       id: "commerce-roas",
-      label: "Reklam verimi",
-      subtitle: "ROAS optimizasyonu",
-      businessType: "Performans reklamı odaklı online satış",
-      targetAudience: "Meta/Google reklamlarından gelen yeni kullanıcılar",
-      mainGoal: "Reklam bütçesinden daha yüksek gelir elde etmek",
-      primaryMetric: "ROAS ve müşteri edinme maliyeti",
+      label: "Ad efficiency",
+      subtitle: "ROAS optimization",
+      businessType: "Performance-ad-driven online sales",
+      targetAudience: "New users arriving from Meta/Google ads",
+      mainGoal: "Generate more revenue from ad spend",
+      primaryMetric: "ROAS and customer acquisition cost",
     },
   ],
   marketplace: [
     {
       id: "marketplace-sellers",
-      label: "Satıcı büyümesi",
-      subtitle: "Çoklu satıcı modeli",
+      label: "Seller growth",
+      subtitle: "Multi-vendor model",
       businessType: "Marketplace platformu",
-      targetAudience: "Platforma katılmak isteyen satıcılar ve alıcılar",
-      mainGoal: "Aktif satıcı ve işlem hacmini büyütmek",
-      primaryMetric: "Aylık aktif satıcı ve GMV",
+      targetAudience: "Sellers and buyers who want to join the platform",
+      mainGoal: "Grow active sellers and transaction volume",
+      primaryMetric: "Monthly active sellers and GMV",
     },
   ],
   custom: [
     {
       id: "custom-enterprise",
-      label: "Özel entegrasyon",
-      subtitle: "Kuruma özel ihtiyaç",
-      businessType: "Özel yazılım ihtiyacı olan kurum",
-      targetAudience: "Kurum içi operasyon ekipleri",
-      mainGoal: "Operasyon süreçlerini dijitalleştirip hızlandırmak",
-      primaryMetric: "Süreç başına harcanan operasyon süresi",
+      label: "Custom integration",
+      subtitle: "Company-specific needs",
+      businessType: "Organization with custom software needs",
+      targetAudience: "Internal operations teams",
+      mainGoal: "Digitize and speed up operations",
+      primaryMetric: "Operational time per process",
     },
   ],
 };
@@ -235,7 +280,7 @@ function StepSuccessIcon() {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 14 14"
-      className="size-3.5 shrink-0 origin-center text-success-base"
+      className="size-3.5 shrink-0 origin-center text-green-500"
       aria-hidden="true"
     >
       <path
@@ -248,7 +293,7 @@ function StepSuccessIcon() {
 
 function formatMoney(price: number | string): string {
   const n = typeof price === "string" ? parseFloat(price) : price;
-  if (Number.isNaN(n) || n <= 0) return "Kapsama göre";
+  if (Number.isNaN(n) || n <= 0) return "Based on scope";
   return `$${n.toLocaleString("en-US")}`;
 }
 
@@ -270,16 +315,80 @@ function extractScanSiteTitle(scanLike: unknown, fallbackDomain: string): string
   return candidate.trim();
 }
 
+function normalizeSiteUrl(rawValue: string): string {
+  const trimmed = rawValue.trim();
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
+
+function buildSitePreviewCandidates(rawValue: string): string[] {
+  const normalized = normalizeSiteUrl(rawValue);
+  if (!normalized) return [];
+
+  return [
+    `https://image.thum.io/get/width/1200/crop/760/noanimate/${normalized}`,
+    `https://s.wordpress.com/mshots/v1/${encodeURIComponent(normalized)}?w=1200`,
+  ];
+}
+
 function getScanIssues(scan: ScanResult): string[] {
   const issues: string[] = [];
-  if (!scan.seo.meta_description) issues.push("Meta açıklama eksik");
-  if (!scan.seo.h1) issues.push("H1 başlığı eksik");
+  if (!scan.seo.meta_description) issues.push("Meta description missing");
+  if (!scan.seo.h1) issues.push("H1 heading missing");
   if (!scan.presence.analytics && !scan.presence.tag_manager) {
-    issues.push("Analytics kurulumu yok");
+    issues.push("Analytics setup missing");
   }
-  if (!scan.presence.meta_pixel) issues.push("Meta Pixel eksik");
-  if (!scan.presence.google_business) issues.push("Google Business kaydı eksik");
+  if (!scan.technical?.robots_txt) issues.push("robots.txt not detected");
+  if (!scan.technical?.sitemap_xml) issues.push("sitemap.xml not detected");
+  if (!scan.technical?.open_graph) issues.push("Open Graph tags missing");
+  if (!scan.technical?.schema_org) issues.push("Structured data missing");
+  if (!scan.presence.google_business) issues.push("Google Business profile missing");
   return issues.slice(0, 4);
+}
+
+function getTechnicalHighlights(scan: ScanResult): Array<{ label: string; ok: boolean }> {
+  const technical = scan.technical ?? {};
+
+  return [
+    { label: "robots.txt", ok: Boolean(technical.robots_txt) },
+    { label: "sitemap.xml", ok: Boolean(technical.sitemap_xml) },
+    { label: "Open Graph", ok: Boolean(technical.open_graph) },
+    { label: "Twitter Card", ok: Boolean(technical.twitter_cards) },
+    { label: "Schema", ok: Boolean(technical.schema_org) },
+    { label: "Favicon", ok: Boolean(technical.favicon) },
+  ];
+}
+
+function getScanResultLabel(scan: ScanResult | null): string {
+  if (!scan) return "Live Scan Result";
+  if (scan.estimated) return "Estimated Scan Preview";
+  if (scan.error) return "Partial Live Scan";
+  return "Live Scan Result";
+}
+
+function getScanResultDescription(scan: ScanResult): string {
+  if (scan.estimated) {
+    return "The live scan could not finish, so this is an estimated fallback preview.";
+  }
+
+  if (scan.error) {
+    return "The scan reached the public site with limited access, so some sections may be incomplete.";
+  }
+
+  return "These findings are based on the current public version of your website.";
+}
+
+function getPerformanceSnapshotMessage(performance?: ScanPerformance): string {
+  if (performance?.available) {
+    return "PageSpeed mobile data from the current public site.";
+  }
+
+  if (performance?.failure_message) {
+    return `Live technical scan completed. ${performance.failure_message}`;
+  }
+
+  return "Live technical scan completed, but performance data is not available yet.";
 }
 
 function scoreTone(score: number) {
@@ -287,20 +396,20 @@ function scoreTone(score: number) {
     return {
       text: "text-emerald-600",
       bg: "bg-emerald-500",
-      label: "İyi",
+      label: "Good",
     };
   }
   if (score >= 50) {
     return {
       text: "text-amber-600",
       bg: "bg-amber-500",
-      label: "Geliştirilebilir",
+      label: "Needs work",
     };
   }
   return {
     text: "text-rose-600",
     bg: "bg-rose-500",
-    label: "Kritik",
+    label: "Critical",
   };
 }
 
@@ -312,19 +421,29 @@ function recommendPackageFromScan(scan: ScanResult): "starter" | "business" | "c
 
 export function OnboardingSiteFlow() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { setShowStepIndicator } = useOnboarding();
+  const searchParams = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? new URLSearchParams("")
+        : new URLSearchParams(window.location.search),
+    [],
+  );
+
+  const navigate = (path: string) => router.push(path);
 
   const tenant = searchParams.get("tenant");
   const templateSlug = searchParams.get("template");
   const templateTitleParam = searchParams.get("templateTitle");
   const templateImageParam = searchParams.get("templateImage");
+  const templateCategoryParam = searchParams.get("templateCategory");
+  const templateDescriptionParam = searchParams.get("templateDescription");
   const flowStepParam = searchParams.get("flowStep");
   const packageParam = searchParams.get("package");
   const recommendedParam = searchParams.get("recommended");
   const initialAddonKeys = searchParams.getAll("addons[]");
   const initialAddonKeysSignature = initialAddonKeys.join("|");
-  const rememberKey = `onboarding-site-flow:${tenant ?? "default"}:${templateSlug ?? "default"}`;
+  const rememberKey = `OnboardingSiteFlow:${tenant ?? "default"}:${templateSlug ?? "default"}`;
   const rememberedState = useMemo(() => {
     if (typeof window === "undefined") return null;
 
@@ -335,7 +454,6 @@ export function OnboardingSiteFlow() {
       return null;
     }
   }, [rememberKey]);
-  const hasRememberedAddonSelection = Array.isArray(rememberedState?.selectedAddonIds);
 
   const selectedTemplate = useMemo(
     () => MOCK_TEMPLATES.find((t) => t.slug === templateSlug) ?? null,
@@ -366,6 +484,11 @@ export function OnboardingSiteFlow() {
     rememberedState?.scanRequestError ?? null,
   );
   const [isScanning, setIsScanning] = useState(false);
+  const [previewMode, setPreviewMode] = useState<PreviewMode>(() =>
+    rememberedState?.previewMode === "current" ? "current" : "template",
+  );
+  const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
+  const [currentPreviewExhausted, setCurrentPreviewExhausted] = useState(false);
 
   const [plans, setPlans] = useState<PlanFromApi[]>([]);
   const [plansLoading, setPlansLoading] = useState(true);
@@ -377,9 +500,6 @@ export function OnboardingSiteFlow() {
     Array.isArray(rememberedState?.selectedAddonIds)
       ? rememberedState.selectedAddonIds.filter((value): value is number => typeof value === "number")
       : [],
-  );
-  const [preserveRememberedAddonSelection, setPreserveRememberedAddonSelection] = useState(
-    hasRememberedAddonSelection,
   );
 
   const [businessType, setBusinessType] = useState(rememberedState?.businessType ?? "");
@@ -417,6 +537,7 @@ export function OnboardingSiteFlow() {
           scanBlocked,
           nextScanAtHuman,
           scanRequestError,
+          previewMode,
           selectedPlanId,
           selectedAddonIds,
           businessType,
@@ -437,6 +558,7 @@ export function OnboardingSiteFlow() {
     hasWebsite,
     mainGoal,
     nextScanAtHuman,
+    previewMode,
     primaryMetric,
     rememberKey,
     scanBlocked,
@@ -518,11 +640,6 @@ export function OnboardingSiteFlow() {
   useEffect(() => {
     if (!selectedPlan) {
       setSelectedAddonIds([]);
-      setPreserveRememberedAddonSelection(false);
-      return;
-    }
-    if (preserveRememberedAddonSelection) {
-      setPreserveRememberedAddonSelection(false);
       return;
     }
     const recommended = planAddons
@@ -530,10 +647,12 @@ export function OnboardingSiteFlow() {
       .slice(0, 2)
       .map((addon) => addon.id);
     setSelectedAddonIds(recommended);
-  }, [planAddons, preserveRememberedAddonSelection, selectedPlan]);
+  }, [selectedPlan, planAddons]);
 
   useEffect(() => {
-    if (!flowStepParam) return;
+    if (!flowStepParam) {
+      return;
+    }
 
     const nextStep = getInitialStepIndex(flowStepParam);
     setCurrentStep((prev) => (prev === nextStep ? prev : nextStep));
@@ -571,38 +690,38 @@ export function OnboardingSiteFlow() {
     switch (selectedPackageKey) {
       case "starter":
         return {
-          businessType: "Örn: Kurumsal tanıtım sitesi",
-          targetAudience: "Örn: Şirketi araştıran potansiyel müşteriler",
-          mainGoal: "Örn: İletişim formu ve telefon dönüşümünü artırmak",
-          primaryMetric: "Örn: Aylık lead / form sayısı",
+          businessType: "Ex: Corporate showcase website",
+          targetAudience: "Ex: Potential customers researching your company",
+          mainGoal: "Ex: Increase contact form and phone conversions",
+          primaryMetric: "Ex: Monthly leads / form submissions",
         };
       case "business":
         return {
-          businessType: "Örn: B2B hizmet / danışmanlık",
-          targetAudience: "Örn: Karar verici yönetici profili",
-          mainGoal: "Örn: Demo ve teklif taleplerini büyütmek",
-          primaryMetric: "Örn: Aylık demo talebi",
+          businessType: "Ex: B2B services / consulting",
+          targetAudience: "Ex: Decision-maker profile",
+          mainGoal: "Ex: Increase demo and quote requests",
+          primaryMetric: "Ex: Monthly demo requests",
         };
       case "commerce":
         return {
-          businessType: "Örn: E-ticaret mağazası",
-          targetAudience: "Örn: Mobil ağırlıklı ürün alıcıları",
-          mainGoal: "Örn: Sepetten ödeme tamamlamaya geçişi artırmak",
-          primaryMetric: "Örn: Sipariş adedi / dönüşüm oranı",
+          businessType: "Ex: Ecommerce store",
+          targetAudience: "Ex: Mobile-first product shoppers",
+          mainGoal: "Ex: Improve cart-to-checkout completion",
+          primaryMetric: "Ex: Order count / conversion rate",
         };
       case "marketplace":
         return {
-          businessType: "Örn: Çok satıcılı pazar yeri",
-          targetAudience: "Örn: Satıcılar ve nihai alıcılar",
-          mainGoal: "Örn: Aktif satıcı ve işlem hacmini artırmak",
-          primaryMetric: "Örn: Aylık GMV",
+          businessType: "Ex: Multi-vendor marketplace",
+          targetAudience: "Ex: Sellers and end buyers",
+          mainGoal: "Ex: Increase active sellers and GMV",
+          primaryMetric: "Ex: Monthly GMV",
         };
       default:
         return {
-          businessType: "Örn: B2B hizmet / E-ticaret",
-          targetAudience: "Örn: 25-45 yaş profesyoneller",
-          mainGoal: "Örn: İlk 3 ay içinde teklif form dönüşümünü artırmak",
-          primaryMetric: "Örn: Aylık lead sayısı",
+          businessType: "Ex: B2B services / Ecommerce",
+          targetAudience: "Ex: Professionals aged 25-45",
+          mainGoal: "Ex: Increase quote form conversions in the first 3 months",
+          primaryMetric: "Ex: Monthly lead count",
         };
     }
   }, [selectedPackageKey]);
@@ -634,25 +753,82 @@ export function OnboardingSiteFlow() {
     if (hasWebsite === "yes" && domain.trim()) return domain.trim();
     if (templateTitleParam?.trim()) return templateTitleParam.trim();
     if (selectedTemplate?.title) return selectedTemplate.title;
-    return "Yeni Projeniz";
+    return "new-project";
   }, [domain, hasWebsite, scannedSiteTitle, selectedTemplate, templateTitleParam]);
 
   const previewSlug = useMemo(() => {
     const source =
-      (siteTitle.trim() || selectedTemplate?.slug || "yeni-site").toLowerCase();
+      (siteTitle.trim() || selectedTemplate?.slug || "new-site").toLowerCase();
     const sanitized = source
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
-    return sanitized || "yeni-site";
+    return sanitized || "new-site";
   }, [selectedTemplate, siteTitle]);
 
   const previewGradient = selectedTemplate?.gradient ?? "from-slate-600 to-slate-800";
-  const showSelectedPlanPreview = Boolean(
-    selectedPlan && (currentStep > 0 || scanResult),
+  const currentSitePreviewCandidates = useMemo(() => {
+    if (hasWebsite !== "yes" || !scanResult) return [];
+
+    const rawCandidates = [
+      scanResult.preview?.screenshot_url,
+      scanResult.preview?.open_graph_image_url,
+      ...buildSitePreviewCandidates(scanResult.url || domain.trim()),
+    ];
+
+    return rawCandidates.filter(
+      (value, index, list): value is string =>
+        typeof value === "string" &&
+        value.trim().length > 0 &&
+        list.indexOf(value) === index,
+    );
+  }, [domain, hasWebsite, scanResult]);
+  const currentSitePreviewLabel = scanResult?.domain || domain.trim() || "Current site";
+  const hasTemplateContext = Boolean(
+    selectedTemplate ||
+      templateTitleParam?.trim() ||
+      templateImageParam?.trim() ||
+      templateCategoryParam?.trim() ||
+      templateDescriptionParam?.trim() ||
+      templateSlug?.trim(),
   );
+  const templatePreviewLabel = hasTemplateContext ? "Selected Template" : "Template Preview";
+  const templatePreviewTitle =
+    selectedTemplate?.title ||
+    templateTitleParam ||
+    (hasTemplateContext ? "Custom Build" : "Choose a marketplace template");
+  const templatePreviewDescription = hasTemplateContext
+    ? templateDescriptionParam?.trim() ||
+      mainGoal ||
+      selectedTemplate?.description ||
+      "A cleaner, conversion-ready version of your site."
+    : "This area is populated from the marketplace selection before the user lands in onboarding.";
+  const templatePreviewBadge = hasTemplateContext
+    ? selectedTemplate?.category || templateCategoryParam?.trim() || "Moydus"
+    : "Marketplace";
+  const currentPreviewSignature = currentSitePreviewCandidates.join("|");
+  const currentSitePreviewUrl =
+    !currentPreviewExhausted && currentSitePreviewCandidates.length > 0
+      ? currentSitePreviewCandidates[currentPreviewIndex] || null
+      : null;
+  const showCurrentSitePreview =
+    previewMode === "current" &&
+    hasWebsite === "yes" &&
+    Boolean(scanResult) &&
+    Boolean(currentSitePreviewUrl);
+  const showScanLoadingPreview =
+    isScanning && hasWebsite === "yes" && previewMode === "current";
+  const showSplitPreview = hasWebsite === "yes" && Boolean(scanResult) && !isScanning;
+  const showSelectedPlanPreview = Boolean(
+    selectedPlan && (currentStep > 0 || hasWebsite === "no" || scanResult),
+  );
+  const onboardingThemeStyle = {
+    "--primary-base": "250 115 25",
+    "--primary-darker": "206 94 18",
+    "--primary-dark": "183 83 16",
+  } as CSSProperties;
 
   const progress = ((currentStep + 1) / STEPS.length) * 100;
-  const previousTitle = STEPS[currentStep - 1]?.title ?? "Giriş";
+  const previousTitle = STEPS[currentStep - 1]?.title ?? "Start";
   const currentTitle = STEPS[currentStep]?.title ?? "Onboarding";
   const stepIndicatorTop = currentStep * 76;
 
@@ -689,11 +865,16 @@ export function OnboardingSiteFlow() {
     selectedPlanId,
   ]);
 
+  useEffect(() => {
+    setCurrentPreviewIndex(0);
+    setCurrentPreviewExhausted(false);
+  }, [currentPreviewSignature]);
+
   const showExitBlocked = () => {
-    setExitBlockedNotice("Onboarding tamamlanmadan çıkış yapılamaz.");
+    setExitBlockedNotice("You cannot leave before onboarding is complete.");
     window.setTimeout(() => {
       setExitBlockedNotice((prev) =>
-        prev === "Onboarding tamamlanmadan çıkış yapılamaz." ? null : prev,
+        prev === "You cannot leave before onboarding is complete." ? null : prev,
       );
     }, 2200);
   };
@@ -701,12 +882,6 @@ export function OnboardingSiteFlow() {
   const clearRememberedOnboardingState = () => {
     if (typeof window === "undefined") return;
     window.sessionStorage.removeItem(rememberKey);
-  };
-
-  const selectPlan = (planId: number) => {
-    setPreserveRememberedAddonSelection(false);
-    setSelectedAddonIds([]);
-    setSelectedPlanId(planId);
   };
 
   const onBack = () => {
@@ -746,16 +921,20 @@ export function OnboardingSiteFlow() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
+        const domainError =
+          Array.isArray(data?.errors?.domain) && typeof data.errors.domain[0] === "string"
+            ? data.errors.domain[0]
+            : null;
         const message =
           res.status === 401
-            ? "Oturum süresi doldu. Canlı tarama için yeniden giriş yapın."
+            ? "Your session expired. Sign in again to run a live scan."
             : res.status === 422
-              ? "Geçerli bir domain girin."
+              ? domainError || "Enter a valid domain to run a live scan."
               : res.status === 408 || res.status === 504
-                ? "Canlı tarama zaman aşımına uğradı. Lütfen tekrar deneyin."
+                ? "The live scan timed out. Please try again."
                 : typeof data?.message === "string" && data.message.trim().length > 0
                   ? data.message
-                  : "Canlı tarama şu anda tamamlanamadı.";
+                  : "The live scan could not be completed right now.";
 
         setScanResult(null);
         setScannedSiteTitle("");
@@ -776,11 +955,14 @@ export function OnboardingSiteFlow() {
         if (!(data?.scanResult && typeof data.scanResult?.score === "number")) {
           setScanResult(null);
           setScannedSiteTitle("");
-          setScanRequestError("Canlı tarama kullanılabilir veri döndürmedi. Lütfen tekrar deneyin.");
+          setScanRequestError("The live scan did not return usable data. Please try again.");
           return;
         }
 
-        const result: ScanResult = data.scanResult;
+        const result: ScanResult = {
+          ...data.scanResult,
+          estimated: Boolean(data.scanResult?.estimated),
+        };
 
         setScanResult(result);
         setScannedSiteTitle(extractScanSiteTitle(result, domain.trim()));
@@ -790,13 +972,13 @@ export function OnboardingSiteFlow() {
           (plan) => inferPackageKeyFromPlanName(plan.name) === recommended,
         );
         if (planMatch) {
-          selectPlan(planMatch.id);
+          setSelectedPlanId(planMatch.id);
         }
       }
     } catch {
       setScanResult(null);
       setScannedSiteTitle("");
-      setScanRequestError("Tarama servisine ulaşılamadı. Lütfen tekrar deneyin.");
+      setScanRequestError("We could not reach the scan service. Please try again.");
     } finally {
       setIsScanning(false);
     }
@@ -839,10 +1021,10 @@ export function OnboardingSiteFlow() {
         body: JSON.stringify(payload),
       });
       clearRememberedOnboardingState();
-      router.push("/dashboard");
+      navigate("/dashboard");
     } catch {
       clearRememberedOnboardingState();
-      router.push("/dashboard");
+      navigate("/dashboard");
     } finally {
       setIsCompleting(false);
     }
@@ -874,19 +1056,82 @@ export function OnboardingSiteFlow() {
   };
 
   const scanIssues = scanResult ? getScanIssues(scanResult) : [];
+  const technicalHighlights = scanResult ? getTechnicalHighlights(scanResult) : [];
   const scoreInfo = scoreTone(scanResult?.score ?? 0);
+  const scanResultLabel = getScanResultLabel(scanResult);
+  const performanceSnapshot = scanResult?.performance;
+  const performanceScore =
+    typeof performanceSnapshot?.performance_score === "number"
+      ? performanceSnapshot.performance_score
+      : null;
+  const performanceScoreInfo = scoreTone(performanceScore ?? 0);
+  const performanceMetrics = [
+    {
+      label: "FCP",
+      value: performanceSnapshot?.first_contentful_paint || "Not available",
+    },
+    {
+      label: "LCP",
+      value: performanceSnapshot?.largest_contentful_paint || "Not available",
+    },
+    {
+      label: "TBT",
+      value: performanceSnapshot?.total_blocking_time || "Not available",
+    },
+    {
+      label: "CLS",
+      value: performanceSnapshot?.cumulative_layout_shift || "Not available",
+    },
+  ];
+  const previewPerformanceHighlights = performanceSnapshot?.available
+    ? [
+        {
+          label: "Performance",
+          value: performanceScore !== null ? `${performanceScore}/100` : "Not available",
+        },
+        {
+          label: "LCP",
+          value: performanceSnapshot?.largest_contentful_paint || "Not available",
+        },
+      ]
+    : [];
 
   const stepDescriptions = [
-    "Siteniz varsa canlı tarama yapalım, yoksa doğrudan yeni kurulumla ilerleyelim.",
-    "İş modelinize en uygun paketi seçin.",
-    "İhtiyacınıza göre eklentileri belirleyin.",
-    "Kısa sorularla projenin hedefini netleştirelim.",
-    "Seçimlerinizi son kez kontrol edin.",
-    "Ödeme adımını tamamlayıp kurulumu başlatın.",
+    "If you already have a website, we can scan it live. Otherwise, we can move straight into a new build.",
+    "Choose the package that fits your business model best.",
+    "Select the add-ons you need.",
+    "Answer a few quick questions so we can define the project goals.",
+    "Review your selections one last time.",
+    "Complete the payment step and start setup.",
   ];
 
   const currentStepDescription =
-    stepDescriptions[currentStep] ?? "Onboarding ayarlarınızı tamamlayın.";
+    stepDescriptions[currentStep] ?? "Complete your onboarding setup.";
+
+  useEffect(() => {
+    if (isScanning) {
+      setCurrentPreviewIndex(0);
+      setCurrentPreviewExhausted(false);
+      setPreviewMode("current");
+      return;
+    }
+
+    if (hasWebsite === "yes" && scanResult) {
+      setPreviewMode("current");
+      return;
+    }
+
+    setPreviewMode("template");
+  }, [hasWebsite, isScanning, scanResult]);
+
+  const handleCurrentPreviewError = () => {
+    if (currentPreviewIndex + 1 < currentSitePreviewCandidates.length) {
+      setCurrentPreviewIndex((prev) => prev + 1);
+      return;
+    }
+
+    setCurrentPreviewExhausted(true);
+  };
 
   const toggleAddon = (addonId: number) => {
     setSelectedAddonIds((prev) =>
@@ -904,9 +1149,12 @@ export function OnboardingSiteFlow() {
   };
 
   return (
-    <div className="flex min-h-full flex-col bg-bg-white-0 lg:flex-row">
+    <div
+      className="flex min-h-full flex-col bg-bg-white-0 font-sans lg:flex-row"
+      style={onboardingThemeStyle}
+    >
       <aside className="hidden w-[212px] shrink-0 flex-col gap-12 p-8 lg:flex">
-        <div className="flex size-8 items-center justify-center rounded-xl bg-primary-base text-static-white">
+        <div className="flex size-8 items-center justify-center rounded-xl  text-static-white">
           <AppLogoIcon />
         </div>
 
@@ -935,7 +1183,7 @@ export function OnboardingSiteFlow() {
               >
                 <div
                   className={cn(
-                    "flex items-center gap-1.5 text-label-sm transition-colors duration-200 ease-out",
+                    "flex items-center gap-1.5 text-sm transition-colors duration-200 ease-out",
                     active
                       ? "text-primary-base"
                       : completed
@@ -943,7 +1191,7 @@ export function OnboardingSiteFlow() {
                         : "text-text-soft-400",
                   )}
                 >
-                  {`Adım ${index + 1}/${STEPS.length}`}
+                  {`Step ${index + 1}/${STEPS.length}`}
                   {completed && <StepSuccessIcon />}
                 </div>
                 <div
@@ -961,7 +1209,7 @@ export function OnboardingSiteFlow() {
           })}
         </div>
 
-        <div className="text-paragraph-xs text-text-soft-400">© 2026 Moyduz</div>
+        <div className="text-paragraph-xs text-text-soft-400">© 2026 Moydus</div>
       </aside>
 
       <div className="lg:hidden">
@@ -973,7 +1221,7 @@ export function OnboardingSiteFlow() {
               className="inline-flex items-center gap-1 text-label-sm text-text-sub-600 hover:text-text-strong-950"
             >
               <RiArrowLeftSLine className="size-5" />
-              {`${previousTitle} sayfasına dön`}
+              {`Return to ${previousTitle}`}
             </button>
             <div className="flex-1" />
             <button
@@ -1009,11 +1257,11 @@ export function OnboardingSiteFlow() {
       <div className="flex flex-col-reverse md:grid md:flex-1 md:grid-cols-[minmax(0,600fr)_minmax(0,628fr)]">
         <div className="flex flex-col md:py-2 md:pl-2 lg:pl-0">
           <div className="flex w-full flex-1 flex-col items-center justify-center overflow-hidden bg-bg-weak-50 py-9 md:rounded-2xl lg:py-0">
-            <div className="flex w-full max-w-[352px] flex-col gap-5">
+            <div className="flex w-full max-w-[452px] flex-col gap-5">
               <div>
-                <div className="text-label-md text-text-sub-600">Canlı Önizleme</div>
+                <div className="text-label-sm text-text-sub-600">Live Preview</div>
                 <div className="mt-1 text-label-sm text-text-soft-400">
-                  Seçtikçe sağdaki bilgiler burada gerçek zamanlı güncellenir.
+                  The preview updates here in real time as you make selections.
                 </div>
               </div>
 
@@ -1024,9 +1272,38 @@ export function OnboardingSiteFlow() {
                     <div className="text-label-sm text-text-soft-400">
                       {hasWebsite === "yes" && domain.trim()
                         ? `Domain: ${domain.trim()}`
-                        : `Demo: demo.moyduz.com/${previewSlug}`}
+                        : `Demo: demo.moydus.com/${previewSlug}`}
                     </div>
                   </div>
+
+                  {hasWebsite === "yes" && scanResult && !showSplitPreview && (
+                    <div className="mb-3 inline-flex rounded-full bg-bg-weak-50 p-1 ring-1 ring-inset ring-stroke-soft-200">
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode("current")}
+                        className={cn(
+                          "rounded-full px-3 py-1.5 text-[11px] font-medium transition",
+                          previewMode === "current"
+                            ? "bg-bg-white-0 text-text-strong-950 shadow-sm"
+                            : "text-text-soft-400",
+                        )}
+                      >
+                        {`${currentSitePreviewLabel} Preview`}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode("template")}
+                        className={cn(
+                          "rounded-full px-3 py-1.5 text-[11px] font-medium transition",
+                          previewMode === "template"
+                            ? "bg-bg-white-0 text-text-strong-950 shadow-sm"
+                            : "text-text-soft-400",
+                        )}
+                      >
+                        {templatePreviewLabel}
+                      </button>
+                    </div>
+                  )}
 
                   <div className="overflow-hidden rounded-xl border border-stroke-soft-200">
                     <div className="flex items-center gap-1.5 bg-bg-soft-200 px-3 py-2">
@@ -1036,43 +1313,103 @@ export function OnboardingSiteFlow() {
                       <div className="ml-2 flex-1 truncate rounded-full bg-bg-weak-50 px-2 py-0.5 text-[10px] text-text-soft-400">
                         {hasWebsite === "yes" && domain.trim()
                           ? domain.trim()
-                          : `demo.moyduz.com/${previewSlug}`}
-                      </div>
+                          : `demo.moydus.com/${previewSlug}`
+                      }</div>
                     </div>
 
-                    <div className={cn("relative h-[224px] w-full bg-gradient-to-br", previewGradient)}>
-                      {templateImageParam && hasWebsite !== "yes" && !scanResult && (
-                        // eslint-disable-next-line @next/next/no-img-element
+                    <div
+                      className={cn(
+                        "relative h-[224px] w-full",
+                        showScanLoadingPreview ? "bg-bg-white-0" : previewGradient,
+                      )}
+                    >
+                      {!showSplitPreview && showCurrentSitePreview && currentSitePreviewUrl && (
+                        <img
+                          src={currentSitePreviewUrl}
+                          alt={scanResult?.title || domain.trim() || "Current website preview"}
+                          className="absolute inset-0 h-full w-full object-cover"
+                          onError={handleCurrentPreviewError}
+                        />
+                      )}
+                      {!showSplitPreview && templateImageParam && (hasWebsite !== "yes" || previewMode === "template") && (!scanResult || previewMode === "template") && (
                         <img
                           src={templateImageParam}
-                          alt={templateTitleParam || "Seçilen şablon"}
+                          alt={templateTitleParam || "Selected template"}
                           className="absolute inset-0 h-full w-full object-cover"
                         />
                       )}
 
-                      {(isScanning ||
+                      {!showSplitPreview && (isScanning ||
                         (!scanResult &&
-                          !(templateImageParam && hasWebsite !== "yes"))) && (
+                          !(templateImageParam && hasWebsite !== "yes")) ||
+                        (previewMode === "template" && !templateImageParam)) && (
                         <>
-                          <div className="absolute inset-0 bg-black/10" />
+                          <div
+                            className={cn(
+                              "absolute inset-0",
+                              showScanLoadingPreview
+                                ? "bg-gradient-to-br from-white via-slate-50 to-slate-100"
+                                : "bg-black/10",
+                            )}
+                          />
                           <div className="absolute inset-0 p-4">
-                            <div className="h-full rounded-xl bg-white/18 p-3 ring-1 ring-white/35 backdrop-blur-[1px]">
+                            <div
+                              className={cn(
+                                "h-full rounded-xl p-3",
+                                showScanLoadingPreview
+                                  ? "bg-white shadow-sm ring-1 ring-stroke-soft-200"
+                                  : "bg-white/18 ring-1 ring-white/35 backdrop-blur-[1px]",
+                              )}
+                            >
                               <div className="animate-pulse">
+                                {showScanLoadingPreview && (
+                                  <div className="mb-3 inline-flex items-center gap-1 rounded-full bg-primary-alpha-10 px-2 py-1 text-[11px] font-medium text-primary-base">
+                                    <RiPulseLine className="size-3.5 animate-pulse" />
+                                    Scanning live site...
+                                  </div>
+                                )}
                                 <div className="flex items-center justify-between">
-                                  <div className="h-2.5 w-20 rounded-full bg-white/75" />
+                                  <div
+                                    className={cn(
+                                      "h-2.5 w-20 rounded-full",
+                                      showScanLoadingPreview ? "bg-slate-200" : "bg-white/75",
+                                    )}
+                                  />
                                   <div className="flex items-center gap-1.5">
-                                    <div className="h-2.5 w-2.5 rounded-full bg-white/70" />
-                                    <div className="h-2.5 w-2.5 rounded-full bg-white/70" />
-                                    <div className="h-2.5 w-2.5 rounded-full bg-white/70" />
+                                    {[...Array(3)].map((_, index) => (
+                                      <div
+                                        key={index}
+                                        className={cn(
+                                          "h-2.5 w-2.5 rounded-full",
+                                          showScanLoadingPreview ? "bg-slate-200" : "bg-white/70",
+                                        )}
+                                      />
+                                    ))}
                                   </div>
                                 </div>
                                 <div className="mt-3 space-y-2">
-                                  <div className="h-4 w-3/4 rounded-full bg-white/80" />
-                                  <div className="h-3 w-1/2 rounded-full bg-white/65" />
+                                  <div
+                                    className={cn(
+                                      "h-4 w-3/4 rounded-full",
+                                      showScanLoadingPreview ? "bg-slate-200" : "bg-white/80",
+                                    )}
+                                  />
+                                  <div
+                                    className={cn(
+                                      "h-3 w-1/2 rounded-full",
+                                      showScanLoadingPreview ? "bg-slate-100" : "bg-white/65",
+                                    )}
+                                  />
                                 </div>
                                 <div className="mt-4 grid grid-cols-3 gap-2">
                                   {[...Array(3)].map((_, index) => (
-                                    <div key={index} className="h-14 rounded-lg bg-white/45" />
+                                    <div
+                                      key={index}
+                                      className={cn(
+                                        "h-14 rounded-lg",
+                                        showScanLoadingPreview ? "bg-slate-100" : "bg-white/45",
+                                      )}
+                                    />
                                   ))}
                                 </div>
                               </div>
@@ -1084,22 +1421,146 @@ export function OnboardingSiteFlow() {
                       {isScanning && (
                         <>
                           <div className="absolute inset-0 overflow-hidden">
-                            <div className="absolute inset-x-0 top-0 h-[2px] bg-white/80 animate-pulse" />
+                            <div
+                              className={cn(
+                                "absolute inset-x-0 top-0 h-[2px] animate-pulse",
+                                showScanLoadingPreview ? "bg-primary-base" : "bg-white/80",
+                              )}
+                            />
                           </div>
-                          <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[11px] text-white backdrop-blur-sm">
+                          <div
+                            className={cn(
+                              "absolute bottom-3 left-3 flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] backdrop-blur-sm",
+                              showScanLoadingPreview
+                                ? "bg-white/90 text-text-strong-950 ring-1 ring-stroke-soft-200"
+                                : "bg-black/25 text-white",
+                            )}
+                          >
                             <RiPulseLine className="size-3.5 animate-pulse" />
-                            Canlı analiz yapılıyor...
+                            Running live analysis...
                           </div>
                         </>
                       )}
 
-                      {!isScanning && scanResult && hasWebsite === "yes" && (
+                      {showSplitPreview && scanResult && (
+                        <div className="absolute inset-0 p-3">
+                          <div className="grid h-full grid-cols-2 gap-2">
+                            <div
+                              className={cn(
+                                "relative overflow-hidden rounded-xl p-3 text-white ring-1 ring-white/15",
+                                currentSitePreviewUrl
+                                  ? "bg-slate-950"
+                                  : "bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600",
+                              )}
+                            >
+                              {currentSitePreviewUrl && (
+                                <>
+                                  <img
+                                    src={currentSitePreviewUrl}
+                                    alt={`${scanResult.domain} preview`}
+                                    className="absolute inset-0 h-full w-full object-cover"
+                                    onError={handleCurrentPreviewError}
+                                  />
+                                  <div className="absolute inset-0  " />
+                                </>
+                              )}
+                              <div className="absolute inset-x-0 top-0 h-8 " />
+                              <div className="relative flex h-full flex-col">
+                                <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-white/70">
+                                  {`${currentSitePreviewLabel} Preview`}
+                                </div>
+                                <div className="mt-2 line-clamp-1 text-label-sm text-white">
+                                  {scanResult.title || domain.trim()}
+                                </div>
+                                <div className="mt-1 line-clamp-1 text-[10px] text-white/60">
+                                  {scanResult.url}
+                                </div>
+                                <div className="mt-3 flex items-start justify-between gap-2">
+                                  <div>
+                                    <div className="text-[10px] uppercase tracking-[0.08em] text-white/60">
+                                      Site Score
+                                    </div>
+                                    <div className={cn("text-2xl font-black", scoreInfo.text.replace("600", "100"))}>
+                                      {scanResult.score}
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={cn(
+                                      "rounded-full px-2 py-0.5 text-[11px] font-semibold text-white",
+                                      scoreInfo.bg,
+                                    )}
+                                  >
+                                    {scoreInfo.label}
+                                  </div>
+                                </div>
+                                <div className="mt-3 space-y-1.5">
+                                  {scanIssues.slice(0, 2).map((issue) => (
+                                    <div
+                                      key={issue}
+                                      className="rounded-md bg-white/8 px-2 py-1 text-[10px] text-white/85"
+                                    >
+                                      {issue}
+                                    </div>
+                                  ))}
+                                </div>
+                                {!currentSitePreviewUrl && (
+                                  <div className="mt-2 rounded-md bg-white/10 px-2 py-1 text-[10px] text-white/85">
+                                    Live screenshot is unavailable. Some sites block remote preview capture.
+                                  </div>
+                                )}
+                                <div className="mt-auto pt-3">
+                                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                                    <div
+                                      className={cn("h-full rounded-full", scoreInfo.bg)}
+                                      style={{ width: `${Math.max(8, Math.min(100, scanResult.score))}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="relative overflow-hidden rounded-xl ring-1 ring-white/15">
+                              {templateImageParam ? (
+                                <img
+                                  src={templateImageParam}
+                                  alt={templateTitleParam || "Selected template"}
+                                  className="absolute inset-0 h-full w-full object-cover"
+                                />
+                              ) : (
+                                <div className={cn("absolute inset-0 ", previewGradient)} />
+                              )}
+                              <div className="absolute inset-0 bg-black/25" />
+                              <div className="relative flex h-full flex-col p-3 text-white">
+                                <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-white/75">
+                                  {templatePreviewLabel}
+                                </div>
+                                <div className="mt-2 line-clamp-2 text-label-sm text-white">
+                                  {templatePreviewTitle}
+                                </div>
+                                <div className="mt-1 line-clamp-2 text-[10px] text-white/70">
+                                  {templatePreviewDescription}
+                                </div>
+                                <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+                                  <div className="rounded-full bg-white/12 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-sm">
+                                    {templatePreviewBadge}
+                                  </div>
+                                  <div className="rounded-full bg-primary-base px-2 py-0.5 text-[10px] font-semibold text-white">
+                                    After
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {!showSplitPreview && !isScanning && scanResult && hasWebsite === "yes" && previewMode === "current" && !showCurrentSitePreview && (
                         <div className="absolute inset-0 p-4">
                           <div className="h-full rounded-xl bg-black/18 p-3 ring-1 ring-white/30 backdrop-blur-[1px] text-white">
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <div className="text-[11px] opacity-80">Site Skoru</div>
-                                <div className={cn("text-3xl font-black", scoreInfo.text.replace("600", "100"))}>
+                                <div className="text-[11px] opacity-80">{scanResultLabel}</div>
+                                <div className={cn("text-2xl font-black", scoreInfo.text.replace("600", "100"))}>
                                   {scanResult.score}
                                 </div>
                               </div>
@@ -1108,7 +1569,21 @@ export function OnboardingSiteFlow() {
                               </div>
                             </div>
 
-                            <div className="mt-3 space-y-1.5">
+                            {previewPerformanceHighlights.length > 0 && (
+                              <div className="mt-2 grid grid-cols-2 gap-1.5">
+                                {previewPerformanceHighlights.map((item) => (
+                                  <div
+                                    key={item.label}
+                                    className="rounded-md bg-black/25 px-2 py-1 text-[10px]"
+                                  >
+                                    <div className="opacity-70">{item.label}</div>
+                                    <div className="mt-0.5 font-semibold text-white">{item.value}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            <div className="mt-1 space-y-1.5">
                               {scanIssues.map((issue) => (
                                 <div
                                   key={issue}
@@ -1118,35 +1593,69 @@ export function OnboardingSiteFlow() {
                                 </div>
                               ))}
                             </div>
+
+                            <div className="mt-2 grid grid-cols-2 gap-1.5">
+                              {technicalHighlights.slice(0, 4).map((item) => (
+                                <div
+                                  key={item.label}
+                                  className="flex items-center gap-1.5 rounded-md bg-black/25 px-2 py-1 text-[10px]"
+                                >
+                                  {item.ok ? (
+                                    <Check className="size-3 text-emerald-200" />
+                                  ) : (
+                                    <AlertTriangle className="size-3 text-amber-200" />
+                                  )}
+                                  <span>{item.label}</span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )}
 
-                      {showSelectedPlanPreview && (
+                      {showSelectedPlanPreview && !showSplitPreview && (
                         <div className="absolute left-3 top-3 rounded-full bg-black/20 px-2.5 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm">
-                          {selectedPlan?.name}
+                          {selectedPlan.name}
                         </div>
                       )}
 
-                      <div className="absolute bottom-3 right-3 rounded-full bg-black/20 px-2 py-0.5 text-[11px] text-white backdrop-blur-sm">
-                        {showSelectedPlanPreview && selectedAddonIds.length > 0
-                          ? `${selectedAddonIds.length} eklenti`
-                          : showSelectedPlanPreview
-                            ? "Temel kurulum"
-                            : "Marketplace önizleme"}
-                      </div>
+                      {!showSplitPreview && previewMode === "current" &&
+                        scanResult &&
+                        hasWebsite === "yes" &&
+                        performanceScore !== null && (
+                          <div
+                            className={cn(
+                              "absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[11px] font-semibold text-static-white backdrop-blur-sm",
+                              performanceScoreInfo.bg,
+                            )}
+                          >
+                            {`Performance ${performanceScore}`}
+                          </div>
+                        )}
+
+                      {!showSplitPreview && (
+                        <div className="absolute bottom-3 right-3 rounded-full bg-black/20 px-2 py-0.5 text-[11px] text-white backdrop-blur-sm">
+                          {previewMode === "current" && scanResult && hasWebsite === "yes"
+                            ? "Live site preview"
+                            : showSelectedPlanPreview && selectedAddonIds.length > 0
+                              ? `${selectedAddonIds.length} add-on`
+                              : showSelectedPlanPreview
+                                ? "Basic setup"
+                                : "Marketplace preview"}
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   <div className="w-full">
-                    <div className="text-label-md text-text-soft-400">
+                    <div className="text-label-sm text-text-soft-400">
                       {selectedTemplate?.category || "Onboarding"}
                     </div>
-                    <div className="mt-2 line-clamp-2 text-label-lg text-text-sub-600">
+                    <div className="mt-2 line-clamp-2 text-label-md text-text-sub-600">
                       {siteTitle}
                     </div>
                     <div className="mt-1 line-clamp-2 text-paragraph-sm text-text-soft-400">
-                      {mainGoal || selectedTemplate?.description || "Hedefinizi yazdıkça bu alan güncellenir."}
+                      {mainGoal || selectedTemplate?.description || "This area updates as you define your goal."}
                     </div>
                     {showSelectedPlanPreview && (
                       <div className="mt-3 rounded-lg bg-bg-weak-50 p-3 ring-1 ring-inset ring-stroke-soft-200">
@@ -1156,7 +1665,7 @@ export function OnboardingSiteFlow() {
                               Selected Package
                             </div>
                             <div className="line-clamp-1 text-label-sm text-text-strong-950">
-                              {selectedPlan?.name}
+                              {selectedPlan.name}
                             </div>
                           </div>
                           {totalAmount > 0 && (
@@ -1164,7 +1673,7 @@ export function OnboardingSiteFlow() {
                               <div className="text-paragraph-xs text-text-soft-400">Total</div>
                               <div
                                 className={cn(
-                                  "text-title-h5 text-text-strong-950 transition-all duration-300",
+                                  "text-title-h6 text-text-strong-950 transition-all duration-300",
                                   pricePulse && "scale-105 text-primary-base",
                                 )}
                               >
@@ -1203,21 +1712,21 @@ export function OnboardingSiteFlow() {
 
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                      <div className="text-label-md text-text-soft-400">Brief Durumu</div>
+                      <div className="text-label-sm text-text-soft-400">Brief Status</div>
                       <div className="text-label-sm text-text-soft-400">
-                        {businessType || mainGoal ? "Dolu" : "Bekleniyor"}
+                        {businessType || mainGoal ? "Filled" : "Pending"}
                       </div>
                     </div>
 
                     <div className="rounded-lg bg-bg-weak-50 p-3 ring-1 ring-inset ring-stroke-soft-200">
-                      <div className="text-paragraph-xs text-text-soft-400">İş Tipi</div>
+                      <div className="text-paragraph-xs text-text-soft-400">Business Type</div>
                       <div className="mt-1 line-clamp-1 text-paragraph-sm text-text-sub-600">
-                        {businessType || "Henüz yazılmadı"}
+                        {businessType || "Not added yet"}
                       </div>
 
-                      <div className="mt-2 text-paragraph-xs text-text-soft-400">Ana Hedef</div>
+                      <div className="mt-2 text-paragraph-xs text-text-soft-400">Primary Goal</div>
                       <div className="mt-1 line-clamp-2 text-paragraph-sm text-text-sub-600">
-                        {mainGoal || "Henüz belirtilmedi"}
+                        {mainGoal || "Not specified yet"}
                       </div>
                     </div>
                   </div>
@@ -1235,16 +1744,16 @@ export function OnboardingSiteFlow() {
               className="inline-flex items-center gap-1 text-label-sm text-text-sub-600 hover:text-text-strong-950"
             >
               <RiArrowLeftSLine className="size-5" />
-              {`${previousTitle} sayfasına dön`}
+              {`Return to ${previousTitle}`}
             </button>
             <div className="flex-1" />
-            <button
+            {/* <button
               type="button"
               onClick={showExitBlocked}
               className="flex size-5 items-center justify-center rounded-md text-text-sub-600 hover:bg-bg-weak-50 hover:text-text-strong-950"
             >
               <RiCloseLine className="size-[18px]" />
-            </button>
+            </button> */}
           </div>
 
           <div className="flex h-full w-full flex-col justify-center md:py-9">
@@ -1252,8 +1761,8 @@ export function OnboardingSiteFlow() {
               <div className="flex w-full flex-col gap-6">
                 <Sparkles className="size-7 text-primary-base" />
                 <div>
-                  <div className="text-title-h5 text-text-strong-950">{currentTitle}</div>
-                  <div className="mt-2 text-paragraph-md text-text-sub-600">
+                  <div className="text-title-h6 text-text-strong-950">{currentTitle}</div>
+                  <div className="mt-2 text-paragraph-sm text-text-sub-600">
                     {currentStepDescription}
                   </div>
                   {exitBlockedNotice && (
@@ -1266,14 +1775,12 @@ export function OnboardingSiteFlow() {
 
               {currentStep === 0 && (
                 <div className="flex flex-col gap-3">
-                  <div className="text-label-sm text-text-sub-600">Siteniz var mı?</div>
+                  <div className="text-label-sm text-text-sub-600">Do you have a website?</div>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => {
                         setHasWebsite("yes");
-                        setScanBlocked(false);
-                        setNextScanAtHuman(null);
                         setScanRequestError(null);
                       }}
                       className={cn(
@@ -1283,7 +1790,7 @@ export function OnboardingSiteFlow() {
                           : "border-stroke-soft-200 bg-bg-white-0 text-text-sub-600",
                       )}
                     >
-                      Evet, var
+                      Yes, I have a website
                     </button>
                     <button
                       type="button"
@@ -1303,7 +1810,7 @@ export function OnboardingSiteFlow() {
                           : "border-stroke-soft-200 bg-bg-white-0 text-text-sub-600",
                       )}
                     >
-                      Hayır, yok
+                      No, not yet
                     </button>
                   </div>
 
@@ -1317,30 +1824,50 @@ export function OnboardingSiteFlow() {
                           setScanRequestError(null);
                         }}
                         className="mt-1 h-10 w-full rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 text-paragraph-sm text-text-strong-950 outline-none focus:border-stroke-strong-950"
-                        placeholder="ornek.com"
+                        placeholder="example.com"
                       />
                     </label>
                   )}
 
-                  {scanRequestError && (
-                    <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-paragraph-xs text-rose-700">
-                      {scanRequestError}
+                  {scanBlocked && nextScanAtHuman && (
+                    <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-paragraph-xs text-amber-800">
+                      {`A new scan will be available again on ${nextScanAtHuman}.`}
                     </div>
                   )}
 
-                  {scanBlocked && nextScanAtHuman && (
-                    <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-paragraph-xs text-amber-800">
-                      {`Yeni tarama ${nextScanAtHuman} tarihinde tekrar açılacak.`}
+                  {scanRequestError && (
+                    <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-paragraph-xs text-rose-800">
+                      {scanRequestError}
                     </div>
                   )}
 
                   {scanResult && hasWebsite === "yes" && (
                     <div className="rounded-2xl border border-stroke-soft-200 bg-bg-white-0 p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="text-label-sm text-text-strong-950">Tarama Sonucu</div>
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-label-sm text-text-strong-950">{scanResultLabel}</div>
+                          <div className="mt-1 text-paragraph-xs text-text-soft-400">
+                            {getScanResultDescription(scanResult)}
+                          </div>
+                        </div>
                         <div className="text-label-sm text-text-sub-600">{scanResult.score}/100</div>
                       </div>
-                      <div className="mt-2 space-y-1.5">
+
+                      <div className="mt-3 rounded-xl bg-bg-weak-50 p-3 ring-1 ring-inset ring-stroke-soft-200">
+                        <div className="line-clamp-1 text-label-sm text-text-strong-950">
+                          {scanResult.title || domain.trim()}
+                        </div>
+                        <div className="mt-1 line-clamp-1 text-paragraph-xs text-text-soft-400">
+                          {scanResult.url}
+                        </div>
+                        {scanResult.h1 && (
+                          <div className="mt-2 line-clamp-1 text-paragraph-sm text-text-sub-600">
+                            {scanResult.h1}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-3 space-y-1.5">
                         {scanIssues.map((issue) => (
                           <div key={issue} className="flex items-center gap-2 text-paragraph-xs text-text-sub-600">
                             <AlertTriangle className="size-3.5 text-amber-500" />
@@ -1348,11 +1875,68 @@ export function OnboardingSiteFlow() {
                           </div>
                         ))}
                       </div>
+
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        {technicalHighlights.map((item) => (
+                          <div
+                            key={item.label}
+                            className="flex items-center gap-2 rounded-lg bg-bg-weak-50 px-2.5 py-2 text-paragraph-xs text-text-sub-600 ring-1 ring-inset ring-stroke-soft-200"
+                          >
+                            {item.ok ? (
+                              <Check className="size-3.5 text-emerald-500" />
+                            ) : (
+                              <AlertTriangle className="size-3.5 text-amber-500" />
+                            )}
+                            <span>{item.label}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {scanResult.technical?.sitemap_url && (
+                        <div className="mt-3 rounded-lg bg-bg-weak-50 px-3 py-2 text-paragraph-xs text-text-soft-400 ring-1 ring-inset ring-stroke-soft-200">
+                          {`Sitemap: ${scanResult.technical.sitemap_url}`}
+                        </div>
+                      )}
+
+                      <div className="mt-3 rounded-xl border border-stroke-soft-200 bg-bg-white-0 p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="text-label-sm text-text-strong-950">Performance Snapshot</div>
+                            <div className="mt-1 text-paragraph-xs text-text-soft-400">
+                              {getPerformanceSnapshotMessage(performanceSnapshot)}
+                            </div>
+                          </div>
+                          {performanceScore !== null && (
+                            <div
+                              className={cn(
+                                "rounded-full px-2.5 py-1 text-label-sm text-static-white",
+                                performanceScoreInfo.bg,
+                              )}
+                            >
+                              {performanceScore}/100
+                            </div>
+                          )}
+                        </div>
+
+                        {performanceSnapshot?.available && (
+                          <div className="mt-3 grid grid-cols-2 gap-2">
+                            {performanceMetrics.map((metric) => (
+                              <div
+                                key={metric.label}
+                                className="rounded-lg bg-bg-weak-50 px-3 py-2 ring-1 ring-inset ring-stroke-soft-200"
+                              >
+                                <div className="text-paragraph-xs text-text-soft-400">{metric.label}</div>
+                                <div className="mt-1 text-label-sm text-text-strong-950">{metric.value}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
 
                   <p className="text-paragraph-xs text-text-soft-400">
-                    Bu adımda canlı analiz hissi için site taraması yapılır, yoksa sıfırdan kurulum akışına geçilir.
+                    This step runs a site scan for a live analysis experience, or moves into a fresh setup flow if you do not have a site yet.
                   </p>
                 </div>
               )}
@@ -1361,7 +1945,7 @@ export function OnboardingSiteFlow() {
                 <div className="flex flex-col gap-3">
                   {plansLoading && (
                     <div className="rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 py-2 text-paragraph-sm text-text-soft-400">
-                      Paketler yükleniyor...
+                      Loading packages...
                     </div>
                   )}
 
@@ -1373,7 +1957,7 @@ export function OnboardingSiteFlow() {
                           <button
                             key={plan.id}
                             type="button"
-                            onClick={() => selectPlan(plan.id)}
+                            onClick={() => setSelectedPlanId(plan.id)}
                             className={cn(
                               "rounded-10 border p-3 text-left",
                               selected
@@ -1382,11 +1966,11 @@ export function OnboardingSiteFlow() {
                             )}
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <div className="text-label-md text-text-strong-950">{plan.name}</div>
+                              <div className="text-label-sm text-text-strong-950">{plan.name}</div>
                               {selected && <Check className="size-4 text-primary-base" />}
                             </div>
                             <div className="mt-1 text-paragraph-xs text-text-soft-400">
-                              {plan.description || "Özel kurulum"}
+                              {plan.description || "Custom setup"}
                             </div>
                             <div className="mt-2 text-label-sm text-text-sub-600">
                               {`${formatMoney(plan.setup_price)} setup`}
@@ -1406,11 +1990,11 @@ export function OnboardingSiteFlow() {
                   {selectedPlan ? (
                     <>
                       <div className="rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 py-2 text-paragraph-sm text-text-sub-600">
-                        {`${selectedPlan.name} paketi için eklentiler`}
+                        {`${selectedPlan.name} add-ons`}
                       </div>
                       {planAddons.length === 0 && (
                         <div className="rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 py-2 text-paragraph-sm text-text-soft-400">
-                          Bu paket için eklenti bulunamadı.
+                          No add-ons are available for this package.
                         </div>
                       )}
                       {planAddons.map((addon) => {
@@ -1434,13 +2018,13 @@ export function OnboardingSiteFlow() {
                               </div>
                             </div>
                             <div className="mt-1 text-paragraph-xs text-text-soft-400">
-                              {addon.description || "Opsiyonel geliştirme"}
+                              {addon.description || "Optional upgrade"}
                             </div>
                           </button>
                         );
                       })}
                       <div className="rounded-10 border border-stroke-soft-200 bg-bg-weak-50 px-3 py-2">
-                        <div className="text-label-xs text-text-sub-600">Seçilen eklentiler</div>
+                        <div className="text-label-xs text-text-sub-600">Selected add-ons</div>
                         {selectedAddons.length > 0 ? (
                           <div className="mt-2 flex flex-col gap-1.5">
                             {selectedAddons.map((addon) => (
@@ -1457,19 +2041,19 @@ export function OnboardingSiteFlow() {
                           </div>
                         ) : (
                           <div className="mt-2 text-paragraph-xs text-text-soft-400">
-                            Henüz eklenti seçilmedi.
+                            No add-ons selected yet.
                           </div>
                         )}
                         <div className="my-2 h-px bg-stroke-soft-200" />
                         <div className="flex items-center justify-between text-label-sm text-text-strong-950">
-                          <span>Toplam eklenti tutarı</span>
+                          <span>Total add-on cost</span>
                           <span>{`$${Math.round(addonsAmount).toLocaleString("en-US")}`}</span>
                         </div>
                       </div>
                     </>
                   ) : (
                     <div className="rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 py-2 text-paragraph-sm text-text-soft-400">
-                      Önce bir paket seçin.
+                      Select a package first.
                     </div>
                   )}
                 </div>
@@ -1481,10 +2065,10 @@ export function OnboardingSiteFlow() {
                     <div className="rounded-10 border border-primary-alpha-30 bg-primary-alpha-10 p-3">
                       <div className="flex items-center gap-1.5 text-label-sm text-primary-base">
                         <Sparkles className="size-4" />
-                        AI Brief Önerileri
+                        AI Brief Suggestions
                       </div>
                       <p className="mt-1 text-paragraph-xs text-text-sub-600">
-                        {`${selectedPlan.name} paketi için hızlı bir senaryo seçip alanları otomatik doldurabilirsiniz.`}
+                        {`Choose a quick scenario for the ${selectedPlan.name} package and auto-fill the fields.`}
                       </p>
                       <div className="mt-2 grid grid-cols-1 gap-2">
                         {activeBriefPresets.map((preset) => {
@@ -1516,7 +2100,7 @@ export function OnboardingSiteFlow() {
                   )}
 
                   <label className="text-label-sm text-text-sub-600">
-                    İş modeliniz
+                    Your business model
                     <input
                       value={businessType}
                       onChange={(event) => setBusinessType(event.target.value)}
@@ -1546,7 +2130,7 @@ export function OnboardingSiteFlow() {
                   </label>
 
                   <label className="text-label-sm text-text-sub-600">
-                    Başarı metriği
+                    Success metric
                     <input
                       value={primaryMetric}
                       onChange={(event) => setPrimaryMetric(event.target.value)}
@@ -1559,22 +2143,22 @@ export function OnboardingSiteFlow() {
 
               {currentStep === 4 && (
                 <div className="rounded-2xl border border-stroke-soft-200 bg-bg-white-0 p-4">
-                  <div className="text-label-sm text-text-strong-950">Özet</div>
+                  <div className="text-label-sm text-text-strong-950">Summary</div>
                   <div className="mt-3 space-y-2 text-paragraph-sm text-text-sub-600">
                     <p>
                       <strong className="text-text-strong-950">Website:</strong>{" "}
-                      {hasWebsite === "yes" ? domain || "-" : "Yok (yeni kurulacak)"}
+                      {hasWebsite === "yes" ? domain || "-" : "No (will be created)"}
                     </p>
                     <p>
                       <strong className="text-text-strong-950">Template:</strong>{" "}
-                      {selectedTemplate?.title || "Seçilmedi"}
+                      {selectedTemplate?.title || "Not selected"}
                     </p>
                     <p>
-                      <strong className="text-text-strong-950">Paket:</strong>{" "}
+                      <strong className="text-text-strong-950">Package:</strong>{" "}
                       {selectedPlan?.name || "-"}
                     </p>
                     <p>
-                      <strong className="text-text-strong-950">Eklentiler:</strong>{" "}
+                      <strong className="text-text-strong-950">Add-ons:</strong>{" "}
                       {selectedAddons.length > 0
                         ? selectedAddons
                             .map(
@@ -1585,7 +2169,7 @@ export function OnboardingSiteFlow() {
                         : "Yok"}
                     </p>
                     <p>
-                      <strong className="text-text-strong-950">İş modeli:</strong>{" "}
+                      <strong className="text-text-strong-950">Business model:</strong>{" "}
                       {businessType || "-"}
                     </p>
                     <p>
@@ -1596,7 +2180,7 @@ export function OnboardingSiteFlow() {
                       <strong className="text-text-strong-950">Toplam:</strong>{" "}
                       {totalAmount > 0
                         ? `$${Math.round(totalAmount).toLocaleString("en-US")}`
-                        : "Kapsama göre"}
+                        : "Based on scope"}
                     </p>
                   </div>
                 </div>
@@ -1606,22 +2190,22 @@ export function OnboardingSiteFlow() {
                 <div className="flex flex-col gap-3">
                   <div className="rounded-10 border border-stroke-soft-200 bg-bg-weak-50 px-3 py-2 text-paragraph-sm text-text-sub-600">
                     {totalAmount > 0
-                      ? `Ödenecek toplam: $${Math.round(totalAmount).toLocaleString("en-US")}`
-                      : "Ödeme tutarı kapsamınıza göre netleşecek"}
+                      ? `Total due: $${Math.round(totalAmount).toLocaleString("en-US")}`
+                      : "Final pricing will be confirmed based on your scope"}
                   </div>
 
                   <label className="text-label-sm text-text-sub-600">
-                    Kart üzerindeki isim
+                    Name on card
                     <input
                       value={cardName}
                       onChange={(event) => setCardName(event.target.value)}
                       className="mt-1 h-10 w-full rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 text-paragraph-sm text-text-strong-950 outline-none focus:border-stroke-strong-950"
-                      placeholder="Ad Soyad"
+                      placeholder="Full Name"
                     />
                   </label>
 
                   <label className="text-label-sm text-text-sub-600">
-                    Kart numarası
+                    Card number
                     <input
                       value={cardNumber}
                       onChange={(event) => setCardNumber(event.target.value)}
@@ -1652,7 +2236,7 @@ export function OnboardingSiteFlow() {
                   </div>
 
                   <p className="text-paragraph-xs text-text-soft-400">
-                    Bu adım demo amaçlıdır; tamamlandığında kurulum süreciniz başlatılır.
+                    This step is for demo purposes; completing it will start your setup process.
                   </p>
                 </div>
               )}
@@ -1668,18 +2252,18 @@ export function OnboardingSiteFlow() {
                 {currentStep === 0
                   ? hasWebsite === "yes"
                     ? scanResult
-                      ? "Paket Seçimine Geç"
+                      ? "Continue to Package Selection"
                       : isScanning
-                        ? "Taranıyor..."
-                        : "Taramayı Başlat"
+                        ? "Scanning..."
+                        : "Start Scan"
                     : hasWebsite === "no"
-                      ? "Paket Seçimine Geç"
-                      : "Devam Et"
+                      ? "Continue to Package Selection"
+                      : "Continue"
                   : currentStep === STEPS.length - 1
                     ? isCompleting
-                      ? "Tamamlanıyor..."
-                      : "Ödemeyi Tamamla"
-                    : "Devam Et"}
+                      ? "Completing..."
+                      : "Complete Payment"
+                    : "Continue"}
               </Button.Root>
 
               {currentStep > 0 && (
@@ -1688,7 +2272,7 @@ export function OnboardingSiteFlow() {
                   onClick={onBack}
                   className="text-center text-paragraph-sm text-text-sub-600 hover:text-text-strong-950"
                 >
-                  Geri dön
+                  Go back
                 </button>
               )}
 
@@ -1698,7 +2282,7 @@ export function OnboardingSiteFlow() {
                   onClick={() => setCurrentStep(1)}
                   className="text-center text-paragraph-sm text-text-sub-600 hover:text-text-strong-950"
                 >
-                  Site yok, paket adımına geç
+                  No site, continue to packages
                 </button>
               )}
 
@@ -1706,16 +2290,16 @@ export function OnboardingSiteFlow() {
                 <div className="rounded-10 border border-stroke-soft-200 bg-bg-weak-50 px-3 py-2 text-paragraph-xs text-text-soft-400">
                   <div className="flex items-center gap-1.5">
                     <CreditCard className="size-3.5" />
-                    Güvenli ödeme altyapısı ile devam edilir.
+                    Proceed with secure payment infrastructure.
                   </div>
                   <div className="mt-1 flex items-center gap-1.5">
                     <Globe className="size-3.5" />
-                    Kurulum sonrası dashboard ve proje paneliniz aktif olur.
+                    Your dashboard and project panel will be activated after setup.
                   </div>
                   {scanResult && (
                     <div className="mt-1 flex items-center gap-1.5">
                       <Search className="size-3.5" />
-                      Tarama sonucu: {scanResult.score}/100
+                      Scan result: {scanResult.score}/100
                     </div>
                   )}
                 </div>
