@@ -1150,7 +1150,7 @@ export function OnboardingSiteFlow() {
 
   return (
     <div
-      className="flex min-h-full flex-col bg-bg-white-0 font-sans lg:flex-row"
+      className="flex min-h-svh flex-col bg-bg-white-0 font-sans lg:flex-row"
       style={onboardingThemeStyle}
     >
       <aside className="hidden w-[212px] shrink-0 flex-col gap-12 p-8 lg:flex">

@@ -133,7 +133,7 @@ export function AddSiteFlow() {
     stepDescriptions[currentStep] ?? "Site bilgilerinizi yapılandırın ve yayına hazırlayın";
 
   return (
-    <div className="flex min-h-full flex-col bg-bg-white-0 lg:flex-row">
+    <div className="flex  flex-col bg-bg-white-0 lg:flex-row">
       <aside className="hidden w-[212px] shrink-0 flex-col gap-12  p-8 lg:flex">
         <div className="flex size-8 items-center justify-center rounded-xl bg-primary-base text-static-white">
           <AppLogoIcon />
