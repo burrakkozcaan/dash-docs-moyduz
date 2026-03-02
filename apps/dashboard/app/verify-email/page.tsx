@@ -7,6 +7,7 @@ import AuthLayout from "@/components/auth-layout"
 import { Button } from "@repo/ui/components/ui/button"
 import AppLogoIcon from "@/components/app-logo-icon"
 import { useAuth } from "@/hooks/use-auth"
+import { api } from "@/lib/api"
 import { getPostVerificationDestination, hasVerifiedEmail } from "@/lib/auth-redirects"
 import { routes } from "@/lib/routes"
 
@@ -35,12 +36,19 @@ export default function VerifyEmailPage() {
     e.preventDefault()
     setProcessing(true)
     try {
+      const token = api.getToken()
       const res = await fetch("/api/auth/verification/send", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
       })
+
       if (res.ok) {
         setStatus("Yeni bir doğrulama bağlantısı e-postana gönderildi.")
+      } else if (res.status === 401) {
+        setStatus("Oturum bulunamadı. Lütfen tekrar giriş yap.")
       }
     } finally {
       setProcessing(false)
