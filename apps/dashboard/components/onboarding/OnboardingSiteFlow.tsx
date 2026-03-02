@@ -4,7 +4,6 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   RiArrowLeftSLine,
   RiCloseLine,
@@ -433,7 +432,6 @@ function recommendPackageFromScan(scan: ScanResult): "starter" | "business" | "c
 }
 
 export function OnboardingSiteFlow() {
-  const router = useRouter();
   const { setShowStepIndicator } = useOnboarding();
   const searchParams = useMemo(
     () =>
@@ -442,8 +440,6 @@ export function OnboardingSiteFlow() {
         : new URLSearchParams(window.location.search),
     [],
   );
-
-  const navigate = (path: string) => router.push(path);
 
   const tenant = searchParams.get("tenant");
   const templateSlug = searchParams.get("template");
