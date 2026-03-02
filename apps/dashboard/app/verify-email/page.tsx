@@ -1,14 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import AuthLayout from "@/components/auth-layout"
 import { Button } from "@repo/ui/components/ui/button"
 import AppLogoIcon from "@/components/app-logo-icon"
+import { useAuth } from "@/hooks/use-auth"
+import { getPostVerificationDestination, hasVerifiedEmail } from "@/lib/auth-redirects"
+import { routes } from "@/lib/routes"
 
 export default function VerifyEmailPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { user, loading: authLoading } = useAuth()
   const [processing, setProcessing] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
+  const redirectTo = searchParams.get("redirect")
+
+  useEffect(() => {
+    if (authLoading) return
+
+    if (!user) {
+      router.replace(routes.login())
+      return
+    }
+
+    if (hasVerifiedEmail(user)) {
+      router.replace(getPostVerificationDestination(user, redirectTo))
+    }
+  }, [authLoading, redirectTo, router, user])
 
   const handleResend = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,6 +45,19 @@ export default function VerifyEmailPage() {
     } finally {
       setProcessing(false)
     }
+  }
+
+  if (authLoading || !user || hasVerifiedEmail(user)) {
+    return (
+      <AuthLayout
+        title="E-postanı doğrula"
+        description="Yönlendiriliyorsun..."
+      >
+        <div className="flex justify-start text-left">
+          <AppLogoIcon />
+        </div>
+      </AuthLayout>
+    )
   }
 
   return (

@@ -6,16 +6,16 @@
   "pages": [
     "---Rehber---",
     "index",
-    "search",
+    "arama",
     "---API Referansı---",
-    "page-tree",
-    "internationalization",
-    "components",
-    "utils",
+    "sayfa-agaci",
+    "coklu-dil",
+    "bilesenler",
+    "araclar",
     "mdx",
     "---Kaynaklar---",
-    "source-api",
-    "page-conventions",
+    "kaynak-api",
+    "sayfa-kurallari",
     "content-collections/index"
   ]
 }

@@ -7,7 +7,7 @@ description: Customise generated page slugs and page tree.
 
 ## Overview
 
-Fumadocs generates **page slugs** and **page tree** (sidebar items) from your content directory using [`loader()`](/docs/headless/source-api),
+Fumadocs generates **page slugs** and **page tree** (sidebar items) from your content directory using [`loader()`](/docs/headless-mimari/kaynak-api),
 the routing functionality will be handled by your React framework.
 
 You can define folders and pages similar to file-system based routing.
@@ -19,7 +19,7 @@ You can define folders and pages similar to file-system based routing.
   </Folder>
 </Files>
 
-To customise its output further, you may use [Loader Plugins](/docs/headless/source-api/plugins).
+To customise its output further, you may use [Loader Plugins](/docs/headless-mimari/kaynak-api/eklentiler).
 
 ## File
 
@@ -166,7 +166,7 @@ Folder items are sorted alphabetically by default, you can add or control the or
 
 Since Fumadocs doesn't include an icon library, you have to convert the icon names to JSX elements in runtime, and render it as a component.
 
-You can add an [`icon` handler](/docs/headless/source-api#icons) to `loader()`.
+You can add an [`icon` handler](/docs/headless-mimari/kaynak-api#icons) to `loader()`.
 
 ## i18n Routing
 

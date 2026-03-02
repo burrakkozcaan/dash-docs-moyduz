@@ -7,7 +7,7 @@ description: Turn content sources into a unified interface
 
 `loader()` provides an interface for Fumadocs to integrate with different content sources.
 
-- Generate [page slugs and page tree](/docs/headless/page-conventions).
+- Generate [page slugs and page tree](/docs/headless-mimari/sayfa-kurallari).
 - Assign URL to each page.
 - Output useful utilities to interact with content.
 
@@ -20,7 +20,7 @@ description: Turn content sources into a unified interface
 
 ## Usage
 
-You can use it with content sources like Fumadocs MDX, see [`source`](/docs/headless/source-api/source) for details.
+You can use it with content sources like Fumadocs MDX, see [`source`](/docs/headless-mimari/kaynak-api/kaynak) for details.
 
 ```ts
 import { loader } from 'fumadocs-core/source';
@@ -67,7 +67,7 @@ loader({
 
 ### Icons
 
-Load the [icon](/docs/headless/page-conventions#icons) property specified by page and meta files.
+Load the [icon](/docs/headless-mimari/sayfa-kurallari#icons) property specified by page and meta files.
 
 ```ts
 import { loader } from 'fumadocs-core/source';
@@ -101,7 +101,7 @@ export const source = loader({
 
 With i18n enabled, loader will generate a page tree for every locale.
 
-If translations are missing for a page, it fallbacks to [`fallbackLanguage`](/docs/headless/internationalization#fallback-language).
+If translations are missing for a page, it fallbacks to [`fallbackLanguage`](/docs/headless-mimari/coklu-dil#fallback-language).
 
 ## Output
 

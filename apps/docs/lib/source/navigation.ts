@@ -5,7 +5,7 @@ export function getSection(path: string | undefined) {
   return (
     {
       'e-ticaret-paketleri': 'E-Ticaret Paketleri',
-      headless: 'Headless Mimari',
+      'headless-mimari': 'Headless Mimari',
       mdx: 'İçerik Yönetimi (MDX)',
     }[dir] ?? 'Genel'
   );

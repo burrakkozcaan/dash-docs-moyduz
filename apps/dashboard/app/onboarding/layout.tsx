@@ -1,7 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import { cn } from "@repo/ui/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
+import { buildVerifyEmailRedirect, hasVerifiedEmail } from "@/lib/auth-redirects";
+import { routes } from "@/lib/routes";
 
 import { OnboardingProvider, useOnboarding } from "./onboarding-context";
 
@@ -68,6 +72,34 @@ export default function OnboardingLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const params = searchParams.toString();
+    const currentPath = `${pathname}${params ? `?${params}` : ""}`;
+
+    if (!user) {
+      router.replace(routes.loginWithRedirect(currentPath));
+
+      return;
+    }
+
+    if (!hasVerifiedEmail(user)) {
+      router.replace(buildVerifyEmailRedirect(currentPath));
+    }
+  }, [loading, pathname, router, searchParams, user]);
+
+  if (loading || !user || !hasVerifiedEmail(user)) {
+    return <div className="min-h-screen bg-background" />;
+  }
+
   return (
     <OnboardingProvider>
       <div className="relative min-h-screen bg-background">
