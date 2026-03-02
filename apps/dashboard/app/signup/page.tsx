@@ -10,6 +10,8 @@ import { Input } from "@repo/ui/components/ui/input"
 import { Label } from "@repo/ui/components/ui/label"
 import AppLogoIcon from "@/components/app-logo-icon"
 import { useAuth } from "@/hooks/use-auth"
+import { api } from "@/lib/api"
+import { getAuthDestination } from "@/lib/auth-redirects"
 
 // function BrandMark() {
 //   return (
@@ -66,7 +68,7 @@ export default function RegisterPage() {
   useEffect(() => {
     if (authLoading) return
     if (user) {
-      router.replace(redirectTo)
+      router.replace(getAuthDestination(user, redirectTo))
     }
   }, [authLoading, user, router, redirectTo])
 
@@ -102,7 +104,9 @@ export default function RegisterPage() {
           localStorage.setItem("token", data.token || data.access_token)
         }
       }
-      router.push(redirectTo)
+      const nextUser = data.user ?? (await api.getCurrentUser())
+
+      router.push(getAuthDestination(nextUser, redirectTo))
     } catch {
       setError("Bağlantı hatası. Lütfen tekrar deneyin.")
     } finally {

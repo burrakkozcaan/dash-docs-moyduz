@@ -8,6 +8,8 @@ import GoogleButton from "@/components/google-button"
 import { Button } from "@repo/ui/components/ui/button"
 import { Input } from "@repo/ui/components/ui/input"
 import { Label } from "@repo/ui/components/ui/label"
+import { api } from "@/lib/api"
+import { getAuthDestination } from "@/lib/auth-redirects"
 import { routes } from "@/lib/routes"
 import AppLogoIcon from "@/components/app-logo-icon"
 import { useAuth } from "@/hooks/use-auth"
@@ -81,7 +83,7 @@ export default function LoginPage({
   useEffect(() => {
     if (authLoading) return
     if (user) {
-      router.replace(redirectTo)
+      router.replace(getAuthDestination(user, redirectTo))
     }
   }, [authLoading, user, router, redirectTo])
 
@@ -119,7 +121,9 @@ export default function LoginPage({
           localStorage.setItem("token", data.token || data.access_token)
         }
       }
-      router.push(redirectTo)
+      const nextUser = data.user ?? (await api.getCurrentUser())
+
+      router.push(getAuthDestination(nextUser, redirectTo))
     } catch {
       setErrors({ email: "Bağlantı hatası. Lütfen tekrar deneyin." })
     } finally {

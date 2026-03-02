@@ -1,11 +1,12 @@
 export function getSection(path: string | undefined) {
-  if (!path) return 'framework';
+  if (!path) return 'Rehber';
   const [dir] = path.split('/', 1);
-  if (!dir) return 'framework';
+  if (!dir) return 'Rehber';
   return (
     {
-      'e-ticaret-paketleri': 'ui',
-      headless: 'headless',
-    }[dir] ?? 'framework'
+      'e-ticaret-paketleri': 'E-Ticaret Paketleri',
+      headless: 'Headless Mimari',
+      mdx: 'İçerik Yönetimi (MDX)',
+    }[dir] ?? 'Genel'
   );
 }

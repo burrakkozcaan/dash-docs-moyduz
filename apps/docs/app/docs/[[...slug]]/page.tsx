@@ -59,7 +59,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
     );
   }
 
-  const { body: Mdx, toc, lastModified } = await page.data.load();
+  const { body: Mdx, toc, lastModified } = (await page.data.load()) as any;
 
   return (
     <DocsPage
