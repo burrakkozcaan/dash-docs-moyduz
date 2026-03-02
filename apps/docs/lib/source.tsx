@@ -11,6 +11,7 @@ import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { openapi } from '@/lib/openapi';
 
+// @ts-ignore
 export const source = loader(
   multiple({
     docs: docs.toFumadocsSource(),

@@ -7,6 +7,10 @@ const withAnalyzer = createBundleAnalyzer({
 });
 
 const config: NextConfig = {
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, topLevelAwait: true };
+    return config;
+  },
   reactStrictMode: true,
   transpilePackages: ['@repo/ui'],
   logging: {
