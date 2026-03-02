@@ -13,7 +13,6 @@ import {
   type SearchItemType,
   type SharedProps,
 } from 'fumadocs-ui/components/dialog/search';
-import { useDocsSearch } from 'fumadocs-core/search/client';
 import { useMemo, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { ArrowRight, ChevronDown } from 'lucide-react';
@@ -22,7 +21,7 @@ import { cn } from '@/lib/cn';
 import { useTreeContext } from 'fumadocs-ui/contexts/tree';
 import type { Item, Node } from 'fumadocs-core/page-tree';
 import { useRouter } from 'next/navigation';
-import { orama } from '@/lib/orama/client';
+import { OramaCloud, useSearch } from '@oramacloud/react-client';
 
 const items = [
   {
@@ -56,14 +55,18 @@ const items = [
   },
 ];
 
-export default function CustomSearchDialog(props: SharedProps) {
+function SearchInner(props: SharedProps) {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState<string | undefined>();
-  const { search, setSearch, query } = useDocsSearch({
-    type: 'orama-cloud',
-    client: orama,
-    tag,
+  // Local state for search because useSearch takes term as param
+  const [search, setSearch] = useState('');
+
+  const { results } = useSearch({
+    term: search,
+    limit: 10,
+    mode: 'fulltext'
   });
+
   const { full } = useTreeContext();
   const router = useRouter();
   const searchMap = useMemo(() => {
@@ -81,6 +84,7 @@ export default function CustomSearchDialog(props: SharedProps) {
     for (const item of full.children) onNode(item);
     return map;
   }, [full]);
+
   const pageTreeAction = useMemo<SearchItemType | undefined>(() => {
     if (search.length === 0) return;
 
@@ -104,8 +108,22 @@ export default function CustomSearchDialog(props: SharedProps) {
     }
   }, [router, search, searchMap]);
 
+  const queryData = useMemo(() => {
+    if (search.length === 0) return 'empty';
+    if (!results || !results.hits) return [];
+
+    return results.hits.map(hit => ({
+      type: 'page',
+      id: hit.id,
+      url: (hit.document.url || '') as string,
+      title: (hit.document.title || 'Untitled') as string,
+      description: hit.document.description as string | undefined,
+      content: (hit.document.description || hit.document.title || '') as string,
+    } as unknown as SearchItemType));
+  }, [results, search]);
+
   return (
-    <SearchDialog search={search} onSearchChange={setSearch} isLoading={query.isLoading} {...props}>
+    <SearchDialog search={search} onSearchChange={setSearch} isLoading={!results && search.length > 0} {...props}>
       <SearchDialogOverlay />
       <SearchDialogContent>
         <SearchDialogHeader>
@@ -115,11 +133,11 @@ export default function CustomSearchDialog(props: SharedProps) {
         </SearchDialogHeader>
         <SearchDialogList
           items={
-            query.data !== 'empty' || pageTreeAction
+            queryData !== 'empty' || pageTreeAction
               ? [
-                  ...(pageTreeAction ? [pageTreeAction] : []),
-                  ...(Array.isArray(query.data) ? query.data : []),
-                ]
+                ...(pageTreeAction ? [pageTreeAction] : []),
+                ...(Array.isArray(queryData) ? queryData : []),
+              ]
               : null
           }
         />
@@ -162,14 +180,25 @@ export default function CustomSearchDialog(props: SharedProps) {
             </PopoverContent>
           </Popover>
           <a
-            href="https://orama.com"
+            href="https://moyduz.com"
             rel="noreferrer noopener"
             className="text-xs text-nowrap text-fd-muted-foreground"
           >
-            Powered by Orama
+            Powered by moyduz
           </a>
         </SearchDialogFooter>
       </SearchDialogContent>
     </SearchDialog>
+  );
+}
+
+export default function CustomSearchDialog(props: SharedProps) {
+  return (
+    <OramaCloud
+      endpoint={process.env.NEXT_PUBLIC_ORAMA_ENDPOINT || 'https://cloud.orama.run/v1/indexes/docs-moyduz-com-r3obvs'}
+      apiKey={process.env.NEXT_PUBLIC_ORAMA_API_KEY || 'BuoJunift2Ou1ltF6Vxlc5EMIjT7Q6Y5'}
+    >
+      <SearchInner {...props} />
+    </OramaCloud>
   );
 }

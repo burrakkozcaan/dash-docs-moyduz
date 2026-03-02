@@ -1,6 +1,7 @@
 import { type OramaDocument, sync } from 'fumadocs-core/search/orama-cloud';
 import * as fs from 'node:fs/promises';
-import { DataSourceId, isAdmin, orama } from '@/lib/orama/client';
+import { isAdmin } from '@/lib/orama/client';
+import { OramaCloud } from '@orama/core';
 
 export async function updateSearchIndexes(): Promise<void> {
   if (!isAdmin) {
@@ -11,8 +12,13 @@ export async function updateSearchIndexes(): Promise<void> {
   const content = await fs.readFile('.next/server/app/static.json.body');
   const records = JSON.parse(content.toString()) as OramaDocument[];
 
-  await sync(orama, {
-    index: DataSourceId,
+  const adminOrama = new OramaCloud({
+    projectId: process.env.NEXT_PUBLIC_ORAMA_PROJECT_ID || '',
+    apiKey: process.env.ORAMA_PRIVATE_API_KEY || '',
+  });
+
+  await sync(adminOrama, {
+    index: process.env.NEXT_PUBLIC_ORAMA_DATASOURCE_ID || '',
     documents: records,
   });
 

@@ -32,9 +32,10 @@ function getHandler() {
         async ({ query }) => {
           const result = await orama.search({
             term: query,
-            datasources: [DataSourceId],
             limit: 50,
           });
+
+          if (!result) return { content: [] };
 
           return {
             content: result.hits.map((hit) => ({

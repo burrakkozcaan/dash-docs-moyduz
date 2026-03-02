@@ -5,10 +5,9 @@ export async function getSuggestions(pathname: string): Promise<Suggestion[]> {
   const results = await orama.search({
     term: pathname,
     mode: 'vector',
-    datasources: [DataSourceId],
     groupBy: {
       properties: ['url'],
-      max_results: 1,
+      maxResult: 1,
     },
   });
 
