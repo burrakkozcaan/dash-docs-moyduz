@@ -51,6 +51,7 @@ interface RememberedOnboardingState {
   targetAudience: string;
   mainGoal: string;
   primaryMetric: string;
+  dynamicQuestionAnswers: Record<string, string>;
 }
 
 interface ScanSummary {
@@ -137,6 +138,18 @@ interface BriefPreset {
   primaryMetric: string;
 }
 
+interface DynamicQuestion {
+  id: number;
+  key: string;
+  label: string;
+  help_text?: string | null;
+  type: string;
+  options?: string[] | null;
+  required?: boolean;
+  priority?: number | null;
+  depends_on?: Record<string, unknown> | null;
+}
+
 const STEPS: OnboardingStep[] = [
   { id: "scan", title: "Canli Site Analizi" },
   { id: "package", title: "Paket Secimi" },
@@ -176,22 +189,22 @@ const MOCK_PLANS: PlanFromApi[] = [
 const PACKAGE_BRIEF_PRESETS: Record<string, BriefPreset[]> = {
   starter: [
     {
-      id: "starter-visibility",
-      label: "Kurumsal gorunurluk",
-      subtitle: "Tanitim odakli baslangic",
-      businessType: "Kurumsal tanitim sitesi",
-      targetAudience: "Sirketinizi Google'da arayan potansiyel musteriler",
-      mainGoal: "Guveni ve iletisim formu donusumlerini artirmak",
-      primaryMetric: "Aylik iletisim formu gonderimi",
+      id: "starter-credibility",
+      label: "Brand credibility",
+      subtitle: "Trust-first website foundation",
+      businessType: "Service or company website",
+      targetAudience: "People evaluating whether your business is credible and relevant",
+      mainGoal: "Clearly explain what you do and turn interest into qualified enquiries",
+      primaryMetric: "Qualified enquiries per month",
     },
     {
-      id: "starter-local",
-      label: "Yerel musteri buyumesi",
-      subtitle: "Bolgesel talep odagi",
-      businessType: "Yerel hizmet isletmesi",
-      targetAudience: "Sehrinizde hizmet arayan kullanicilar",
-      mainGoal: "Telefon aramalarini ve WhatsApp baslangiclarini artirmak",
-      primaryMetric: "Aylik telefon/WhatsApp lead sayisi",
+      id: "starter-leads",
+      label: "Lead generation",
+      subtitle: "Conversion-focused launch",
+      businessType: "Offer-led business website",
+      targetAudience: "Prospects comparing providers before reaching out",
+      mainGoal: "Generate more calls, form submissions, and WhatsApp conversations",
+      primaryMetric: "Monthly inbound leads",
     },
   ],
   business: [
@@ -506,6 +519,23 @@ export function OnboardingSiteFlow() {
   const [targetAudience, setTargetAudience] = useState(rememberedState?.targetAudience ?? "");
   const [mainGoal, setMainGoal] = useState(rememberedState?.mainGoal ?? "");
   const [primaryMetric, setPrimaryMetric] = useState(rememberedState?.primaryMetric ?? "");
+  const [dynamicQuestions, setDynamicQuestions] = useState<DynamicQuestion[]>([]);
+  const [questionsLoading, setQuestionsLoading] = useState(false);
+  const [dynamicQuestionAnswers, setDynamicQuestionAnswers] = useState<Record<string, string>>(
+    rememberedState?.dynamicQuestionAnswers &&
+      typeof rememberedState.dynamicQuestionAnswers === "object"
+      ? Object.entries(rememberedState.dynamicQuestionAnswers).reduce<Record<string, string>>(
+          (carry, [key, value]) => {
+            if (typeof value === "string") {
+              carry[key] = value;
+            }
+
+            return carry;
+          },
+          {},
+        )
+      : {},
+  );
 
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -544,6 +574,7 @@ export function OnboardingSiteFlow() {
           targetAudience,
           mainGoal,
           primaryMetric,
+          dynamicQuestionAnswers,
         } satisfies RememberedOnboardingState),
       );
     }, 120);
@@ -568,6 +599,7 @@ export function OnboardingSiteFlow() {
     selectedAddonIds,
     selectedPlanId,
     targetAudience,
+    dynamicQuestionAnswers,
   ]);
 
   useEffect(() => {
@@ -642,11 +674,10 @@ export function OnboardingSiteFlow() {
       setSelectedAddonIds([]);
       return;
     }
-    const recommended = planAddons
-      .filter((addon) => addon.is_recommended)
-      .slice(0, 2)
-      .map((addon) => addon.id);
-    setSelectedAddonIds(recommended);
+
+    setSelectedAddonIds((currentIds) =>
+      currentIds.filter((id) => planAddons.some((addon) => addon.id === id)),
+    );
   }, [selectedPlan, planAddons]);
 
   useEffect(() => {
@@ -676,6 +707,14 @@ export function OnboardingSiteFlow() {
   const selectedAddons = useMemo(
     () => planAddons.filter((addon) => selectedAddonIds.includes(addon.id)),
     [planAddons, selectedAddonIds],
+  );
+  const selectedAddonKeys = useMemo(
+    () => selectedAddons.map((addon) => addon.key || addon.name),
+    [selectedAddons],
+  );
+  const selectedAddonKeysSignature = useMemo(
+    () => selectedAddonKeys.join("|"),
+    [selectedAddonKeys],
   );
   const selectedPackageKey = useMemo(
     () => inferPackageKeyFromPlanName(selectedPlan?.name ?? ""),
@@ -730,6 +769,134 @@ export function OnboardingSiteFlow() {
   const monthlyAmount = parseAmount(selectedPlan?.monthly_price ?? 0);
   const addonsAmount = selectedAddons.reduce((sum, addon) => sum + parseAmount(addon.price), 0);
   const totalAmount = setupAmount + monthlyAmount + addonsAmount;
+  const requiredDynamicQuestions = useMemo(
+    () => dynamicQuestions.filter((question) => question.required),
+    [dynamicQuestions],
+  );
+  const groupedDynamicQuestions = useMemo(() => {
+    const sections = [
+      {
+        key: "business",
+        title: "Business basics",
+        description: "Who you are, what you do, and the core business context.",
+        questions: [] as DynamicQuestion[],
+      },
+      {
+        key: "brand",
+        title: "Brand and assets",
+        description: "Brand inputs, visual direction, and existing business assets.",
+        questions: [] as DynamicQuestion[],
+      },
+      {
+        key: "requirements",
+        title: "Site requirements",
+        description: "Content, references, functionality, and anything the site must support.",
+        questions: [] as DynamicQuestion[],
+      },
+    ];
+
+    const pickSectionKey = (question: DynamicQuestion) => {
+      const source = `${question.key} ${question.label}`.toLowerCase();
+
+      if (
+        source.includes("customer") ||
+        source.includes("company") ||
+        source.includes("business") ||
+        source.includes("phone") ||
+        source.includes("email")
+      ) {
+        return "business";
+      }
+
+      if (
+        source.includes("logo") ||
+        source.includes("brand") ||
+        source.includes("social") ||
+        source.includes("domain")
+      ) {
+        return "brand";
+      }
+
+      return "requirements";
+    };
+
+    dynamicQuestions.forEach((question) => {
+      const sectionKey = pickSectionKey(question);
+      const section = sections.find((item) => item.key === sectionKey);
+
+      if (section) {
+        section.questions.push(question);
+      }
+    });
+
+    return sections.filter((section) => section.questions.length > 0);
+  }, [dynamicQuestions]);
+  const areRequiredDynamicQuestionsComplete = useMemo(
+    () =>
+      requiredDynamicQuestions.every(
+        (question) => (dynamicQuestionAnswers[question.key] || "").trim().length > 0,
+      ),
+    [dynamicQuestionAnswers, requiredDynamicQuestions],
+  );
+
+  useEffect(() => {
+    if (!selectedPlan || !selectedPackageKey) {
+      setDynamicQuestions([]);
+      setDynamicQuestionAnswers({});
+      return;
+    }
+
+    let cancelled = false;
+    setQuestionsLoading(true);
+
+    const params = new URLSearchParams();
+    params.set("package", selectedPackageKey);
+
+    selectedAddonKeys.forEach((addonKey) => {
+      params.append("addons[]", addonKey);
+    });
+
+    const headers: Record<string, string> = {};
+    if (tenant) {
+      headers["x-tenant"] = tenant;
+    }
+
+    fetch(`/api/onboarding/questions?${params.toString()}`, { headers })
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) {
+          return;
+        }
+
+        const questions = Array.isArray(data) ? (data as DynamicQuestion[]) : [];
+        setDynamicQuestions(questions);
+        setDynamicQuestionAnswers((currentAnswers) => {
+          const nextAnswers: Record<string, string> = {};
+
+          questions.forEach((question) => {
+            if (typeof currentAnswers[question.key] === "string") {
+              nextAnswers[question.key] = currentAnswers[question.key];
+            }
+          });
+
+          return nextAnswers;
+        });
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDynamicQuestions([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setQuestionsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedAddonKeys, selectedAddonKeysSignature, selectedPackageKey, selectedPlan, tenant]);
 
   useEffect(() => {
     if (!selectedPlan || totalAmount <= 0) {
@@ -839,7 +1006,14 @@ export function OnboardingSiteFlow() {
       return true;
     }
     if (currentStep === 1) return selectedPlanId != null;
-    if (currentStep === 3) return businessType.trim().length > 0 && mainGoal.trim().length > 0;
+    if (currentStep === 3) {
+      return (
+        businessType.trim().length > 0 &&
+        mainGoal.trim().length > 0 &&
+        !questionsLoading &&
+        areRequiredDynamicQuestionsComplete
+      );
+    }
     if (currentStep === 5) {
       return (
         cardName.trim().length > 2 &&
@@ -862,6 +1036,8 @@ export function OnboardingSiteFlow() {
     isCompleting,
     isScanning,
     mainGoal,
+    areRequiredDynamicQuestionsComplete,
+    questionsLoading,
     selectedPlanId,
   ]);
 
@@ -1000,6 +1176,7 @@ export function OnboardingSiteFlow() {
         target_audience: targetAudience,
         main_goal: mainGoal,
         primary_metric: primaryMetric,
+        package_answers: dynamicQuestionAnswers,
       },
       totals: {
         setup: setupAmount,
@@ -1141,11 +1318,25 @@ export function OnboardingSiteFlow() {
     );
   };
 
+  const clearBriefFields = () => {
+    setBusinessType("");
+    setTargetAudience("");
+    setMainGoal("");
+    setPrimaryMetric("");
+  };
+
   const applyBriefPreset = (preset: BriefPreset) => {
     setBusinessType(preset.businessType);
     setTargetAudience(preset.targetAudience);
     setMainGoal(preset.mainGoal);
     setPrimaryMetric(preset.primaryMetric);
+  };
+
+  const updateDynamicQuestionAnswer = (questionKey: string, value: string) => {
+    setDynamicQuestionAnswers((current) => ({
+      ...current,
+      [questionKey]: value,
+    }));
   };
 
   return (
@@ -2065,10 +2256,10 @@ export function OnboardingSiteFlow() {
                     <div className="rounded-10 border border-primary-alpha-30 bg-primary-alpha-10 p-3">
                       <div className="flex items-center gap-1.5 text-label-sm text-primary-base">
                         <Sparkles className="size-4" />
-                        YZ Brief Onerileri
+                        AI Brief Suggestions
                       </div>
                       <p className="mt-1 text-paragraph-xs text-text-sub-600">
-                        {`${selectedPlan.name} paketi icin hizli bir senaryo secin, alanlar otomatik dolsun.`}
+                        {`Pick a strong starting brief for the ${selectedPlan.name} package. These answers shape the site structure, messaging, and conversion flow.`}
                       </p>
                       <div className="mt-2 grid grid-cols-1 gap-2">
                         {activeBriefPresets.map((preset) => {
@@ -2096,11 +2287,21 @@ export function OnboardingSiteFlow() {
                           );
                         })}
                       </div>
+                      <button
+                        type="button"
+                        onClick={clearBriefFields}
+                        className="mt-2 w-full rounded-10 border border-dashed border-primary-alpha-30 bg-bg-white-0 px-3 py-2 text-left hover:border-primary-base/60"
+                      >
+                        <div className="text-label-sm text-text-strong-950">Kendim dolduracağım</div>
+                        <div className="text-paragraph-xs text-text-sub-600">
+                          Alanlari sifirlayip brief&apos;i manuel olarak yazin.
+                        </div>
+                      </button>
                     </div>
                   )}
 
                   <label className="text-label-sm text-text-sub-600">
-                    Is modeliniz
+                    What are you selling?
                     <input
                       value={businessType}
                       onChange={(event) => setBusinessType(event.target.value)}
@@ -2110,7 +2311,7 @@ export function OnboardingSiteFlow() {
                   </label>
 
                   <label className="text-label-sm text-text-sub-600">
-                    Hedef kitle
+                    Who is this site for?
                     <input
                       value={targetAudience}
                       onChange={(event) => setTargetAudience(event.target.value)}
@@ -2120,7 +2321,7 @@ export function OnboardingSiteFlow() {
                   </label>
 
                   <label className="text-label-sm text-text-sub-600">
-                    Ana hedef
+                    What should the site make them do?
                     <textarea
                       value={mainGoal}
                       onChange={(event) => setMainGoal(event.target.value)}
@@ -2130,7 +2331,7 @@ export function OnboardingSiteFlow() {
                   </label>
 
                   <label className="text-label-sm text-text-sub-600">
-                    Basari metrigi
+                    How will we measure success?
                     <input
                       value={primaryMetric}
                       onChange={(event) => setPrimaryMetric(event.target.value)}
@@ -2138,6 +2339,116 @@ export function OnboardingSiteFlow() {
                       placeholder={packageQuestionHints.primaryMetric}
                     />
                   </label>
+
+                  {selectedPlan && (
+                    <div className="rounded-10 border border-stroke-soft-200 bg-bg-white-0 p-3">
+                      <div className="text-label-sm text-text-strong-950">
+                        Package-specific requirements
+                      </div>
+                      <p className="mt-1 text-paragraph-xs text-text-sub-600">
+                        These questions come from your onboarding setup and help us define the
+                        right pages, content, and functionality for this package.
+                      </p>
+
+                      {questionsLoading && (
+                        <div className="mt-3 text-paragraph-sm text-text-soft-400">
+                          Loading package questions...
+                        </div>
+                      )}
+
+                      {!questionsLoading && dynamicQuestions.length === 0 && (
+                        <div className="mt-3 text-paragraph-sm text-text-soft-400">
+                          No additional package questions for this selection.
+                        </div>
+                      )}
+
+                      {!questionsLoading && groupedDynamicQuestions.length > 0 && (
+                        <div className="mt-3 flex flex-col gap-3">
+                          {groupedDynamicQuestions.map((section) => (
+                            <div
+                              key={section.key}
+                              className="rounded-10 border border-stroke-soft-200 bg-bg-weak-50 p-3"
+                            >
+                              <div className="text-label-sm text-text-strong-950">
+                                {section.title}
+                              </div>
+                              <div className="mt-1 text-paragraph-xs text-text-soft-400">
+                                {section.description}
+                              </div>
+
+                              <div className="mt-3 flex flex-col gap-3">
+                                {section.questions.map((question) => (
+                                  <label
+                                    key={question.id}
+                                    className="text-label-sm text-text-sub-600"
+                                  >
+                                    <span className="flex items-center gap-1">
+                                      <span>{question.label}</span>
+                                      {question.required && (
+                                        <span className="text-primary-base">*</span>
+                                      )}
+                                    </span>
+                                    {question.help_text && (
+                                      <span className="mt-1 block text-paragraph-xs text-text-soft-400">
+                                        {question.help_text}
+                                      </span>
+                                    )}
+
+                                    {question.type === "select" ? (
+                                      <select
+                                        value={dynamicQuestionAnswers[question.key] || ""}
+                                        onChange={(event) =>
+                                          updateDynamicQuestionAnswer(question.key, event.target.value)
+                                        }
+                                        className="mt-1 h-10 w-full rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 text-paragraph-sm text-text-strong-950 outline-none focus:border-stroke-strong-950"
+                                      >
+                                        <option value="">Select an option</option>
+                                        {(question.options ?? []).map((option) => (
+                                          <option key={option} value={option}>
+                                            {option}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    ) : question.type === "boolean" ? (
+                                      <select
+                                        value={dynamicQuestionAnswers[question.key] || ""}
+                                        onChange={(event) =>
+                                          updateDynamicQuestionAnswer(question.key, event.target.value)
+                                        }
+                                        className="mt-1 h-10 w-full rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 text-paragraph-sm text-text-strong-950 outline-none focus:border-stroke-strong-950"
+                                      >
+                                        <option value="">Choose</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                      </select>
+                                    ) : question.type === "textarea" ? (
+                                      <textarea
+                                        value={dynamicQuestionAnswers[question.key] || ""}
+                                        onChange={(event) =>
+                                          updateDynamicQuestionAnswer(question.key, event.target.value)
+                                        }
+                                        className="mt-1 min-h-[80px] w-full rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 py-2 text-paragraph-sm text-text-strong-950 outline-none focus:border-stroke-strong-950"
+                                        placeholder={question.label}
+                                      />
+                                    ) : (
+                                      <input
+                                        value={dynamicQuestionAnswers[question.key] || ""}
+                                        onChange={(event) =>
+                                          updateDynamicQuestionAnswer(question.key, event.target.value)
+                                        }
+                                        className="mt-1 h-10 w-full rounded-10 border border-stroke-soft-200 bg-bg-white-0 px-3 text-paragraph-sm text-text-strong-950 outline-none focus:border-stroke-strong-950"
+                                        placeholder={question.label}
+                                      />
+                                    )}
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -2166,7 +2477,7 @@ export function OnboardingSiteFlow() {
                                 `${addon.name} ($${parseAmount(addon.price).toLocaleString("en-US")})`,
                             )
                             .join(", ")
-                        : "Yok"}
+                        : "None selected"}
                     </p>
                     <p>
                       <strong className="text-text-strong-950">Is modeli:</strong>{" "}
@@ -2176,6 +2487,14 @@ export function OnboardingSiteFlow() {
                       <strong className="text-text-strong-950">Ana hedef:</strong>{" "}
                       {mainGoal || "-"}
                     </p>
+                    {dynamicQuestions
+                      .filter((question) => (dynamicQuestionAnswers[question.key] || "").trim().length > 0)
+                      .map((question) => (
+                        <p key={`summary-question-${question.id}`}>
+                          <strong className="text-text-strong-950">{`${question.label}:`}</strong>{" "}
+                          {dynamicQuestionAnswers[question.key]}
+                        </p>
+                      ))}
                     <p>
                       <strong className="text-text-strong-950">Toplam:</strong>{" "}
                       {totalAmount > 0
