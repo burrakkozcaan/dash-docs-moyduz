@@ -1,5 +1,7 @@
 import { DataSourceId, orama } from '@/lib/orama/client';
 import { createMcpHandler } from 'mcp-handler';
+
+export const dynamic = 'force-dynamic';
 import { z } from 'zod';
 import { ProvideLinksToolSchema } from '@/lib/chat/inkeep-qa-schema';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
