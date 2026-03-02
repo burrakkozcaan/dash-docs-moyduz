@@ -195,8 +195,8 @@ function SearchInner(props: SharedProps) {
 export default function CustomSearchDialog(props: SharedProps) {
   return (
     <OramaCloud
-      endpoint={process.env.NEXT_PUBLIC_ORAMA_ENDPOINT || 'https://cloud.orama.run/v1/indexes/docs-moyduz-com-r3obvs'}
-      apiKey={process.env.NEXT_PUBLIC_ORAMA_API_KEY || 'BuoJunift2Ou1ltF6Vxlc5EMIjT7Q6Y5'}
+      endpoint="https://cloud.orama.run/v1/indexes/docs-moyduz-com-r3obvs"
+      apiKey="BuoJunift2Ou1ltF6Vxlc5EMIjT7Q6Y5"
     >
       <SearchInner {...props} />
     </OramaCloud>
