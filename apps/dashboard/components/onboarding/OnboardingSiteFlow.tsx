@@ -1164,19 +1164,30 @@ export function OnboardingSiteFlow() {
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
+    setExitBlockedNotice(null);
+
     const payload = {
-      tenant: tenant ?? undefined,
-      has_website: hasWebsite === "yes" ? 1 : 0,
-      domain: hasWebsite === "yes" ? domain.trim() : undefined,
-      template: templateSlug ?? undefined,
       package: selectedPlan ? inferPackageKeyFromPlanName(selectedPlan.name) : undefined,
       addons: selectedAddons.map((addon) => addon.key || addon.name),
-      brief: {
-        business_type: businessType,
-        target_audience: targetAudience,
-        main_goal: mainGoal,
-        primary_metric: primaryMetric,
-        package_answers: dynamicQuestionAnswers,
+      formData: {
+        basics: {
+          hasWebsite,
+          website: hasWebsite === "yes" ? domain.trim() : "",
+        },
+        project: {
+          businessType,
+          targetAudience,
+          mainGoal,
+          primaryMetric,
+          template: templateSlug ?? null,
+          ...dynamicQuestionAnswers,
+        },
+        final: {
+          notes:
+            hasWebsite === "yes" && domain.trim().length > 0
+              ? `Existing website: ${domain.trim()}`
+              : null,
+        },
       },
       totals: {
         setup: setupAmount,
@@ -1188,20 +1199,49 @@ export function OnboardingSiteFlow() {
 
     try {
       setIsCompleting(true);
-      await fetch("/api/onboarding/complete", {
+      const response = await fetch("/api/onboarding/complete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
           ...(tenant && { "x-tenant": tenant }),
         },
         body: JSON.stringify(payload),
       });
-      clearRememberedOnboardingState();
-      navigate("/dashboard");
-    } catch {
-      clearRememberedOnboardingState();
-      navigate("/dashboard");
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          (result &&
+            typeof result === "object" &&
+            "error" in result &&
+            typeof result.error === "string" &&
+            result.error) ||
+            "We could not start checkout. Please try again.",
+        );
+      }
+
+      if (result?.checkout_url) {
+        clearRememberedOnboardingState();
+        window.location.href = result.checkout_url;
+        return;
+      }
+
+      if (result?.success) {
+        clearRememberedOnboardingState();
+        window.location.href = result.redirect_url || "/dashboard";
+        return;
+      }
+
+      throw new Error("We could not start checkout. Please try again.");
+    } catch (error) {
+      setExitBlockedNotice(
+        error instanceof Error
+          ? error.message
+          : "We could not start checkout. Please try again.",
+      );
     } finally {
       setIsCompleting(false);
     }
