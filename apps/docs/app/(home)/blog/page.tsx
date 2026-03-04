@@ -1,8 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { blog } from '@/lib/source';
 import { PathUtils } from 'fumadocs-core/source';
 import BannerImage from './banner.png';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 function getName(path: string) {
   return PathUtils.basename(path, PathUtils.extname(path));

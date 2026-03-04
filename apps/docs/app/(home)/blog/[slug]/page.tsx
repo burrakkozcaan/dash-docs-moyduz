@@ -69,6 +69,7 @@ export async function generateMetadata(props: PageProps<'/blog/[slug]'>): Promis
   return createMetadata({
     title: page.data.title,
     description: page.data.description ?? 'The library for building documentation sites',
+    robots: { index: false, follow: false },
   });
 }
 
