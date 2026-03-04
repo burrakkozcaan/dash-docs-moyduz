@@ -12,16 +12,15 @@ export async function getSuggestions(pathname: string): Promise<Suggestion[]> {
 
     return results.hits
       .slice(0, 3)
-      .map((hit) => {
+      .flatMap((hit) => {
         const doc = hit.document;
-        if (!doc) return null;
+        if (!doc) return [];
         return {
           id: hit.id,
           href: doc.url as string,
           title: doc.title as string,
         } satisfies Suggestion;
-      })
-      .filter((s): s is Suggestion => s !== null);
+      });
   } catch {
     return [];
   }
