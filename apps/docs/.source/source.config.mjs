@@ -1,7 +1,3 @@
-// source.script.ts
-import { defineConfig as defineConfig2 } from "fumadocs-mdx/config";
-import { visit } from "unist-util-visit";
-
 // source.config.ts
 import {
   applyMdxPreset,
@@ -157,41 +153,8 @@ var source_config_default = defineConfig({
     lastModified()
   ]
 });
-
-// source.script.ts
-function remarkElementIds() {
-  return (tree, vfile) => {
-    const file = vfile;
-    file.data ??= {};
-    file.data.elementIds ??= [];
-    visit(tree, "mdxJsxFlowElement", (element) => {
-      if (!element.name || !element.attributes) return;
-      const idAttr = element.attributes.find(
-        (attr) => attr.type === "mdxJsxAttribute" && attr.name === "id"
-      );
-      if (idAttr && typeof idAttr.value === "string") {
-        file.data.elementIds.push(idAttr.value);
-      }
-    });
-  };
-}
-var source_script_default = defineConfig2({
-  mdxOptions: {
-    valueToExport: ["elementIds", "toc"],
-    remarkNpmOptions: {
-      persist: {
-        id: "package-manager"
-      }
-    },
-    remarkHeadingOptions: {
-      generateToc: true
-    },
-    remarkPlugins: [remarkElementIds],
-    rehypePlugins: () => []
-  }
-});
 export {
   blog,
-  source_script_default as default,
+  source_config_default as default,
   docs
 };

@@ -1,0 +1,15 @@
+{
+  "title": "Altyapı Taşıma",
+  "description": "Mevcut e-ticaret platformunuzdan sorunsuz geçiş rehberleri",
+  "icon": "ArrowRightLeft",
+  "root": true,
+  "pages": [
+    "index",
+    "e-ticaret-sitesi-nasil-tasinir",
+    "seo-kaybetmeden-tasima",
+    "301-yonlendirme-checklist",
+    "veri-export-rehberi",
+    "sozlesme-okuma",
+    "cayma-bedeli-destegi"
+  ]
+}

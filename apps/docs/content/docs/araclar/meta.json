@@ -1,0 +1,14 @@
+{
+  "title": "Araçlar",
+  "description": "E-ticaret kararlarınız için hesaplama ve karşılaştırma araçları",
+  "icon": "Wrench",
+  "root": true,
+  "pages": [
+    "index",
+    "trendyol-komisyon-hesaplama",
+    "kar-marji-hesaplama",
+    "kiralama-vs-sahiplik",
+    "tahsilat-gecikme-maliyeti",
+    "e-ticaret-maliyet-hesaplayici"
+  ]
+}

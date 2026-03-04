@@ -1,0 +1,285 @@
+---
+title: E-Ticaret Altyapısı Seçerken Dikkat Edilmesi Gerekenler
+description: E-ticaret platformu seçerken yapılan 10 kritik hata ve doğru karar verme rehberi.
+icon: CircleAlert
+---
+
+# E-Ticaret Altyapısı Seçerken Dikkat Edilmesi Gerekenler
+
+E-ticaret altyapısı seçimi, **işinizin geleceğini belirleyen en önemli karardır**. Yanlış seçim, yıllarca sürecek teknik borç, gizli maliyetler ve büyüme engelleri demektir.
+
+Bu rehber, altyapı seçerken **mutlaka sormanız gereken soruları** ve dikkat etmeniz gereken kritik noktaları içeriyor.
+
+## 1. Maliyet Şeffaflığı
+
+### Sormanız Gereken Sorular
+
+- [ ] İlk yıl ücreti nedir?
+- [ ] **2. yıl yenileme ücreti ne kadar?** (En kritik!)
+- [ ] Enflasyon zammı uygulanıyor mu?
+- [ ] Hangi özellikler ekstra ücretli?
+- [ ] İşlem/komisyon ücreti var mı?
+- [ ] Tahsilat vadesi kaç gün?
+
+### Kırmızı Bayraklar 🚩
+
+```
+❌ "Yenileme fiyatları piyasa koşullarına göre güncellenir"
+❌ "Trafiğiniz artarsa paket yükseltmeniz gerekir"
+❌ "Bu özellik premium pakette var"
+❌ "Tahsilat süresi ortalama 14-35 gün"
+```
+
+### Yeşil Bayraklar ✅
+
+```
+✅ Ömür boyu aynı fiyat
+✅ Trafik/ziyaretçi limiti yok
+✅ Tüm özellikler dahil
+✅ Ertesi gün tahsilat
+✅ Kod sahipliği dahil
+```
+
+## 2. Teknik Özellikler
+
+### Performans
+
+| Özellik | Minimum | İdeal |
+|---------|---------|-------|
+| Sayfa Yükleme | &lt;3 sn | &lt;1 sn |
+| Uptime SLA | %99 | %99.9 |
+| CDN | Opsiyonel | Dahil |
+| Sunucu Tipi | Paylaşımlı | VPS/Dedike |
+
+### SEO Altyapısı
+
+- [ ] Özelleştirilebilir URL yapısı
+- [ ] Meta tag yönetimi
+- [ ] Schema.org işaretlemeleri
+- [ ] Otomatik sitemap.xml
+- [ ] Robots.txt kontrolü
+- [ ] 301 yönlendirme desteği
+- [ ] Canonical URL yönetimi
+
+### Güvenlik
+
+- [ ] 256-bit SSL sertifikası
+- [ ] PCI DSS uyumluluğu
+- [ ] 3D Secure ödeme
+- [ ] DDoS koruması
+- [ ] Günlük yedekleme
+- [ ] Two-factor authentication
+
+## 3. Özelleştirme ve Esneklik
+
+### Tema ve Tasarım
+
+**Sormanız gerekenler:**
+
+1. Tema kodlarına erişebiliyor muyum?
+2. Özel CSS/JS ekleyebiliyor muyum?
+3. Header/footer düzenlenebilir mi?
+4. Mobil responsive ayrı mı yönetiliyor?
+5. A/B test yapabiliyorum mu?
+
+### Entegrasyonlar
+
+```
+Zorunlu Entegrasyonlar:
+├── Ödeme Sistemleri (iyzico, PayTR, vs.)
+├── Kargo Firmaları (Yurtiçi, Aras, MNG)
+├── Muhasebe (Logo, Mikro, Eta)
+├── ERP Sistemleri
+└── Pazaryerleri (Trendyol, Hepsiburada)
+```
+
+**Kritik Soru:** "X sistemi ile entegrasyon var mı?" yerine **"X sistemi ile entegrasyon yapabilir miyim?"** sorun.
+
+Kapalı kaynak sistemlerde **marketplace dışına çıkamazsınız**.
+
+## 4. Büyüme ve Ölçeklenebilirlik
+
+### Trafik Limitleri
+
+Çoğu SaaS platformu trafik limiti koyar:
+
+| Paket | Aylık Ziyaret | Aşım Durumu |
+|-------|---------------|-------------|
+| Başlangıç | 50K | Site kapatılır |
+| Pro | 200K | Ek ücret |
+| Enterprise | 1M | Özel fiyat |
+
+**Gerçek:** Başarılı olursanız **cezalandırılırsınız**.
+
+### Ürün Limiti
+
+- Sınırsız ürün mü?
+- Varyasyon limiti var mı?
+- Görsel başına limit var mı?
+- Kategori ağacı derinliği?
+
+### Çoklu Dil ve Para Birimi
+
+- [ ] Sınırsız dil desteği
+- [ ] Para birimi otomatik dönüşüm
+- [ ] Ülke bazlı fiyatlandırma
+- [ ] Çoklu para birimi checkout
+
+## 5. Veri Sahipliği ve Taşınabilirlik
+
+### Veri Export
+
+**Mutlaka deneyin:**
+
+```
+1. Ürün listesini CSV olarak export edin
+2. Müşteri verilerini export edin
+3. Sipariş geçmişini alın
+4. Blog içeriklerini export edin
+```
+
+Eğer export **kolay değilse** veya **ekstra ücretliyse**, kaçın.
+
+### Kod Sahipliği
+
+| Soru | Hazır Paket | Özel Yazılım |
+|------|-------------|--------------|
+| Tema kodları sizin mi? | ❌ | ✅ |
+| Backend kodları sizin mi? | ❌ | ✅ |
+| Database'e erişim? | ❌ | ✅ |
+| Başka sunucuya taşıma? | ❌ | ✅ |
+
+## 6. Destek ve Hizmet
+
+### Destek Kanalları
+
+- [ ] 7/24 canlı destek
+- [ ] Telefon desteği
+- [ ] E-posta desteği
+- [ ] Ticket sistemi
+- [ ] Bilgi bankası/dokümantasyon
+
+### SLA (Service Level Agreement)
+
+```
+Kritik Sorular:
+- Cevap süresi garantisi var mı?
+- Kritik hata durumunda ne kadar sürede çözüm?
+- Planlı bakım ne zaman, ne sıklıkla?
+- Bakım sırasında site erişilebilir mi?
+```
+
+## 7. Sözleşme Detayları
+
+### Dikkat Edilmesi Gereken Maddeler
+
+```
+⚠️ "Sözleşme süresi: 12/24 ay"
+⚠️ "Otomatik yenileme"
+⚠️ "Cayma bedeli: Kalan ayların %50'si"
+⚠️ "Fiyat artışı: TÜFE + %X"
+⚠️ "Veri export ücreti: ₺X"
+⚠️ "Hizmet değişiklik hakkı saklıdır"
+```
+
+### İdeal Sözleşme
+
+```
+✅ Aylık veya yıllık, taahhüt yok
+✅ İstediğiniz zaman iptal
+✅ Veri export ücretsiz
+✅ Fiyat sabit (ömür boyu)
+✅ Hizmet seviyesi garanti
+```
+
+## 8. Referanslar ve Kanıtlar
+
+### Kontrol Listesi
+
+- [ ] Canlı referans siteleri
+- [ ] Aynı sektörde müşteri
+- [ ] Video testimonial'lar
+- [ ] Trustpilot/Shikayetvar puanı
+- [ ] Case study'ler
+
+### Referanslara Sorulacaklar
+
+1. "Destek gerçekten hızlı mı?"
+2. "Gizli ücretlerle karşılaştınız mı?"
+3. "Büyüdükçe paket değiştirmek zorunda kaldınız mı?"
+4. "Tahsilat süresi ne kadar?"
+5. "Tekrar seçer miydiniz?"
+
+## Karar Checklist
+
+Altyapı seçmeden önce **tüm maddeleri** kontrol edin:
+
+<Accordions>
+
+<Accordion title="Maliyet Kontrol Listesi">
+
+- [ ] İlk yıl ücreti net
+- [ ] 2. yıl yenileme ücreti yazılı
+- [ ] Enflasyon zammı yok
+- [ ] Tüm özellikler dahil
+- [ ] Komisyon %0
+- [ ] Tahsilat süresi makul (1-3 gün)
+
+</Accordion>
+
+<Accordion title="Teknik Kontrol Listesi">
+
+- [ ] Sayfa hızı &lt;2 sn
+- [ ] Uptime %99+ garanti
+- [ ] SSL dahil
+- [ ] CDN var
+- [ ] SEO altyapısı tam
+- [ ] Mobil responsive
+
+</Accordion>
+
+<Accordion title="Özelleştirme Kontrol Listesi">
+
+- [ ] Tema kodları erişilebilir
+- [ ] Özel CSS/JS eklenebiliyor
+- [ ] Header/footer düzenlenebilir
+- [ ] Özel entegrasyon yapılabiliyor
+- [ ] API erişimi var
+
+</Accordion>
+
+<Accordion title="Veri Sahipliği Kontrol Listesi">
+
+- [ ] Veri export kolay ve ücretsiz
+- [ ] Kod sahipliği size ait
+- [ ] Database erişimi var
+- [ ] Başka sunucuya taşınabilir
+- [ ] Çıkış engeli yok
+
+</Accordion>
+
+</Accordions>
+
+## Sonraki Adımlar
+
+<Cards>
+
+<Card href="/docs/maliyet-analizi/3-yillik-sahip-olma-maliyeti-tco" title="TCO Hesaplayıcı">
+Gerçek maliyeti kendi senaryonuzla hesaplayın.
+</Card>
+
+<Card href="/docs/karsilastirmalar/moyduz-vs-ikas" title="Platform Karşılaştırmaları">
+Popüler platformları detaylı karşılaştırın.
+</Card>
+
+<Card href="/docs/altyapi-tasima/e-ticaret-sitesi-nasil-tasinir" title="Taşıma Rehberi">
+Mevcut altyapınızdan nasıl geçersiniz?
+</Card>
+
+</Cards>
+
+---
+
+<Callout type="info">
+**Danışmanlık mı gerekiyor?** [Ücretsiz ön görüşme](https://moyduz.com/iletisim) için iletişime geçin. Mevcut sözleşmenizi birlikte inceleyelim.
+</Callout>

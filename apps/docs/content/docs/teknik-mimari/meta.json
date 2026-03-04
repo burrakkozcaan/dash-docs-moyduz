@@ -1,0 +1,14 @@
+{
+  "title": "Teknik Mimari",
+  "description": "Enterprise düzeyinde e-ticaret altyapısı ve teknik rehberler",
+  "icon": "Cpu",
+  "root": true,
+  "pages": [
+    "index",
+    "aws-vps-sunucu-mimarisi",
+    "kaynak-kod-teslimi-ve-ozgurluk",
+    "yeni-nesil-seo-geo-aeo-optimizasyonu",
+    "coklu-satici-pazaryeri-mimarisi",
+    "olceklenebilir-altyapi"
+  ]
+}

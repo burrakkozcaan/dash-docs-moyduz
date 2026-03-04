@@ -1,16 +1,9 @@
-import { AlbumIcon, Heart, LayoutTemplate, Instagram, Youtube } from 'lucide-react';
+import { Heart, LayoutTemplate, Instagram, Youtube } from 'lucide-react';
 import Image from 'next/image';
 import type { BaseLayoutProps, LinkItemType } from 'fumadocs-ui/layouts/shared';
 import { MoyduzIcon } from '@/app/layout.client';
 
 export const linkItems: LinkItemType[] = [
-  {
-    icon: <AlbumIcon />,
-    text: 'Blog',
-    url: '/blog',
-    active: 'nested-url',
-  },
-
   {
     type: 'icon',
     url: 'https://github.com/burrakkozcaan/dash-docs-moyduz',

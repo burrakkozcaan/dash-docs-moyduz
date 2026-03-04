@@ -1,0 +1,178 @@
+---
+title: Teknik Mimari
+description: Enterprise düzeyinde e-ticaret altyapısı, ölçeklenebilirlik ve teknik rehberler
+icon: Cpu
+---
+
+# Teknik Mimari
+
+Büyük ölçekli e-ticaret projeleri için **sağlam, güvenli ve ölçeklenebilir** teknik altyapı rehberleri.
+
+## AWS VPS Mimarisi
+
+Neden paylaşımlı hosting yerine AWS VPS?
+
+### Paylaşımlı Hosting Limitleri
+
+- CPU/RAM paylaşımı (komşu etkisi)
+- Disk I/O kısıtlamaları
+- Güvenlik riskleri
+- Ölçeklenebilirlik sınırlı
+
+### AWS VPS Avantajları
+
+- **Dedike kaynaklar:** Sadece sizin kullandığınız CPU/RAM
+- **Otomatik ölçekleme:** Trafik arttıkça otomatik genişleme
+- **Global CDN:** Dünyanın her yerinden hızlı erişim
+- **Güvenlik:** VPC, Security Groups, WAF
+- **Yedeklilik:** Multi-AZ deployment
+
+```
+┌─────────────────────────────────────────┐
+│           CloudFront (CDN)              │
+└─────────────────┬───────────────────────┘
+                  │
+    ┌─────────────┴─────────────┐
+    │                           │
+┌───▼───┐               ┌──────▼──────┐
+│  ALB  │               │   Route 53  │
+└───┬───┘               └─────────────┘
+    │
+    │     ┌─────────────┬─────────────┐
+    │     │             │             │
+┌───▼───┐ ┌───▼───┐ ┌───▼───┐
+│ EC2-1 │ │ EC2-2 │ │ EC2-3 │  (Auto Scaling)
+└───┬───┘ └───┬───┘ └───┬───┘
+    │         │         │
+    └────┬────┴────┬────┘
+         │         │
+    ┌────▼────┐ ┌──▼──────────┐
+    │   RDS   │ │   ElastiCache │
+    │ (MySQL) │ │   (Redis)     │
+    └─────────┘ └───────────────┘
+```
+
+## Ölçeklenebilir Altyapı
+
+### Yatay vs Dikey Ölçekleme
+
+| Özellik | Dikey (Scale Up) | Yatay (Scale Out) |
+|---------|------------------|-------------------|
+| Yöntem | Daha güçlü sunucu | Daha fazla sunucu |
+| Maliyet | Üstel artar | Lineer artar |
+| Limit | Donanım limiti | Pratikte sınırsız |
+| Downtime | Genelde gerekir | Gerektirmez |
+
+### Önerilen Mimari
+
+```
+Küçük Ölçek (0-10K ziyaret/gün):
+- 1x VPS (4 CPU, 8GB RAM)
+- Managed Database
+- CDN
+
+Orta Ölçek (10K-100K ziyaret/gün):
+- 2-4x VPS (Load Balancer arkasında)
+- Managed Database (Multi-AZ)
+- Redis Cache
+- CDN
+
+Büyük Ölçek (100K+ ziyaret/gün):
+- Auto Scaling Group (4-20+ instance)
+- Database Read Replicas
+- ElastiCache Cluster
+- CDN + Edge Computing
+- Message Queue (SQS)
+```
+
+## ERP Entegrasyonu
+
+### Entegrasyon Modelleri
+
+#### 1. Real-Time API
+
+```
+E-Ticaret → API Gateway → ERP
+     ↓
+   Response (200ms)
+```
+
+**Kullanım:** Stok, fiyat güncellemeleri
+
+#### 2. Batch Sync
+
+```
+E-Ticaret → Queue → Scheduled Job → ERP
+```
+
+**Kullanım:** Sipariş sync, günlük raporlar
+
+#### 3. Event-Driven
+
+```
+E-Ticaret → Event Bus → ERP + Muhasebe + Kargo
+```
+
+**Kullanım:** Sipariş oluşturulduğunda çoklu sistem güncelleme
+
+### Desteklenen ERP Sistemleri
+
+- ✅ Logo Netsis
+- ✅ Logo İşbaşı
+- ✅ Mikro X
+- ✅ SAP Business One
+- ✅ Oracle NetSuite
+- ✅ Özel ERP (REST/SOAP API)
+
+## B2B E-Ticaret Mimarisi
+
+### Temel Bileşenler
+
+```
+┌──────────────────────────────────────────────┐
+│              B2B Portal                       │
+├──────────────────────────────────────────────┤
+│  Müşteri     │  Sipariş     │  Stok &        │
+│  Yönetimi    │  Yönetimi    │  Fiyatlandırma │
+├──────────────────────────────────────────────┤
+│  Teklif      │  Raporlama   │  Entegrasyonlar│
+│  Yönetimi    │  & Analitik  │  (ERP, CRM)    │
+└──────────────────────────────────────────────┘
+```
+
+### B2B Özellikleri
+
+- **Müşteri bazlı fiyatlandırma:** Her bayii farklı fiyat
+- **Kredi limiti:** Otomatik kredi kontrolü
+- **Vade yönetimi:** 30-60-90 gün vade seçenekleri
+- **Toplu sipariş:** Excel upload, hızlı sipariş formu
+- **Onay akışları:** Çok seviyeli sipariş onayı
+
+## Multi-Vendor Altyapı
+
+Pazaryeri modeli için gerekli bileşenler:
+
+### Vendor Yönetimi
+
+- Satıcı kayıt ve onay
+- Satıcı paneli
+- Komisyon yönetimi
+- Ödeme dağıtımı
+
+### Ürün Yönetimi
+
+- Satıcı bazlı ürün yükleme
+- Ürün onay akışı
+- Stok takibi (satıcı bazlı)
+
+### Sipariş Yönetimi
+
+- Sepette satıcı bazlı ayrıştırma
+- Kargo hesaplaması (satıcı bazlı)
+- Ödeme dağıtımı (satıcı + platform)
+
+---
+
+<Callout type="info">
+**Teknik danışmanlık mı gerekiyor?** [İletişim](https://moyduz.com/iletisim) sayfamızdan mimari değerlendirme talep edin.
+</Callout>

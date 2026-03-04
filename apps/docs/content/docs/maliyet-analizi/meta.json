@@ -1,0 +1,13 @@
+{
+  "title": "Maliyet Analizi",
+  "description": "E-ticaret platformu maliyetlerini detaylı inceleyin ve hesaplayın",
+  "icon": "Calculator",
+  "root": true,
+  "pages": [
+    "index",
+    "3-yillik-sahip-olma-maliyeti-tco",
+    "e-ticaret-paket-yenileme-ucretleri-enflasyon-tuzagi",
+    "sifir-komisyon-yalanlari-ve-nakit-akisi",
+    "500gb-trafik-limiti-cezasi"
+  ]
+}

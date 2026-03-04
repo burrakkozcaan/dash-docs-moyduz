@@ -1,0 +1,13 @@
+{
+  "title": "Karar Motoru",
+  "description": "E-ticaret platformu kararınızı vermenize yardımcı olacak rehberler",
+  "icon": "Scale",
+  "root": true,
+  "pages": [
+    "index",
+    "hazir-paket-mi-ozel-yazilim-mi",
+    "e-ticaret-altyapisi-secerken-dikkat-edilmesi-gerekenler",
+    "b2b-e-ticaret-gerekli-mi",
+    "hazir-e-ticaret-sinirlari"
+  ]
+}

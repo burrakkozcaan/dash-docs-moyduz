@@ -1,0 +1,276 @@
+---
+title: Hazır E-Ticaret Sınırları - Büyüdükçe Ceza Ödemeyin
+description: "Hazır e-ticaret paketlerinin gizli limitleri: trafik kotası, işlem hacmi, modül ücretleri. Büyüdükçe neden ceza ödüyorsunuz?"
+icon: TriangleAlert
+---
+
+# Hazır E-Ticaret Sınırları: Büyüdükçe Ceza Ödemeyin
+
+Hazır e-ticaret platformları size **"sınırsız"** vaat eder ama sözleşmenin küçük yazılarında **büyüdükçe cezalandıran** maddeler saklar.
+
+Bu rehber, hazır platformların **görünmez sınırlarını** ve büyüdükçe nasıl **daha fazla ödemek zorunda kaldığınızı** açıklıyor.
+
+## 1. Trafik Limiti Tuzağı
+
+### Nasıl Çalışır?
+
+Platformlar aylık ziyaretçi limiti koyar:
+
+| Paket | Aylık Ziyaret | Aşım Durumu |
+|-------|---------------|-------------|
+| Başlangıç | 50.000 | Site askıya alınır |
+| Pro | 200.000 | ₺5.000-₺20.000 ek ücret |
+| Enterprise | 1.000.000 | Özel fiyatlandırma |
+
+### Gerçek Senaryo
+
+```
+Ay 1-6:   30K ziyaretçi/ay → Başlangıç paketi (₺10K/ay)
+Ay 7-12:  80K ziyaretçi/ay → Pro pakete zorlanır (₺30K/ay)
+Ay 13-18: 250K ziyaretçi/ay → Enterprise'a zorlanır (₺80K/ay)
+```
+
+**Sonuç:** Başarılı oldunuz diye **aylık ücretiniz 8x arttı**.
+
+### Neden Bu Kadar Düşük?
+
+Platformların maliyeti ziyaretçi başına **kuruşlar** seviyesinde. Ama size **paket yükseltme** satarak 10x kâr ediyorlar.
+
+### Özel Yazılımda Durum
+
+AWS VPS ile:
+- **Ziyaretçi limiti yok**
+- **Otomatik ölçekleme**
+- **Kullandığın kadar öde** (₺5K-₺20K/ay)
+
+## 2. Ürün ve Varyasyon Limitleri
+
+### Gizli Sınırlar
+
+```
+❌ "Sınırsız ürün" derler ama:
+   → Maksimum 10 varyasyon/ürrün
+   → Maksimum 5 görsel/ürün
+   → Maksimum 100 kategori
+```
+
+### Gerçek Örnekler
+
+**İkas:**
+- Sınırsız ürün ✅
+- Varyasyon limiti: 10 ❌
+- Görsel limiti: 10 ❌
+
+**IdeaSoft:**
+- Paket bazlı ürün limiti
+- Pro: 10.000 ürün
+- Enterprise: 50.000 ürün
+
+**Ticimax:**
+- Paket bazlı
+- En üst paket: Sınırsız (ama ₺100K+)
+
+### Özel Yazılımda
+
+- **Gerçekten sınırsız** ürün
+- **Sınırsız** varyasyon
+- **Sınırsız** görsel
+- Tek limit: **Sunucu kapasiteniz**
+
+## 3. İşlem Hacmi Limitleri
+
+### Aylık Sipariş Limiti
+
+Bazı platformlar sipariş sayısı bazında limit koyar:
+
+| Paket | Aylık Sipariş | Aşım Ücreti |
+|-------|---------------|-------------|
+| Başlangıç | 500 | ₺0.5/sipariş |
+| Pro | 2.000 | ₺0.3/sipariş |
+| Enterprise | 10.000 | ₺0.1/sipariş |
+
+### Yıllık Ciro Limiti
+
+Daha tehlikeli olan: **ciro bazlı komisyon**
+
+```
+"Yıllık cironuz ₺5M'yi aşarsa, aşan kısım için %0.5 komisyon"
+```
+
+**Senaryo:**
+- Yıllık ciro: ₺10M
+- Limit: ₺5M
+- Aşan: ₺5M
+- **Ek komisyon: ₺25.000**
+
+## 4. Modül ve Özellik Ayrımcılığı
+
+### Nasıl Çalışır?
+
+Temel özellikler bile **üst paketlerde**:
+
+| Özellik | Başlangıç | Pro | Enterprise |
+|---------|-----------|-----|------------|
+| Çoklu dil | ❌ | ✅ | ✅ |
+| B2B modülü | ❌ | ❌ | ✅ |
+| API erişimi | ❌ | ✅ | ✅ |
+| Özel tema | ❌ | ₺20K | Dahil |
+| A/B test | ❌ | ❌ | ✅ |
+| Gelişmiş rapor | ❌ | ✅ | ✅ |
+
+### Gerçek Maliyet
+
+```
+Başlangıç paketi:     ₺10K/ay
++ Çoklu dil modülü:   ₺5K/ay
++ B2B modülü:         ₺10K/ay
++ API erişimi:        ₺3K/ay
++ Özel tema:          ₺50K (tek seferlik)
+────────────────────────────────
+Gerçek maliyet:       ₺28K/ay + ₺50K
+```
+
+## 5. Tahsilat ve Nakit Akışı
+
+### 35 Gün Vade Tuzağı
+
+Bazı platformlar **tahsilatı 35 gün** içeride tutar:
+
+**Senaryo:**
+- Günlük satış: ₺50K
+- 35 günlük blokaj: **₺1.75M**
+- **Nakit akışı çöktü**
+
+### Gizli Komisyon
+
+```
+"0 komisyon" derler ama:
+
+Gerçek maliyet:
+- Tahsilat 35 gün içeride
+- Enflasyon kaybı (aylık %5): %58/yıl
+- Nakit akışı fırsat maliyeti: %20
+```
+
+**Gerçek komisyon: %78**
+
+### Özel Yazılımda
+
+- **Ertesi gün tahsilat**
+- **%0 komisyon**
+- **Nakit akışı kontrolü sizde**
+
+## 6. Tasarım ve Tema Kısıtlamaları
+
+### Şablon Hapsi
+
+```
+❌ Header düzenlenemez
+❌ Footer sabit
+❌ Ürün sayfası layout değiştirilemez
+❌ Checkout akışı değiştirilemez
+❌ Mobil menü özelleştirilemez
+```
+
+### Neden Önemli?
+
+- **Marka farklılaşması yok**
+- **Dönüşüm optimizasyonu yapılamaz**
+- **A/B test edilemez**
+- **UX iyileştirmesi yapılamaz**
+
+### Özel Yazılımda
+
+- **Pixel-perfect tasarım**
+- **İstediğiniz her şey değiştirilebilir**
+- **Sürekli A/B test**
+- **Veriye dayalı optimizasyon**
+
+## 7. Entegrasyon Sınırları
+
+### Marketplace Hapsi
+
+```
+Sadece onaylı entegrasyonlar:
+✅ iyzico, PayTR (ödeme)
+✅ Yurtiçi, Aras (kargo)
+✅ Logo, Mikro (ERP)
+
+❌ Özel ERP sistemi
+❌ Özel CRM
+❌ Özel WMS
+❌ 3. parti API'ler
+```
+
+### API Limitleri
+
+```
+API Rate Limits:
+- 100 istek/dakika
+- 10.000 istek/gün
+- Aşım: API erişimi askıya alınır
+```
+
+### Özel Yazılımda
+
+- **İstediğiniz entegrasyon**
+- **Rate limit yok**
+- **Custom API geliştirme**
+
+## 8. Veri ve Çıkış Engelleri
+
+### Veri Rehin
+
+```
+❌ Export sadece CSV (kısıtlı)
+❌ Database erişimi yok
+❌ Görselleri toplu indiremezsiniz
+❌ Müşteri verileri export edilemez
+```
+
+### Cayma Bedeli
+
+```
+"Cayma durumunda:
+- Kalan ayların %50'si
+- Setup ücreti iade edilmez
+- Export ücreti: ₺10K"
+```
+
+### Özel Yazılımda
+
+- **Tüm veriler sizin**
+- **İstediğiniz an export**
+- **Database tam erişim**
+- **Cayma bedeli yok**
+
+## Çıkış Stratejisi
+
+### Hazır Paketten Kurtulma
+
+1. **Sözleşmeyi okuyun** (cayma maddesi)
+2. **Verileri export edin** (tüm tablolar)
+3. **301 yönlendirmeleri hazırlayın**
+4. **Yeni altyapıyı kurun**
+5. **Paralel koşun** (eski+yeni)
+6. **DNS switch yapın**
+
+### Destek
+
+<Cards>
+
+<Card href="/docs/altyapi-tasima/cayma-bedeli-destegi" title="Cayma Bedeli Desteği">
+Eski sözleşme cezanızı biz ödüyoruz.
+</Card>
+
+<Card href="/docs/altyapi-tasima/e-ticaret-sitesi-nasil-tasinir" title="Sıfır Kayıpla Taşıma">
+SEO ve veri kaybı olmadan geçiş.
+</Card>
+
+</Cards>
+
+---
+
+<Callout type="warning">
+**Bu sınırlara mahkum değilsiniz.** [İletişime geçin](https://moyduz.com/iletisim), mevcut limitlerinizi ve özel yazılımla kazanacağınızı hesaplayalım.
+</Callout>

@@ -1,3 +1,14 @@
 {
-  "pages": ["(framework)", "e-ticaret-paketleri", "headless-mimari"]
+  "title": "Moyduz Docs",
+  "description": "E-Ticaret Platform Kararları ve Teknik Rehberler",
+  "icon": "Rocket",
+  "pages": [
+    "index",
+    "karar-motoru",
+    "maliyet-analizi",
+    "altyapi-tasima",
+    "teknik-mimari",
+    "araclar",
+    "karsilastirmalar"
+  ]
 }

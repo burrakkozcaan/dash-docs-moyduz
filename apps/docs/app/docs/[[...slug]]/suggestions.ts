@@ -1,27 +1,28 @@
 import type { Suggestion } from '@/components/not-found';
-import { DataSourceId, orama } from '@/lib/orama/client';
+import { orama } from '@/lib/orama/client';
 
 export async function getSuggestions(pathname: string): Promise<Suggestion[]> {
-  const results = await orama.search({
-    term: pathname,
-    mode: 'vector',
-    groupBy: {
-      properties: ['url'],
-      maxResult: 1,
-    },
-  });
+  try {
+    const results = await orama.search({
+      term: pathname,
+      mode: 'vector',
+    });
 
-  if (!results?.groups) return [];
+    if (!results?.hits || results.hits.length === 0) return [];
 
-  return (results.groups
-    .map((group) => {
-      const doc = group.result?.[0];
-      if (!doc) return null;
-      return {
-        id: doc.id,
-        href: doc.document.url as string,
-        title: doc.document.title as string,
-      } satisfies Suggestion;
-    }) as (Suggestion | null)[])
-    .filter((s): s is Suggestion => s !== null);
+    return results.hits
+      .slice(0, 3)
+      .map((hit) => {
+        const doc = hit.document;
+        if (!doc) return null;
+        return {
+          id: hit.id,
+          href: doc.url as string,
+          title: doc.title as string,
+        } satisfies Suggestion;
+      })
+      .filter((s): s is Suggestion => s !== null);
+  } catch {
+    return [];
+  }
 }

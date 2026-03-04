@@ -1,0 +1,13 @@
+{
+  "title": "Karşılaştırmalar",
+  "description": "E-ticaret platformları ve modellerinin detaylı karşılaştırması",
+  "icon": "Compare",
+  "root": true,
+  "pages": [
+    "index",
+    "moyduz-vs-ikas",
+    "moyduz-vs-ideasoft",
+    "moyduz-vs-ticimax",
+    "kiralik-e-ticaret-vs-satin-alma"
+  ]
+}
