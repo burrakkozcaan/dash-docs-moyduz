@@ -111,7 +111,7 @@ export default function Page() {
           <CreateAppAnimation />
         </div>
         <Feedback />
-        <Aesthetics />
+       
         <AnybodyCanWrite />
         <ForEngineers />
         <OpenSource />
@@ -301,7 +301,7 @@ function ForEngineers() {
           }),
         )}
       >
-        Güçlü Altyapı.
+        Size özel çözümler.
       </h2>
 
       <div className={cn(cardVariants(), 'relative flex flex-col overflow-hidden z-2')}>
@@ -313,10 +313,10 @@ function ForEngineers() {
             }),
           )}
         >
-          Bulut Tabanlı Mimari
+          B2B Portalı Oluşturuyoruz.
         </h3>
         <p className="mb-20">
-          Kesintisiz hizmet ve %99.9 uptime garantisi. Trafik yoğunluğuna göre otomatik ölçeklenen sunucular.
+          Müşterileriniz için özel bir B2B portalı oluşturuyoruz.
         </p>
         <div className="flex flex-row gap-2 mt-auto bg-brand text-brand-foreground rounded-xl p-2 w-fit">
           <LayoutTemplateIcon className="size-6" />
@@ -366,33 +366,7 @@ function ForEngineers() {
           ))}
         </div>
       </div>
-      <div className={cn(cardVariants())}>
-        <h3 className={cn(headingVariants({ variant: 'h3', className: 'mb-6' }))}>
-          Rakiplerden Farkımız
-        </h3>
-        <p className="mb-4">
-          Neden bizi tercih etmelisiniz?
-        </p>
-        <div className="ml-4 mb-6">
-          <ul className="list-disc text-sm space-y-2">
-            <li>Yıllık ücret yok, ömür boyu lisans seçenekleri.</li>
-            <li>Gizli maliyet yok.</li>
-            <li>7/24 Ücretsiz Teknik Destek.</li>
-          </ul>
-        </div>
-        <CodeBlock
-          wrapper={{
-            title: 'Hızlı Kurulum',
-          }}
-          code={`
-// 1. Hesap Oluşturun
-// 2. Temanızı Seçin
-// 3. Ürünlerinizi Yükleyin
-// 4. Satışa Başlayın!
-`.trim()}
-          lang="ts"
-        />
-      </div>
+   
   
       {/* <div className={cn(cardVariants(), 'flex flex-col max-md:pb-0')}>
         <h3 className={cn(headingVariants({ variant: 'h3', className: 'mb-6' }))}>
