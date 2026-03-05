@@ -27,9 +27,7 @@ import {
   Writing,
   ContentAdoptionBackground,
 } from '@/app/(home)/page.client';
-import ShadcnImage from './shadcn.png';
-import ContributorCounter from '@/components/contributor-count';
-import { owner, repo } from '@/lib/github';
+import EcommerceComponentsImage from './ecommerce_components.png';
 
 const headingVariants = cva('font-medium tracking-tight', {
   variants: {
@@ -82,7 +80,7 @@ export default function Page() {
             E-ticarete Taşıyın.
           </h1>
           <p className="text-lg mb-8 max-w-xl text-fd-muted-foreground">
-            Moyduz hazır e-ticaret paketleri ile dakikalar içinde online mağazanızı açın. 
+            Moyduz hazır e-ticaret paketleri ile dakikalar içinde online mağazanızı açın.
             Güvenli ödeme, kargo entegrasyonları ve mobil uyumlu temalarla satışa hemen başlayın.
           </p>
           <div className="flex flex-row items-center justify-center gap-4 flex-wrap w-fit">
@@ -90,8 +88,8 @@ export default function Page() {
               Paketleri İncele
             </Link>
             <Link
-               href="https://moyduz.com"
-               className={cn(buttonVariants({ variant: 'secondary' }), 'max-sm:text-sm')}
+              href="https://moyduz.com"
+              className={cn(buttonVariants({ variant: 'secondary' }), 'max-sm:text-sm')}
             >
               Demo Talep Et
             </Link>
@@ -100,8 +98,8 @@ export default function Page() {
       </div>
       <div className="grid grid-cols-1 gap-10 mt-12 px-6 mx-auto w-full max-w-[1400px] md:px-12 lg:grid-cols-2">
         <p className="text-2xl tracking-tight leading-snug font-light col-span-full md:text-3xl xl:text-4xl">
-          Moyduz E-ticaret, <span className="text-brand font-medium">KOBİ'ler</span> ve <span className="text-brand font-medium">Girişimciler</span> için 
-          geliştirilmiş, <span className="text-brand font-medium">SEO uyumlu</span> ve yüksek performanslı bir e-ticaret yazılımıdır. 
+          Moyduz E-ticaret, <span className="text-brand font-medium">KOBİ'ler</span> ve <span className="text-brand font-medium">Girişimciler</span> için
+          geliştirilmiş, <span className="text-brand font-medium">SEO uyumlu</span> ve yüksek performanslı bir e-ticaret yazılımıdır.
           Pazaryeri entegrasyonları ve sosyal medya satış araçları ile işinizi büyütün.
         </p>
         <div className="p-4 bg-radial-[circle_at_top_center] rounded-xl col-span-full">
@@ -109,7 +107,7 @@ export default function Page() {
             Hemen Başlayın
           </h2>
           <div className="flex justify-center mb-8">
-             <p className="text-center max-w-md">Profesyonel e-ticaret sitenizi kurmak için tek yapmanız gereken bize ulaşmak.</p>
+            <p className="text-center max-w-md">Profesyonel e-ticaret sitenizi kurmak için tek yapmanız gereken bize ulaşmak.</p>
           </div>
           <CreateAppAnimation />
         </div>
@@ -145,7 +143,7 @@ function Aesthetics() {
         </p>
         <p className="mb-4">Tasarım bilgisine gerek kalmadan vitrinizi özelleştirin.</p>
         <div className="mt-auto">
-             <Link href="/docs/e-ticaret-paketleri/theme" className="text-brand font-medium hover:underline">Temaları Görüntüle →</Link>
+          <Link href="/docs/e-ticaret-paketleri/theme" className="text-brand font-medium hover:underline">Temaları Görüntüle →</Link>
         </div>
       </div>
     </>
@@ -172,15 +170,15 @@ function AnybodyCanWrite() {
                 <li>Kargo Etiketi Yazdırma</li>
               </ul>
             </div>
-             <div className="flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 rounded-xl p-4">
-                 <StoreIcon className="size-32 text-brand" />
+            <div className="flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 rounded-xl p-4">
+              <StoreIcon className="size-32 text-brand" />
             </div>
           </div>
         ),
         developer: (
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-             <div className="flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 rounded-xl p-4">
-                 <CreditCardIcon className="size-32 text-brand" />
+            <div className="flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 rounded-xl p-4">
+              <CreditCardIcon className="size-32 text-brand" />
             </div>
             <div className="max-lg:row-start-1">
               <h3 className={cn(headingVariants({ variant: 'h3', className: 'my-4' }))}>
@@ -212,8 +210,8 @@ function AnybodyCanWrite() {
                 <li>Google Merchant Center Entegrasyonu</li>
               </ul>
             </div>
-             <div className="flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 rounded-xl p-4">
-                 <SearchIcon className="size-32 text-brand" />
+            <div className="flex items-center justify-center bg-neutral-100 dark:bg-neutral-900 rounded-xl p-4">
+              <SearchIcon className="size-32 text-brand" />
             </div>
           </div>
         ),
@@ -331,7 +329,7 @@ function ForEngineers() {
           Kesintisiz hizmet ve %99.9 uptime garantisi. Trafik yoğunluğuna göre otomatik ölçeklenen sunucular.
         </p>
         <div className="flex flex-row gap-2 mt-auto bg-brand text-brand-foreground rounded-xl p-2 w-fit">
-           <LayoutTemplateIcon className="size-6"/>
+          <LayoutTemplateIcon className="size-6" />
         </div>
 
         <AgnosticBackground />
@@ -347,7 +345,7 @@ function ForEngineers() {
           Esnek Paket Seçenekleri
         </h3>
         <p className="mb-8">
-            İhtiyacınıza uygun paketi seçin, fazlasına ödeme yapmayın. İstediğiniz zaman paketinizi yükseltebilirsiniz.
+          İhtiyacınıza uygun paketi seçin, fazlasına ödeme yapmayın. İstediğiniz zaman paketinizi yükseltebilirsiniz.
         </p>
         <div className="mt-auto flex flex-col gap-2 @container mask-[linear-gradient(to_bottom,white,transparent)]">
           {[
@@ -386,11 +384,11 @@ function ForEngineers() {
           Neden bizi tercih etmelisiniz?
         </p>
         <div className="ml-4 mb-6">
-            <ul className="list-disc text-sm space-y-2">
-                <li>Yıllık ücret yok, ömür boyu lisans seçenekleri.</li>
-                <li>Gizli maliyet yok.</li>
-                <li>7/24 Ücretsiz Teknik Destek.</li>
-            </ul>
+          <ul className="list-disc text-sm space-y-2">
+            <li>Yıllık ücret yok, ömür boyu lisans seçenekleri.</li>
+            <li>Gizli maliyet yok.</li>
+            <li>7/24 Ücretsiz Teknik Destek.</li>
+          </ul>
         </div>
         <CodeBlock
           wrapper={{
@@ -449,7 +447,7 @@ Yeni Üye: 8`}
         </Link>
         <Search />
       </div>
-      <div className={cn(cardVariants(), 'flex flex-col p-0 overflow-hidden')}>
+      {/* <div className={cn(cardVariants(), 'flex flex-col p-0 overflow-hidden')}>
         <div className="p-6 mb-2">
           <h3 className={cn(headingVariants({ variant: 'h3', className: 'mb-6' }))}>
             E-ticaret Bileşenleri
@@ -461,8 +459,8 @@ Yeni Üye: 8`}
             Bileşenleri İncele
           </Link>
         </div>
-        <Image src={ShadcnImage} alt="shadcn" className="mt-auto flex-1 w-full object-cover" />
-      </div>
+        <Image src={EcommerceComponentsImage} alt="E-ticaret Bileşenleri" className="mt-auto flex-1 w-full object-cover" />
+      </div> */}
     </>
   );
 }
@@ -526,7 +524,6 @@ function OpenSource() {
         <p className="mb-8">Yüzlerce işletme işini büyütmek için bizi tercih etti.</p>
         <div className="mb-8 flex flex-row items-center gap-2">
         </div>
-        <ContributorCounter repoOwner={owner} repoName={repo} />
       </div>
       <div
         className={cn(
@@ -539,7 +536,7 @@ function OpenSource() {
           E-ticarete Başla
         </h2>
         <p className="text-center font-mono text-xs opacity-50 mb-8">
-            Hayallerinizdeki mağazayı bugün açın.
+          Hayallerinizdeki mağazayı bugün açın.
         </p>
         <div className="h-[200px] mt-auto overflow-hidden p-8 bg-gradient-to-b from-brand-secondary/10">
           <div className="mx-auto bg-radial-[circle_at_0%_100%] from-60% from-transparent to-brand-secondary size-[500px] rounded-full" />

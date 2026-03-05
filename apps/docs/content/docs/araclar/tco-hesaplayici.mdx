@@ -1,0 +1,79 @@
+---
+title: TCO Hesaplayıcı - 3 Yıllık Toplam Sahip Olma Maliyeti (2026)
+description: E-ticaret altyapınızın 3 yıllık (TCO) toplam sahip olma maliyetini hesaplayın. Kiralama ve mülkiyetin gerçek bedeli nedir?
+icon: Calculator
+---
+
+<Callout type="tip">
+**Canlı Hesaplama Aracı:** Shopify, ikas, WooCommerce ve özel yazılım 3 yıllık maliyetini karşılaştırın → [moyduz.com/tools/maliyet-hesaplama](https://moyduz.com/tools/maliyet-hesaplama)
+</Callout>
+
+# 3 Yıllık (TCO) E-Ticaret Maliyet Hesaplayıcı
+
+<EEATCard 
+  lastUpdated="Mart 2026" 
+  author="Moyduz E-Ticaret Analiz Ekibi" 
+/>
+
+<AboveTheFoldVerdict 
+  scenario1={{
+    profile: "Geçici Projeler ve Kısa Vadeli Hobiciler",
+    recommendation: "Yıllık Kiralık SaaS Paketleri",
+    reason: "Eğer işin devam edip etmeyeceği kesin değilse, ilk yıl indiriminden faydalanmak risk azaltan bir stratejidir."
+  }}
+  scenario2={{
+    profile: "Kalıcı ve Büyük Ciro Hedefleyen Markalar",
+    recommendation: "Özel Mülkiyet (Açık Kaynak/Lisanslı Yazılım)",
+    reason: "İkinci ve üçüncü yıllarda karşınıza çıkacak olan %100-150 enflasyon zamlarından tamamen kurtulur, lisansa ömür boyu sahip olursunuz."
+  }}
+/>
+
+TCO (Total Cost of Ownership), e-ticaret sitenizin sadece **ilk günkü kurulum bedeli değil, takip eden yıllardaki yenilenme bedelleri, limit aşımları ve bakım hizmetleriyle ulaştığı "Toplam Bedeldir"**. E-ticaretteki en büyük stratejik hatalar SaaS platformlarına her sene katlanan kiralar ödenirken fark edilmez.
+
+## Kendi Kırılma Noktanızı Bulun
+
+Mevcut başlangıç rakamlarınızı aşağıdaki tabloya girerek aradaki astronomik **ikinci yıl zammı (hava parası)** uçurumunu kendiniz görün:
+
+<EnflasyonCalculator />
+
+## TCO'ya (Toplam Sahip Olma Maliyeti) Neler Dahildir?
+
+<SemanticKnowledgeBox 
+  title="TCO Kesintilerini Anlamak"
+  concepts={[
+    { term: "Kurulum (Onboarding) Maliyeti", definition: "Platformu kullanmaya başladığınız gün tasarım, entegrasyon ve yazılım lisansına ödediğiniz bedel." },
+    { term: "Yıllık Yenileme (Kira) Bedeli", definition: "SaaS altyapıların kullanımına devam edebilmek için sözleşme kuralları gereği (çoğu zaman enflasyon zammı eklenerek) ödenen bedel." },
+    { term: "Ölçeklenme Gideri (Scaling Cost)", definition: "Trafiğiniz veya sipariş sayınız arttığında sizi bir üst pakete geçmeye zorlayan 'limit aşımı' faturaları." }
+  ]} 
+/>
+
+## Kiralama Modelindeki Büyük Tuzak
+
+<RiskAnalysis title="Enflasyon ve Yenileme Riskleri">
+  **1. Biriken (Kümülatif) Enflasyon Zammı:** İlk yıl 100 TL ödediğinizi sanırsınız, %80 zammın üzerine bir sonraki sene %60 daha geldiğinde ödediğiniz tutar hayal edemeyeceğiniz seviyelere çıkar.  
+  **2. Vendor Lock-in (Bağımlılık Tuzağı):** Siteler kapalı kod yapısına sahiptir. Fiyatları ödemeyi reddettiğinizde "O zaman kodunu ve siteni al git" diyemezsiniz. Tüm veriler içeride kalır.  
+  **3. Gizli Modül Faturaları:** Paket yükseltmeye mecbur bırakılmadığınız anlarda bile muhasebe veya kargo entegrasyonları için devasa ek bütçeler istenebilir.
+</RiskAnalysis>
+
+## İki Modelin 3 Yıllık Portresi
+
+<DecisionMatrix scenarios={[
+  {
+    name: "Özel Yazılım Mülkiyeti",
+    description: "Orta ve Uzun vadede markalaşmak isteyen ticari firmalar.",
+    pros: ["Yüksek kümülatif zamlardan (havaya uçan kiralardan) korur", "Site ömür boyu sizin mülkiyetinizdedir", "Limit aşımı paketi uygulanmaz"],
+    cons: ["SaaS platformlarına göre başlangıç bütçesi daha yüksektir"],
+    winner: true
+  },
+  {
+    name: "Yıllık Hazır Paket",
+    description: "İlk girişim heveslileri ve düşük bütçeliler.",
+    pros: ["İlk giriş maliyetini sıfıra yakın tutar."],
+    cons: ["Sözleşmede ikinci sene sürpriz faturalar getirir.", "Site tasarımını veya firmayı değiştiremezsiniz."]
+  }
+]} />
+
+<FAQSchema faqs={[
+  { question: "E-ticarette TCO nedir neden önemlidir?", answer: "TCO (Toplam Sahip Olma Maliyeti), e-ticaret sitenizin sadece açılırken ödenen ilk parasını değil, 3-5 senelik periyotta yaşattığı tüm gizli paket, kargo ve komisyon maliyetlerini içeren en net muhasebe analizidir." },
+  { question: "Neden özel yazılım almamı öneriyorsunuz?", answer: "Çünkü SaaS platformlarda ödediğiniz onbinlerce lira 3. yılın sonunda hala bir 'kira' bedelinden ibaret kalır. Özel lisans aldığınızda yatırımınız size bir gayrimenkul gibi aittir ve satılabilir, taşınabilir." }
+]} />

@@ -1,14 +1,44 @@
 ---
-title: Sıfır Komisyon Yalanları ve Nakit Akışı - Tahsilat Vadesi Gerçeği
+title: Sıfır Komisyon Yalanları ve Nakit Akışı - Tahsilat Vadesi Gerçeği (2026)
 description: Yuzde sifir komisyon diyen e-ticaret platformları tahsilatı 35 gün içeride tutarak gerçekte ne kadar komisyon alıyor? Nakit akışı maliyet analizi.
 icon: Wallet
 ---
 
 # Sıfır Komisyon Yalanları ve Nakit Akışı
 
-**"%0 komisyon!"** diyorlar. Ama tahsilatı **35 gün** içeride tutarak, gerçekte **%70-80 komisyon** alıyorlar.
+<EEATCard 
+  lastUpdated="Mart 2026" 
+  author="Moyduz E-Ticaret Finans Ekibi" 
+/>
 
-Bu rehber, **görünmez komisyonun** gerçek maliyetini ve nakit akışınızı nasıl yok ettiğini açıklıyor.
+<AboveTheFoldVerdict 
+  scenario1={{
+    profile: "Nakit Akışına İhtiyacı Olmayan veya Dropshipping Yapanlar",
+    recommendation: "%0 Komisyon, 35 Gün Vade",
+    reason: "Sermayesi güçlü, malı hemen kendi peşin alıp satmak durumunda kalmayan pasif satıcılar için %0 kulağa hoş gelebilir."
+  }}
+  scenario2={{
+    profile: "Odağı Büyümek Olan ve Kendi Stoğunu Çeviren KOBİ'ler",
+    recommendation: "Moyduz + Açık Anlaşmalı POS (Ertesi Gün Tahsilat)",
+    reason: "Sermaye %5 enflasyonla platformda rehin kalmaz. Ürün satın alıp anında stoka dönüştürebilirsiniz."
+  }}
+/>
+
+**"%0 komisyon!"** diyorlar. Ama tahsilatı **35 gün** içeride tutarak, enflasyon ve fırsat maliyetiyle birlikte gerçekte sizden ciddi bir bedel alıyorlar.
+
+Bu rehber, **görünmez komisyonun** gerçek maliyetini ve nakit akışınızı nasıl yok ettiğini, gerçek hesaplamalarla açıklıyor.
+
+## Kavramlar: Önce Jargonu Anlayalım
+
+<SemanticKnowledgeBox 
+  title="Ödeme ve Tahsilat Jargonu"
+  concepts={[
+    { term: "Tahsilat Vadesi", definition: "Müşterinin kartından çekilen paranın, sanal POS firması veya e-ticaret altyapısı tarafından sizin banka hesabınıza yatırılana kadar geçen gün sayısı." },
+    { term: "Nakit Akışı (Cash Flow) Döngüsü", definition: "Tedarikçiden mal alımı ile müşteriden tahsilat yapılması arasında geçen süre. Bu süre uzadıkça işletme sermayesi/kredi ihtiyacı doğar." },
+    { term: "Fırsat Maliyeti (Opportunity Cost)", definition: "Paranızın içeride blokede kalması nedeniyle yapamadığınız yatırımların (reklam, indirimli stok alımı) bedelidir." },
+    { term: "Gizli Komisyon", definition: "Platformun sizden doğrudan para kesmeyip, paranızı finansal piyasalarda değerlendirerek (faizle) elde ettiği gelirdir." }
+  ]} 
+/>
 
 ## "%0 Komisyon" Nasıl Çalışır?
 
@@ -43,25 +73,21 @@ Ama: "Tahsilat süresi ortalama 35 gün"
 
 **Bu para sizin ama erişemiyorsunuz.**
 
-### Enflasyon Kaybı (Aylık %5)
+### Kendi Kaybınızı / Kazancınızı Hesaplayın
 
-```
-Ay 1: ₺1.750.000 × %5  = ₺87.500  kayıp
-Ay 2: ₺1.750.000 × %5  = ₺87.500  kayıp
-Ay 3: ₺1.750.000 × %5  = ₺87.500  kayıp
-────────────────────────────────────
-3 Ay:                  ₺262.500  kayıp
-```
+**Aşağıdaki etkileşimli analiz aracı ile**, aylık cironuza göre %0 komisyon yalanının 35 günde size ne kadar kaybettirdiğini görün. Ertesi gün hesabınıza geçen %1.5'luk açık bir PayTR/İyzico oranının bile aslında sizi ne kadar kâra geçireceğini hesaplayın:
 
-### Fırsat Maliyeti
+<SanalPosKomisyonCalculator />
 
-Bu ₺1.75M ile ne yapabilirdiniz?
+## Enflasyon ve Fırsat Maliyeti Riski
 
-```
-- Yeni ürün stoğu:    %30 kâr marjı → ₺525.000 kâr
-- Reklam yatırımı:    3x ROAS → ₺5.250.000 satış
-- Nakit iskonto:      %5 → ₺87.500 indirim
-```
+<RiskAnalysis title="35 Günlük Blokenin Yarattığı Riskler">
+  **1. Enflasyon Erimesi:** Türkiye gibi enflasyonist ortamlarda, kazanılmış bir paranın 35 gün sonra alınması, paranın alım gücünün ortalama %5 erimesi demektir. 100 TL'lik ürün sattığınızda elinize 35 gün sonra geçen paranın reel değeri 95 TL'dir.
+  
+  **2. Yeni Stok Alımının Engellenmesi:** Sürekli sıcak satış yapan bir butikseniz, yeni kargolar göndermek ve kumaş almak zorundasınızdır. Paranız içerdeyken tedarikçinize ödeme yapamadığınız için "Hızlı Büyüme" kapasitenizi kaybedersiniz.
+  
+  **3. Kredi Faizlerine Mecbur Kalmak:** İçerde 2 Milyon TL'niz varken, günlük operasyon (dükkan kirası, kargo, maaşlar) için bankadan %5 faizle Ticari Kredi Kartı kullanmak durumunda kalırsınız.
+</RiskAnalysis>
 
 ## Gerçek Komisyon Oranı
 
@@ -131,33 +157,27 @@ Gün 2:   Yeni stokla satışa devam
 
 **Fark:** **35x daha hızlı** stok devir hızı.
 
+## Model Karşılaştırması
+
+İşletmeniz için hangi modelin nakit akışında kazandırdığını görün:
+
+<DecisionMatrix scenarios={[
+  {
+    name: "Özel Yazılım + Bağımsız Açık POS",
+    description: "Orta ve yüksek hacimli kârlılık odaklı firmalar için.",
+    pros: ["Ertesi gün tahsilat hesaba geçer", "Birden fazla sanal POS firmasını aynı anda sisteme ekleyip komisyonları yarıştırabilirsiniz", "Nakit sıkıntısı bitince stok/reklam gücü artar"],
+    cons: ["Satışlardan minik komisyonlar (ör: %1.5) peşin kesilir ancak para miktarını bağlamaz"],
+    winner: true
+  },
+  {
+    name: "Kapalı SaaS + %0 Komisyon Tuzağı",
+    description: "Sadece az ciro yapan / hobi amaçlı satanlar için.",
+    pros: ["Satış tutarı kesintisiz ekranda gözükür", "Sanal POS başvuru onay süreci daha kısadır"],
+    cons: ["35-40 gün para içeride rehin kalır", "Ticari kredi kullanmaya veya eldeki peşin sermayeyi eritmeye başlatır"]
+  }
+]} />
+
 ## Gerçek Örnek: KOBİ Senaryosu
-
-### Mehmet Bey - Elektronik Satıcısı
-
-**Durum:**
-- Aylık ciro: ₺800.000
-- Kâr marjı: %20
-- Platform: İkas (35 gün vade)
-
-**Sorun:**
-```
-Ocak satışları: ₺800.000
-Para eli geçti: 5 Mart (35 gün sonra)
-Şubat stok alamadı: Kaçan satış ₺400.000
-Kredi çekti: ₺300.000 (%5 faiz/ay)
-```
-
-**Sonuç:**
-```
-Ocak kârı:          ₺160.000
-Kredi faizi:        -₺45.000
-Kaçan satış kârı:   -₺80.000
-────────────────────────────
-NET:                ₺35.000
-```
-
-**Gerçek kâr marjı: %4.4** (>%20 yerine)
 
 ### Aynı Senaryo - 1 Gün Vade
 
@@ -253,7 +273,22 @@ TOPLAM: ₺135K kayıp
 
 **Fark: ₺4.515.000**
 
-## Ne Yapmalısınız?
+## Proje Karar Aşaması: Ne Yapmalısınız?
+
+İşletme modelinize göre doğru tahsilat yöntemini seçin:
+
+<UserProfileSegment profiles={[
+  {
+    title: "SaaS Vade Modelini Seçmesi Gerekenler",
+    description: "Ayda 1-2 satış yapan hobici veya sermayesi limitsiz olanlar.",
+    forWho: ["Ürün alımında nakit derdi olmayan üreticiler", "Hobi amaçlı/ek iş olarak e-ticaret yapanlar", "Tedarikçisine 60-90 gün vade ile ödeme yapabilen kurumsallar"]
+  },
+  {
+    title: "Ertesi Gün POS (Moyduz) Seçmesi Gerekenler",
+    description: "Hızlı büyümesi gereken nakit akışı odaklı girişimciler.",
+    forWho: ["Stok finansmanında banka kredisi kullanmamak isteyenler", "Reklam (ROAS) bütçesini sürekli satıştan gelen parayla döndürenler", "Ürünü Peşin / Havale ile alıp aynı hızda satanlar"]
+  }
+]} />
 
 ### Mevcut Platformunuzda
 
@@ -294,3 +329,10 @@ Nakit akışı tuzağından kaçış.
 <Callout type="warning">
 **Her ay %15-25 kaybediyor olabilirsiniz.** [Ücretsiz nakit akışı analizi](https://moyduz.com/iletisim) için iletişime geçin.
 </Callout>
+
+<FAQSchema faqs={[
+  { question: "E-ticaret sağlayıcıları neden %0 komisyon verip ödemeyi 35 gün sonra yapıyor?", answer: "Çünkü sizin yüzbinlerce liralık cironuzu bankada gecelik (repo/faiz) fonlarda veya kendi finansman ihtiyaçlarında değerlendirerek, normalde alacağı %2 komisyondan çok daha fazlasını ('Finansal arbitraj' yöntemiyle) kazanmaktadır." },
+  { question: "Moyduz altyapısında Sanal POS oranları nasıldır?", answer: "Moyduz size açık (Vendor Lock-in barındırmayan) bir sistem kurar. Kendi adınıza PayTR, İyzico, Param veya Akbank, Garanti gibi sanal POS'ları kurabilirsiniz. Anlaşmanıza göre paranız %1-%2 gibi düşük komisyonlarla, ertesi gün kendi banka hesabınıza geçer." },
+  { question: "Aylık 200.000 TL ciroda 35 gün vadenin bana zararı nedir?", answer: "Eğer aylık enflasyon %5 ise, sadece beklemekten doğan alım gücü kaybı paranızın %5'in erimesine sebep olur (Yaklaşık 10.000 TL gizli zarar). Eğer bu paraya erişemediğiniz için Ticari Kredi Kartı kullanıyorsanız, faiz/komisyon ekstreleriyle zarar katlanır." },
+  { question: "Rakipler ertesi gün ödeme sunmuyor mu?", answer: "SaaS platformları genellikle kendi finansman 'cüzdan / pay' çözümlerini zorunlu tutar. Ertesi gün tahsilat isterseniz, bu sefer sıfır komisyon avantajı kalkar ve piyasa ortalamasının çok daha üstünde (Örneğin %4-5) komisyon oranları dayatılır." }
+]} />

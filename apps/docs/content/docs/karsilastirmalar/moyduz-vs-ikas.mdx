@@ -6,6 +6,10 @@ icon: Scale
 
 # Moyduz vs İkas: Hangisi Daha Kârlı?
 
+<div className="text-sm text-fd-muted-foreground mb-8">
+  **Son Güncelleme:** Mart 2026 | **Enflasyon Varsayımı:** %60 (Yıllık)
+</div>
+
 **İkas**, modern arayüzü ve hızlı kurulumu ile popüler. Ama **büyüdükçe artan maliyetler** ve **tahsilat vadesi** ciddi sorunlar yaratıyor.
 
 Bu karşılaştırma, **gerçek maliyetleri** ve **uzun vadeli kazancı** gösteriyor.
@@ -99,49 +103,24 @@ Fark:         ₺207.300 (Moyduz daha pahalı)
 
 **Ama bekleyin!** Gizli maliyetleri henüz görmediniz.
 
-## Gizli Maliyetler
+## Gizli Maliyetler ve Risk Analizi
 
-### İkas'ta
+<RiskAnalysis title="İkas'ın Tahsilat ve Trafik Tuzakları">
+  **1. Tahsilat Vadesi (35 gün)**
+  Paranızın 35 gün içerde kalması ₺500.000 aylık ciroda yıllık asgari **₺348.000 enflasyon kaybı** yaratır.
+  
+  **2. Trafik Limiti Aşımı**
+  Pro pakette 200K ziyaret sınırı vardır. Başarılı aylarınızda ceza gibi ₺10.000 - ₺30.000 arası aşım faturalarıyla karşılaşırsınız.
+  
+  **3. Ciro Üzerinden Gizli Kayıplar**
+  İçerde kalan parayla yeni ürün almak veya reklama yatırmak yerine paranızı rehin bırakmak zorunda kalırsınız. Yeni finansman için dış kredi kullanmak zorunda kalırsanız zararınız logaritmik büyür.
+</RiskAnalysis>
 
-**1. Tahsilat Vadesi (35 gün)**
-```
-Aylık ciro:      ₺500.000
-Bloke para:      ₺583.000 (35 gün)
-Enflasyon kaybı: ₺29.000/ay (%5)
-Yıllık kayıp:    ₺348.000
-3 yıllık kayıp:  ₺1.044.000
-```
+### Kendi Kaybınızı Hesaplayın
 
-**2. Trafik Limiti Aşımı**
-```
-Pro paket:       200K ziyaret/ay
-Aşım durumunda:  ₺10.000-₺30.000/ay ek ücret
-Yıllık:          ₺120.000-₺360.000
-```
+Tahsilat vadesinin (35 gün) size aylık ve yıllık enflasyon bazlı ne kadar kaybettirdiğini görün.
 
-**3. Nakit Akışı Fırsat Maliyeti**
-```
-Bloke ₺583K ile:
-- Stok yatırsanız:  %30 kâr → ₺175K/ay
-- Reklam yatırsanız: 3x ROAS → ₺1.75M satış
-Yıllık fırsat:     ₺2M+
-```
-
-### Moyduz'da
-
-**1. Tahsilat Vadesi (1 gün)**
-```
-Bloke para:      ₺16.700 (1 gün)
-Enflasyon kaybı: ₺800/ay
-Yıllık kayıp:    ₺9.600
-3 yıllık kayıp:  ₺28.800
-```
-
-**2. Trafik Limiti**
-```
-Yok - sınırsız
-Ek ücret:        ₺0
-```
+<TahsilatVadesiCalculator />
 
 ## Gerçek 3 Yıllık Maliyet
 
@@ -229,7 +208,25 @@ Moyduz (1 gün):
 | A/B test edilemez | Sürekli optimizasyon |
 | UX iyileştirme zor | Veriye dayalı UX |
 
-## İkas'tan Moyduz'a Geçiş
+## İkas'tan Moyduz'a Geçiş Karar Matrisi
+
+Moyduz'a geçmeli miyim yoksa İkas'ta kalmalı mıyım? Karar vermenize yardımcı olacak durum bazlı analiz:
+
+<DecisionMatrix scenarios={[
+  {
+    name: "Özel Yazılım (Moyduz)",
+    description: "Tam kontrol, yüksek dönüşüm ve rekabetçi avantaj.",
+    pros: ["1-2 günde tahsilat", "Trafik veya ürün sınırlaması yok", "Tam kod sahipliği - size ait", "Bağımsız sunucu barındırma"],
+    cons: ["İlk kurulum maliyeti daha yüksek", "Kararlar ve operasyon size ait"],
+    winner: true
+  },
+  {
+    name: "Hazır Paket (İkas)",
+    description: "SaaS modelinde hızlıca e-ticarete giriş.",
+    pros: ["Çok düşük başlangıç maliyeti", "Hızlı şablon kurulumu", "Sunucu vb. bakım derdi yok"],
+    cons: ["35 Gün tahsilat vadesi", "Trafik limiti cezaları", "Kaynak kod sizin değil", "Katı tasarım kısıtlamaları"]
+  }
+]} />
 
 ### Neden Geçiyorlar?
 
@@ -253,24 +250,22 @@ Hafta 6:   DNS switch
 
 **Cayma bedeli desteği ile:** İkas cezanızı biz ödüyoruz (₺30K'a kadar).
 
-## Kimler İçin İkas?
+## Kullanıcı Profillerine Göre Seçim
 
-✅ **İkas seçin eğer:**
-- İlk defa e-ticaret yapıyorsunuz
-- Bütçeniz ₺100K altında
-- 6-12 ay içinde kapatabilirsiniz
-- Standart özellikler yeterli
-- Teknik bilginiz yok
+Hangi platformun size uygun olduğunu profilinize göre seçin:
 
-## Kimler İçin Moyduz?
-
-✅ **Moyduz seçin eğer:**
-- Ciddi, uzun vadeli iş kuruyorsunuz
-- Aylık cironuz ₺200K+ olacak
-- Nakit akışı önemli
-- Marka deneyimi yaratmak istiyorsunuz
-- B2B satış yapacaksınız
-- Özel entegrasyonlar gerekli
+<UserProfileSegment profiles={[
+  {
+    title: "İkas Tercih Edenler",
+    description: "Ekibi olmayan, hızlıca test amaçlı site açmak isteyen ve sermayesi kısıtlı girişimler.",
+    forWho: ["İlk defa e-ticaret yapacaklar", "Bütçesi ₺50K-100K altında olanlar", "1 yıl içinde sistemi kapatma ihtimali olanlar", "Standart hazır şablonların yeterli olduğu iş modelleri"]
+  },
+  {
+    title: "Moyduz Tercih Edenler",
+    description: "Uzun vadeli hedefi olan, nakit akışını yöneten, markasını tamamen özelleştirmek ve ölçeklemek isteyen işletmeler.",
+    forWho: ["Ciddi projesi olan işletmeler", "Aylık ciro hedefi ₺250K+ olanlar", "Nakit akışını hemen eline almak isteyenler (Ertesi Gün)", "Özel entegrasyon veya ERP bağlamak isteyenler"]
+  }
+]} />
 
 ## Referanslar
 
@@ -326,3 +321,10 @@ Sıfır kayıpla İkas'tan çıkış.
 <Callout type="info">
 **İkas'tan memnun değil misiniz?** [Ücretsiz geçiş analizi](https://moyduz.com/iletisim) yapalım. Mevcut maliyetlerinizi ve Moyduz ile kazanacağınızı hesaplayalım.
 </Callout>
+
+<FAQSchema faqs={[
+  { question: "İkas trafik limiti aşılırsa ne olur?", answer: "Sözleşmenizde belirtilen limit (Genelde Pro pakette 200.000) aşıldığında sistem durdurulmaz, ancak ay sonu faturanıza trafik aşım ücreti yansır. Bu rakam yüksek trafik çeken aylarda binlerce lirayı bulabilir." },
+  { question: "Moyduz'da tahsilat vadesi nasıl işler?", answer: "Moyduz'da özel veya hazır ödeme entegrasyonu kullanırsınız. İkas gibi parayı havuzda bekletmez; anlaşmalı kurumlardan paranızı doğrudan ertesi iş günü kendi hesabınıza alabilirsiniz." },
+  { question: "İkas taahhütten cayma bedeli ne kadar?", answer: "İkas ile olan yıllık veya daha uzun sözleşmenizden erken çıkarsanız, iptal komisyonu (cayma bedeli) doğabilir. Moyduz'a geçişlerde bu iade/ceza tutarının ₺30.000 TL'ye kadarını karşılıyoruz." },
+  { question: "Kaynak kodları İkas sisteminde alabilir miyim?", answer: "Hayır. İkas kapalı kaynak bir SaaS e-ticaret yazılımıdır. Kod tamamen onların mülkiyetindedir. Moyduz'da ise geliştirmelerin lisansı ve kaynak kodu size aittir." }
+]} />

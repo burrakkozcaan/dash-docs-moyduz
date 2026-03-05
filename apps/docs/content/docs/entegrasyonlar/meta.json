@@ -1,0 +1,15 @@
+{
+  "title": "Entegrasyonlar",
+  "description": "Ödeme, kargo, ERP, marketplace ve pazarlama araçları entegrasyonları",
+  "icon": "Plug",
+  "root": true,
+  "pages": [
+    "index",
+    "odeme",
+    "kargo",
+    "marketplace",
+    "erp",
+    "analitik",
+    "ozel-entegrasyon"
+  ]
+}

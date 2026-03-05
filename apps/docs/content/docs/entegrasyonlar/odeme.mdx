@@ -1,0 +1,108 @@
+---
+title: Ödeme Sistemi Entegrasyonları - Sanal POS ve Ödeme Geçitleri
+description: "iyzico, PayTR, Sipay, Stripe entegrasyonu. Türk bankaları sanal POS kurulumu. Taksit ve kapıda ödeme desteği."
+icon: CreditCard
+---
+
+# Ödeme Sistemi Entegrasyonları
+
+Moyduz, Türkiye'deki tüm büyük ödeme altyapılarını destekler. **Birden fazla ödeme yöntemi** aynı anda aktif olabilir.
+
+## Desteklenen Ödeme Sistemleri
+
+### Ödeme Geçitleri
+
+| Sistem | Taksit | 3D Secure | Komisyon |
+|--------|--------|-----------|----------|
+| **iyzico** | ✅ 12 taksit | ✅ | %2.35 + ₺0.25 |
+| **PayTR** | ✅ 12 taksit | ✅ | %2.29 + ₺0.25 |
+| **Sipay** | ✅ 12 taksit | ✅ | Anlaşmalı |
+| **Stripe** | ❌ | ✅ | %1.4 + €0.25 |
+| **PayPal** | ❌ | ✅ | %3.49 |
+
+### Banka Sanal POS
+
+```
+✅ İş Bankası
+✅ Garanti BBVA
+✅ Yapı Kredi
+✅ Akbank
+✅ Ziraat Bankası
+✅ Halkbank
+✅ Vakıfbank
+✅ QNB Finansbank
+```
+
+### Alternatif Ödeme Yöntemleri
+
+```
+✅ Kapıda ödeme (nakit + kart)
+✅ Havale / EFT
+✅ BKM Express
+✅ Papara
+✅ PayCo
+✅ Kredi kartı taksit
+✅ Alışveriş kredisi (Akbank Axess, Garanti Bonus...)
+```
+
+## Tahsilat Vadesi Karşılaştırması
+
+Bu konuda Moyduz'un en kritik avantajı:
+
+```
+iyzico / PayTR:  T+1 (ertesi iş günü)
+İkas:            T+35 (35 gün sonra)
+IdeaSoft:        T+14 (14-30 gün)
+
+Moyduz:          T+1 (ertesi iş günü)
+```
+
+**Aylık ₺500.000 ciro için:**
+- İkas (35 gün): ₺583.000 bloke
+- Moyduz (1 gün): ₺16.700 bloke
+- **Fark: ₺566.300 serbest nakit**
+
+## Entegrasyon Özellikleri
+
+### Otomatik İptal & İade
+
+```
+✅ Tek tıkla tam iade
+✅ Kısmi iade desteği
+✅ Otomatik stok iadesi
+✅ Müşteriye otomatik bildirim
+```
+
+### Fraud Koruması
+
+```
+✅ 3D Secure zorunlu/opsiyonel
+✅ IP bazlı limit
+✅ Şüpheli işlem uyarısı
+✅ Kara liste yönetimi
+```
+
+### Muhasebe Entegrasyonu
+
+```
+Her ödeme otomatik olarak:
+→ ERP'ye fatura kaydı
+→ Banka mutabakatı
+→ KDV hesabı
+→ Logo/Mikro entegrasyonu
+```
+
+## Kurulum Süreci
+
+```
+Gün 1: iyzico/PayTR hesabı açılışı
+Gün 2: API key entegrasyonu
+Gün 3: Test ortamı doğrulaması
+Gün 4: Canlıya geçiş
+```
+
+---
+
+<Callout type="info">
+**Mevcut ödeme sisteminizi korumak mı istiyorsunuz?** Geçiş sürecinde eski ve yeni sistemi paralel çalıştırabilirsiniz. [Detay için iletişime geçin.](https://moyduz.com/iletisim)
+</Callout>

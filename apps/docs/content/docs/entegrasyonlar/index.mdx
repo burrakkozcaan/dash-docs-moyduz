@@ -1,0 +1,71 @@
+---
+title: Entegrasyonlar - Ödeme, Kargo, ERP ve Marketplace
+description: "E-ticaret sistemleri için ödeme, kargo, ERP ve marketplace entegrasyonları. Moyduz ile sınırsız entegrasyon."
+icon: Plug
+---
+
+# Entegrasyonlar
+
+Moyduz, **açık kaynak kod yapısı** sayesinde istediğiniz sisteme entegre olur. Hazır platformların aksine, marketplace onayı beklemenize gerek yok.
+
+## Entegrasyon Kategorileri
+
+<Cards>
+
+<Card href="/docs/entegrasyonlar/odeme" title="Ödeme Sistemleri" icon="CreditCard">
+iyzico, PayTR, Sipay, Stripe ve tüm Türk bankaları. Sanal POS entegrasyonu.
+</Card>
+
+<Card href="/docs/entegrasyonlar/kargo" title="Kargo Entegrasyonları" icon="Truck">
+Yurtiçi, Aras, MNG, PTT, UPS. Otomatik kargo takibi ve etiket basımı.
+</Card>
+
+<Card href="/docs/entegrasyonlar/marketplace" title="Marketplace" icon="Store">
+Trendyol, Hepsiburada, n11, Amazon TR. Otomatik stok ve sipariş senkronizasyonu.
+</Card>
+
+<Card href="/docs/entegrasyonlar/erp" title="ERP & Muhasebe" icon="BarChart3">
+Logo, Mikro, Netsis, Paraşüt, Fatura.one. Çift yönlü stok ve fatura entegrasyonu.
+</Card>
+
+<Card href="/docs/entegrasyonlar/analitik" title="Pazarlama & Analitik" icon="TrendingUp">
+Google Ads, Meta Ads, TikTok Ads. GA4, Hotjar, Clarity ile dönüşüm takibi.
+</Card>
+
+<Card href="/docs/entegrasyonlar/ozel-entegrasyon" title="Özel Entegrasyon" icon="Code">
+Mevcut entegrasyonlar dışında özel sistem entegrasyonu geliştirme.
+</Card>
+
+</Cards>
+
+## Neden Moyduz Entegrasyonları Daha İyi?
+
+| | Hazır Platform | Moyduz |
+|---|---|---|
+| **Entegrasyon seçimi** | Marketplace listesi | Sınırsız |
+| **Onay süreci** | Haftalar | Gerek yok |
+| **Özel sistem** | ❌ | ✅ |
+| **API rate limit** | 100 istek/dk | Sınırsız |
+| **Ek maliyet** | Her entegrasyon için ₺5K-₺30K | Dahil |
+
+## Entegrasyon Mimarisi
+
+Tüm entegrasyonlar **RESTful API** veya **webhook** tabanlı çalışır:
+
+```
+Moyduz Backend
+    ↕ REST API / Webhook
+Ödeme Sistemi (iyzico, PayTR...)
+    ↕
+Kargo Sistemi (Yurtiçi, Aras...)
+    ↕
+ERP (Logo, Mikro...)
+    ↕
+Marketplace (Trendyol, Hepsiburada...)
+```
+
+---
+
+<Callout type="info">
+**Özel entegrasyon mu gerekiyor?** [Ücretsiz analiz](https://moyduz.com/iletisim) ile mevcut sistemlerinize nasıl bağlanacağını değerlendirelim.
+</Callout>

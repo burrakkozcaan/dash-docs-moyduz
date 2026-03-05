@@ -6,9 +6,39 @@ icon: Scale
 
 # Moyduz vs IdeaSoft: Hangisi Daha Mantıklı?
 
+<EEATCard 
+  lastUpdated="Mart 2026" 
+  author="Moyduz E-Ticaret Analiz Ekibi" 
+/>
+
+<AboveTheFoldVerdict 
+  scenario1={{
+    profile: "Aylık 200.000 Altı Trafiği Olan Şablon Siteler",
+    recommendation: "IdeaSoft (Hazır Paket)",
+    reason: "Trafik veya ürün limitlerine takılıncaya kadar düşük maaliyetli hızlı kurulum sunar."
+  }}
+  scenario2={{
+    profile: "Büyüme Hedefli ve Özel Entegrasyon Arayanlar",
+    recommendation: "Moyduz (Açık Lisans Özel Yazılım)",
+    reason: "Trafik kapasite aşım ücreti, komisyon blokajı ve ikinci yıl %100 oranında yenileme zammı yoktur."
+  }}
+/>
+
 **IdeaSoft**, Türkiye'nin en eski e-ticaret platformlarından. Ama **yıllık yenileme ücretleri** ve **trafik limitleri** büyük sorun yaratıyor.
 
-Bu karşılaştırma, **2026 gerçek fiyatları** ve **uzun vadeli maliyetleri** gösteriyor.
+Bu karşılaştırma platformların pazarlamaya yönelik değil, **2026 gerçek fiyatları** ve **uzun vadeli (TCO) maliyetlerini** gösteriyor.
+
+## Teknik Kavramlar ve Gizli Limitler
+
+<SemanticKnowledgeBox 
+  title="Karşılaştırma Öncesi Bilinmesi Gerekenler"
+  concepts={[
+    { term: "Trafik Limiti (Bandwidth)", definition: "IdeaSoft paketlerinde aylık bazda size sunulan sunucu kullanım kapasitesi. Bunu aşarsanız ciddi faturalar ödersiniz." },
+    { term: "Açık Kod Sahipliği", definition: "Satın aldığınız yazılımı başka bir sunucuya (AWS vb.) kendinizin taşıyabilmesi ve istediğiniz developer ile çalışabilmeniz." },
+    { term: "Tahsilat Vadesi / Nakit Blokesi", definition: "POS kullanımıyla paranın havuzda blokede kalması. 30 gün beklemek sermaye kaybına yol açar." },
+    { term: "Lisans Yenileme Zammı", definition: "Kiralık sistemlerde (SaaS) ikinci yıl ödeyeceğiniz yıllık ücretin, kontrattaki ufak yazılar sebebiyle enflasyon üzerinde artırılması." }
+  ]} 
+/>
 
 ## Hızlı Karşılaştırma
 
@@ -83,25 +113,31 @@ Moyduz:    ₺917.300
 KAZANÇ:    ₺732.700 (%44 daha ucuz)
 ```
 
-## Kritik Farklar
+## IdeaSoft'un En Büyük 3 Gizli Riski
 
-### 1. Trafik Limiti
+<RiskAnalysis title="IdeaSoft Paketlerindeki Limit Tuzakları">
+  **1. Trafik Limiti Cezaları:** Pro pakette aylık 500GB limiti vardır (~200K ziyaret). Özellikle reklam/kampanya çıktığınız ay trafiğiniz patlarsa, sevinmek yerine sistem size ya 10-50K TL arası trafik faturası keser ya da "Kurumsal pakete geçmeye" zorlar.
+  
+  **2. Ürün ve Varyasyon Sınırları:** Paketler 10.000 üründe sınırlandırılmıştır. XML ile tedarikçiden ürün çekecekseniz anında bu limite takılır, üst paket satın almak zorunda kalırsınız.
+  
+  **3. Veritabanı ve Kod İzolasyonu:** IdeaSoft kodları kapalıdır. Yarın kendi mobil uygulamanızı yazdırmak veya özel bir B2B tedarikçi ekranı tasarlatmak isterseniz "standart yapı dışına çıkamayız" yanıtını alırsınız.
+</RiskAnalysis>
+
+## Kritik Farklar Detayı
+
+### 1. Trafik Limiti (Moyduz'da Limiti Unutun)
 
 **IdeaSoft:**
 ```
 Pro:     500GB/ay (~200K ziyaret)
 Enterprise: 2TB/ay (~800K ziyaret)
-
-Aşım durumunda:
-- Uyarı
-- Ek ücret (₺10K-₺50K)
-- Paket yükseltme zorunluluğu
+Aşım durumunda: Ek ücret veya üst pakete zorunlu geçiş.
 ```
 
 **Moyduz:**
 ```
 Tüm paketler: Sınırsız
-AWS VPS ile otomatik scaling
+AWS VPS ile otomatik scaling, yoğunlukta siteniz çökmez.
 Ek ücret: ₺0
 ```
 
@@ -176,7 +212,7 @@ SEO koruma: Dahil
 
 ## Referans
 
-### Mobilya Markası (IdeaSoft → Moyduz)
+### Mobilya Markası Müşteri Örneği (IdeaSoft → Moyduz)
 
 ```
 Önce (IdeaSoft Pro):
@@ -196,26 +232,51 @@ Sonra (Moyduz Ticaret):
 - Trafik: Sınırsız
 - Yıllık maliyet: ₺189.000
 
-Kazanç: ₺351.000/yıl
+Kazanç: ₺351.000/yıl nakit tasarrufu.
 ```
 
-## Sonuç
+## Karar Aşaması: Hangi Platform Size Göre?
 
-**IdeaSoft seçin eğer:**
-- Küçük ölçekli iş
-- 10K altında ürün
-- Standart özellikler yeterli
-- Kısa vadeli plan
+<DecisionMatrix scenarios={[
+  {
+    name: "Özel Mülkiyet (Moyduz)",
+    description: "Orta ve uzun vadeli, ölçeklenme odaklı firmalar için.",
+    pros: ["Kod size aittir", "Sınırsız ürün ve trafik", "Yüksek lisans yenileme zammı riski yok", "Ödemeler 1 günde hesapta"],
+    cons: ["SaaS platformlarına göre başlangıç paketi daha maliyetlidir."],
+    winner: true
+  },
+  {
+    name: "Hazır Paket (IdeaSoft)",
+    description: "Sadece standart B2C satışı yapacak sınırlı bütçeli firmalar.",
+    pros: ["Başlangıç ilk yıl paketi daha uygun", "Aynı gün içerisinde standart temayla açılış"],
+    cons: ["Trafik aşım cezaları", "İkinci yıl yüksek oranlı kira (yenileme) zammı", "Kod müdahalesi yapılamaz"]
+  }
+]} />
 
-**Moyduz seçin eğer:**
-- Büyüme hedefi var
-- 10K+ ürün
-- Özel tasarım gerekli
-- Uzun vadeli plan
-- B2B satış
+## Kimler Seçmeli?
+
+<UserProfileSegment profiles={[
+  {
+    title: "IdeaSoft Seçmesi Gerekenler",
+    description: "Küçük ölçekli ve teknik beklentisi olmayan işler.",
+    forWho: ["Küçük ölçekli başlangıç işleri", "10.000 altında ürün yükleyecekler", "Özel entegrasyon (Muhasebe/ERP vb) derdi olmayanlar"]
+  },
+  {
+    title: "Moyduz Seçmesi Gerekenler",
+    description: "Artan limitsiz trafik ve özellik isteyen büyüyen markalar.",
+    forWho: ["Büyüme hedefi (Scaling) olan vizyoner markalar", "Limitsiz trafik ve ürün ekleme güvencesi isteyenler", "Özel B2C ve B2B senaryo yazdırıp tasarımı kendi çizecek olanlar"]
+  }
+]} />
 
 ---
 
 <Callout type="info">
-**IdeaSoft'tan memnun değil misiniz?** [Ücretsiz geçiş analizi](https://moyduz.com/iletisim) yapalım.
+**IdeaSoft'tan memnun değil misiniz? Veya Limitlere mi takıldınız?** [Ücretsiz geçiş analizi](https://moyduz.com/iletisim) yapalım. Taşıma senaryonuzu anlatalım.
 </Callout>
+
+<FAQSchema faqs={[
+  { question: "IdeaSoft trafik limiti aşılırsa site kapanır mı?", answer: "Genellikle siteniz doğrudan kapanmaz ancak faturanıza trafik (bandwidth) aşım ücreti yansıtılır. Bu ücretler limit aşımına bağlı olarak yüksek (10.000-50.000 TL) olabilir. Çok yoğun trafiklerde sistem sizi bir üst 'Sınırsız/Kurumsal' pakete yükseltmeye zorlar." },
+  { question: "IdeaSoft kodlarımı ve temamı başka bir Hosting'e taşıyabilir miyim?", answer: "Hayır. IdeaSoft 'Vendor Lock-in' modeliyle kapalı kodlu bir SaaS yazılımıdır. Tüm veritabanı yapısı, çekirdek yazılım ve tema onlara aittir. Aboneliği iptal ederseniz siteyi ve tasarımı taşıyamazsınız; sadece CSV formatında müşteri ve ürün aktarımı alabilirsiniz." },
+  { question: "IdeaSoft yıllık lisans yenileme ücreti nasıl hesaplanır?", answer: "Genellikle başlangıçta aldığınız indirimli ilk yıl paket fiyatı üzerinden değil, IdeaSoft'un güncel katalog fiyatları üzerinden ve enflasyon oranında yüksek revizeler (zamlar) uygulanarak hesaplanır. Çoğu işletme 2. ve 3. yıllarında çok daha pahalı faturalar öder." },
+  { question: "Cayma bedelim varken IdeaSoft'tan Moyduz'a nasıl geçerim?", answer: "IdeaSoft kontratınızı iptal etmeniz durumunda çıkacak cayma bedeli (kalan ay tutarı vs.) zararlarını, Moyduz geçiş programı ile 30.000 TL'ye kadar biz karşılıyoruz. Müşteri veri ihlali olmadan pürüzsüz taşıma yapıyoruz." }
+]} />

@@ -6,6 +6,10 @@ icon: Calculator
 
 # 3 Yıllık Sahip Olma Maliyeti (TCO) Hesaplayıcı
 
+<div className="text-sm text-fd-muted-foreground mb-8">
+  **Son Güncelleme:** Mart 2026 | **Enflasyon Varsayımı:** %60 (Yıllık)
+</div>
+
 E-ticaret platformu seçerken **sadece başlangıç maliyetine bakmak**, bir ev alırken sadece kapı fiyatına bakmak gibidir. **3 yıllık toplam maliyet (TCO)** gerçek resmi gösterir.
 
 Bu rehberde, kendi senaryonuzla **gerçek maliyeti** hesaplayacaksınız.
@@ -142,7 +146,11 @@ Ay 24+:    Özel yazılım daha ucuz
 36. ay sonunda: ₺555.625 tasarruf
 ```
 
-## Gizli Maliyetler
+## Gizli Maliyetler ve Finansal Risk Analizi
+
+<RiskAnalysis title="SaaS E-Ticaretin Gizli Riskleri">
+  SaaS altyapılarda başlangıç maliyeti düşük görünse de, 2. ve 3. yıllarda **enflasyon üstü zamlar**, zorunlu **modül ücretleri** ve **trafik aşım paketleri** sebebiyle TCO devasa boyutlara ulaşır. Ayrıca fonlaması yavaş (35 gün) olan ödeme sistemleri, ₺500.000 aylık ciro yapan bir işletmede yıllık yaklaşık **₺348.000 fırsat maliyeti** yaratır.
+</RiskAnalysis>
 
 ### Hazır E-Ticaret'te
 
@@ -151,7 +159,6 @@ Ay 24+:    Özel yazılım daha ucuz
 | Trafik aşım ücreti | ₺20.000-₺100.000 |
 | Modül eklemeleri | ₺30.000-₺150.000 |
 | Tema özelleştirme | ₺10.000-₺50.000 |
-| API limit aşımı | ₺5.000-₺25.000 |
 | Ödeme blokajı (fırsat) | ₺50.000-₺500.000 |
 | Enflasyon zammı (2. yıl) | %50-100 |
 
@@ -213,21 +220,42 @@ HAZIR TCO = Başlangıç + Σ(Yıllık × (1+enflasyon)^yıl) + Gizli
 | Trafik limiti | Var | Yok |
 | Modül ücretleri | Var | Yok |
 
-## Sonuç ve Öneriler
+## Sonuç ve Öneriler: Hangi Modeli Seçmelisiniz?
 
-### Hazır E-Ticaret Seçin Eğer:
+Durumunuza göre size en uygun olan modeli aşağıdaki karar matrisi ve profillerle seçin:
 
-- ✅ 18 aydan kısa planlıyorsunuz
-- ✅ Aylık cironuz ₺100K altında kalacak
-- ✅ Standart özellikler yeterli
-- ✅ Teknik ekibiniz yok
+### Model Karşılaştırma Karar Matrisi
 
-### Özel Yazılım Seçin Eğer:
+<DecisionMatrix scenarios={[
+  {
+    name: "Açık Kaynak/Kendi Yazılımınız",
+    description: "3 yıl sonunda yüzbinlerce lira kâr ettirir ve bağımsızlık sağlar.",
+    pros: ["Aylık kira veya cirodan komisyon yok", "Trafik veya ürün limiti yok", "Tasarıma tam müdahale özgürlüğü"],
+    cons: ["Başlangıç yatırımı gerektirir", "Sunucu yönetimini sizin veya ajansın yapması gerekir"],
+    winner: true
+  },
+  {
+    name: "Abonelik (SaaS) E-Ticaret",
+    description: "Geçici ve düşük bütçeli sistemler için hızlı bir başlangıçtır.",
+    pros: ["İlk giriş maliyeti çok düşüktür", "Sunucu ve güvenlik önlemleri paket içindedir", "Kurulum çok hızlıdır"],
+    cons: ["Yıllık kira enflasyon oranında artar", "Trafik kotaları aşıldığında gizli ücretler çıkar", "Kaynak koda müdahale edilemez"]
+  }
+]} />
 
-- ✅ 3+ yıl planlıyorsunuz
-- ✅ Aylık cironuz ₺200K+ olacak
-- ✅ Büyüme hedefleriniz var
-- ✅ Nakit akışı önemli
+### Seçim Profilleri
+
+<UserProfileSegment profiles={[
+  {
+    title: "SaaS (Hazır Altyapı) Tercih Edecekler",
+    description: "Yeni başlayan ve hızlıca test yapmak isteyen butikler.",
+    forWho: ["18 aydan kısa süreli operasyon planlayanlar", "Aylık cirosu ₺100K altında kalacaklar", "Teknik bilgisi sıfır olanlar"]
+  },
+  {
+    title: "Özel Yazılım (Sahip Olma) Tercih Edecekler",
+    description: "Nakit varlıklarını içeride hapsetmek istemeyip büyümeyi hedefleyen markalar.",
+    forWho: ["3+ yıl e-ticarette kalmayı garanti edenler", "Aylık ₺200K üzeri ciro ve büyüme hedefi olanlar", "Nakit akışını hemen eline almak isteyenler", "Özel entegrasyon arayan büyük ölçekli markalar"]
+  }
+]} />
 
 ## Sonraki Adımlar
 
@@ -252,3 +280,10 @@ Tahsilat vadesinin gerçek maliyeti.
 <Callout type="info">
 **Ücretsiz TCO analizi mi istiyorsunuz?** [İletişime geçin](https://moyduz.com/iletisim), mevcut durumunuzla detaylı 3 yıllık proje hazırlayalım.
 </Callout>
+
+<FAQSchema faqs={[
+  { question: "E-ticarette TCO (Sahip Olma Maliyeti) nasıl hesaplanır?", answer: "E-ticarette TCO hesaplanırken; ilk kurulum ücreti maliyeti, 3 yıllık yazılım lisans veya kira bedelleri (enflasyon oranları ile çarpılarak), gizli sunucu kapasite aşım ücretleri ve komisyon/tahsilat vadesi gibi zaman tabanlı kayıplar toplanır." },
+  { question: "Neden özel yazılımın 3 yıllık maliyeti daha düşük çıkıyor?", answer: "SaaS platformları her yıl lisans ve modül kirası bedeli keserken enflasyon bazlı yüksek zamlar yapar. Özel yazılımda lisans mülkiyeti size aittir, sadece standart sunucu ve senelik küçük eklenti güncelleme ücreti ödersiniz." },
+  { question: "Moyduz bir hazır sistem mi yoksa özel sistem mi sunuyor?", answer: "Moyduz %100 size ait, açık lisans kodlu (vendor lock-in olmayan) tam donanımlı paketleştirilmiş bir sistem sunar. Yani hazır kurulum hızıyla, özel mülk e-ticaret sitelerinin özelliklerini harmanlar." },
+  { question: "Birinci yılın sonunda beni hangi masraflar bekliyor?", answer: "SaaS paketlerinde genelde ikinci yıl kullanım kira yenileme bedeli ortaya çıkar (bu bedel enflasyonla katlanır). Kendi sisteminizde (Moyduz) sadece bulut sunucu (hosting) ve dilerseniz yıllık periyodik bakım (SLA) anlaşması masrafı ödersiniz." }
+]} />

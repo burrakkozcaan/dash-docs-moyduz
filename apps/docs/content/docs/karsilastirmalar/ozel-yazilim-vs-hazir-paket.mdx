@@ -1,0 +1,251 @@
+---
+title: Özel E-Ticaret Yazılımı vs Hazır Paket (2026 Karar Rehberi)
+description: E-ticaret altyapısı seçerken hazır paket mi, özel yazılım mı almalısınız? TCO, nakit akışı ve mülkiyet analizi.
+icon: CircleHelp
+---
+
+# Özel E-Ticaret Yazılımı vs Hazır Paket (2026 Karar Rehberi)
+
+<EEATCard 
+  lastUpdated="Mart 2026" 
+  author="Moyduz E-Ticaret Finans Ekibi" 
+/>
+
+<AboveTheFoldVerdict 
+  scenario1={{
+    profile: "Aylık Cerosu 100K Altında Olan İlk Kez Başlayanlar",
+    recommendation: "Hazır Paket (SaaS) Kiralama",
+    reason: "İlk yatırım maliyeti yoktur, aynı gün satışa başlanabilir."
+  }}
+  scenario2={{
+    profile: "Aylık Cirosu 200K+ Olan ve Büyüyen Markalar",
+    recommendation: "Moyduz (Açık Lisans Özel Yazılım)",
+    reason: "Sıfır komisyonlu tahsilat, cirodan ceza almamak ve %100 kod mülkiyeti."
+  }}
+/>
+
+E-ticaret işine girerken en temel karar: **Hazır altyapı kiralamak mı, kendi özel yazılımınıza sahip olmak mı?**
+
+SaaS platformları size **"kirala"** der. Biz **"satın al, mülkün olsun"** diyoruz.
+
+İşte detaylı maliyet, risk ve karar analizi.
+
+## Karar Matrisi: Ev Kiralamak mı, Satın Almak mı?
+
+<DecisionMatrix scenarios={[
+  {
+    name: "Özel Yazılım (Satın Almak)",
+    description: "Tıpkı kendi evinize sahip olmak gibidir.",
+    pros: ["Tek seferlik ödeme (veya kredi) ile kodların mülkiyeti sizin olur.", "İstediğiniz zaman altyapıyı veya sunucuyu değiştirebilirsiniz.", "Satış yapacağınız hacim arttıkça ek maliyet çıkmaz.", "Yıllar sonra dijital değerli bir mülke (Asset) sahip olursunuz."],
+    cons: ["İlk kurulum bütçesi daha yüksektir."],
+    winner: true
+  },
+  {
+    name: "Hazır Paket (Kiralamak)",
+    description: "Tıpkı bir evde kiracı olmak gibidir.",
+    pros: ["İlk maliyeti düşüktür.", "Sunucu, SSL, güvenlik gibi dertler yoktur.", "Çok hızlı şekilde anahtar teslim yayına alınır."],
+    cons: ["Sürekli kira ödersiniz (enflasyon oranında zamlanır).", "Evi (sistemi) taşıyamazsınız veya kodu alamazsınız.", "Tadilat veya özel özellik (A/B Test, UI) yapamazsınız.", "5 yıl sonra hiçbir dijital mülkiyetiniz kalmaz."]
+  }
+]} />
+
+## 3 Yıllık Enflasyon Tuzağı ve Maliyet (TCO) Hesaplaması
+
+Hazır paketlerde ilk girişte ödediğiniz rakam makuldür. Asıl sorun **ikinci yıl lisans yenileme ücretlerinde fırlatılan zamlardır.** Kendi durumunuza göre kiralama modelinin sizi ne kadar zarara sokabileceğini hesaplayın:
+
+<EnflasyonCalculator />
+
+### Satın Alma (Özel Yazılım) TCO'su
+
+```
+Başlangıç (Moyduz vb.): ₺350.000
+Yıl 1 bakım/sunucu:     ₺180.000
+Yıl 2 bakım/sunucu:     ₺189.000 (sadece bulut sunucu artışı)
+Yıl 3 bakım/sunucu:     ₺198.300
+────────────────────────────
+TOPLAM TCO:             ₺917.300
+
+Kazanç Özeti:
+3 yıl sonunda elinizde **₺350.000 değerinde mülk (lisans+kod)** bulunur, yazılıma kira ödemeyi bırakırsınız.
+```
+
+**Hangisi daha mantıklı?**
+
+## 3 Yıllık Maliyet
+
+### Kiralama (SaaS)
+
+```
+Başlangıç:         ₺50.000
+Yıl 1 kira:        ₺360.000 (₺30K/ay)
+Yıl 2 kira:        ₺600.000 (%60 zam)
+Yıl 3 kira:        ₺900.000 (%50 zam)
+Ekstralar:         ₺200.000 (modül, tema)
+────────────────────────────
+TOPLAM:            ₺2.110.000
+
+3 yıl sonra:       0 mülkiyet
+```
+
+### Satın Alma (Özel Yazılım)
+
+```
+Başlangıç:         ₺350.000
+Yıl 1 bakım:       ₺180.000
+Yıl 2 bakım:       ₺189.000
+Yıl 3 bakım:       ₺198.300
+────────────────────────────
+TOPLAM:            ₺917.300
+
+3 yıl sonra:       ₺350.000 değerinde mülk
+```
+
+### Fark
+
+```
+Kiralama:   ₺2.110.000 (0 mülkiyet)
+Satın alma: ₺917.300 - ₺350.000 (mülk dahil)
+────────────────────────────────
+KAZANÇ:     ₺1.542.700
+```
+
+## 5 Yıllık Projeksiyon ve Risk Analizi
+
+<RiskAnalysis title="SaaS Bağımlılık (Vendor Lock-in) Riskleri">
+  **1. Fiyat Artışı (Enflasyon):** Türkiye'de son 3 yılda hazır e-ticaret paketlerinin yenileme ücretleri **%150 ile %300** arasında artmıştır.
+  
+  **2. Paket Yükseltme Zorunluluğu (Trafik Limiti):** Çoğu hazır sistem başlangıçta "Limitsiz Trafik" veya "50.000 Ziyaret" sunar. İşleriniz iyi gittiği ilk kampanya döneminde trafik sınırını aşar ve ceza yersiniz ya da binlerce dolar karşılığında "Kurumsal" pakete geçmeniz dayatılır.
+  
+  **3. Veri Rehinesi & Çıkış Engeli:** Sistemi bırakmak istediğinizde sipariş veya müşteri verinizi düzgün dışarı (export) almanıza izin verilmez. Çıkarken cayma bedelleri ile karşılaşırsınız.
+</RiskAnalysis>
+
+## Nakit Akışı ve Tahsilat Stratejisi
+
+<SemanticKnowledgeBox 
+  title="Bilinmesi Gereken Nakit Terimleri"
+  concepts={[
+    { term: "Vendor Lock-in", definition: "Bir e-ticaret altyapısına girdiğinizde operasyonel, teknik veya yasal bariyerler yüzünden o firmaya 'mahkum' kalma durumudur." },
+    { term: "Opportunity Cost (Fırsat Maliyeti)", definition: "Paranızın 35 gün vadede platformun havuzunda beklemesi nedeniyle yeni stok veya reklam alamayarak kaybettiğiniz kâr miktarı." },
+    { term: "A/B Testing Restriction", definition: "Hazır şablonlar (SaaS) nedeniyle sepete ekle butonu veya ödeme adımında konversiyon oranını (CR) artırmak için tasarım testi yapamama sorunu." },
+    { term: "Total Cost of Ownership (TCO)", definition: "Sadece kurulumu değil, 3 yıl boyunca sunucu, kira, komisyon, trafik cezalarıyla birlikte ödeyeceğiniz toplam işletme maliyeti." }
+  ]} 
+/>
+
+### Hazır Sistem Nakit Döngüsü
+
+```
+Aylık ödeme/komisyon: Artan maliyetler yaratır
+Ertesi gün ödeme opsiyonu: Çoğu kez kapalıdır (veya %3-4 komisyonludur)
+Kendi sanal POS entegrasyonu: Sınırlı ya da kapalı
+```
+
+### Özel Yazılım (Moyduz) Nakit Döngüsü
+
+```
+- İstediğiniz tüm sanal posları direkt veya VPOS modülleriyle bağlarsınız.
+- Paranız ertesi iş günü işletme hesabınıza geçer (Bankalar üzerinden).
+- Nakit akışı problemi kalmaz, stok finansmanı için faiz ödemezsiniz.
+```
+
+## Özelleştirme
+
+### Kiralama
+
+```
+❌ Tema şablonları sınırlı
+❌ Kod düzenlenemez
+❌ Özel modül eklenemez
+❌ A/B test edilemez
+❌ UX optimize edilemez
+```
+
+### Satın Alma
+
+```
+✅ Pixel-perfect tasarım
+✅ İstediğin her şey değişir
+✅ Özel modüller
+✅ Sürekli A/B test
+✅ Veriye dayalı optimizasyon
+```
+
+## Çıkış Stratejisi
+
+### Kiralama
+
+```
+Çıkmak istediğinde:
+- Cayma bedeli öde
+- Veri export ücreti öde
+- Yeni sistem kur
+- SEO kaybı yaşa
+- Müşteri deneyimi kopar
+
+Toplam maliyet: ₺50K-₺200K
+```
+
+### Satın Alma
+
+```
+Çıkmak istediğinde:
+- İstediğin an çık
+- Kodlar senin
+- Veriler senin
+- Başka sunucuya taşı
+
+Toplam maliyet: ₺0-₺10K (sunucu taşıma)
+```
+
+## Kullanıcı Profillerine Göre Hangi Modeli Seçmeli?
+
+Sermayeniz, ekibiniz ve hedeflerinize göre kendinizi konumlandırın:
+
+<UserProfileSegment profiles={[
+  {
+    title: "Hazır Paket (Kiralık) Tercih Etmesi Gerekenler",
+    description: "Sermayesi oldukça kısıtlı ve kısa sürede pazar testi yapacak olanlar.",
+    forWho: ["İlk defa e-ticarete girip sadece 'Deniyorum' diyenler", "Bütçesini sadece ürüne ayıranlar (<₺50K)", "Gelecek 6 ayda markayı kapatmayı göze alabilen girişimler", "Hiçbir yazılım bilgisi ve UX optimizasyonu gereksinimi olmayanlar"]
+  },
+  {
+    title: "Özel Yazılım (Satın Alma) Tercih Etmesi Gerekenler",
+    description: "Mevcut fiziksel satışlarını dijitale taşıyan veya işi profesyonelce büyütmek isteyenler.",
+    forWho: ["3+ yıllık ciddi ve agresif iş planı yapan markalar", "Aylık ciro hedefi ₺250K+ olan operasyonlar", "Özel T-Soft, ERP entegrasyonları, B2B modülü arayan büyük yapılar", "Tasarımda yüzde 100 özgürlük isteyip A/B testi uygulayanlar"]
+  }
+]} />
+
+## ROI Hesaplaması
+
+### Kiralama
+
+```
+3 yıl yatırım:    ₺2.110.000
+Mülk değeri:      ₺0
+ROI:              -%100 (kayıp)
+```
+
+### Satın Alma
+
+```
+3 yıl yatırım:    ₺917.300
+Mülk değeri:      ₺350.000
+Net yatırım:      ₺567.300
+ROI:              +%38 (kazanç)
+```
+
+## Sonuç
+
+**Kiralama:** Kısa vadeli, düşük bütçe, hızlı başlangıç için.
+
+**Satın alma:** Uzun vadeli, ciddi büyüme, mülkiyet için.
+
+---
+
+<Callout type="info">
+**Hangi model sizin için doğru?** [Ücretsiz danışmanlık](https://moyduz.com/iletisim) alın, iş modelinizin 3 yıllık finansal TCO'sunu birlikte değerlendirelim.
+</Callout>
+
+<FAQSchema faqs={[
+  { question: "Özel yazılım (satın alma) e-ticaret sistemlerinin bakımı zor mudur?", answer: "Eğer ajans veya in-house bir ekip olmadan açık kaynaklı bir sistemle baş başa kalırsanız zordur. Ancak Moyduz gibi platformlar, özel (sahibi olduğunuz) kod mimarisini sizin adınıza Yönetilen Servis (Managed Service) olarak bulutta yedekler ve sunucu bakımını yapar." },
+  { question: "E-ticaret paketimi (SaaS) istediğim zaman taşıyabilir miyim?", answer: "Hayır. Çoğu kiralık e-ticaret platformu 'Vendor Lock-in' (Sağlayıcıya Bağımlılık) yöntemi kullanır. Tasarım kodlarını ve kurulu altyapınızı başka bir host firmasına veya sunucuya aktaramazsınız." },
+  { question: "Kiralık hazır e-ticaret sitelerinde kaynak kodunuza müdahale edilebilir mi?", answer: "Edilemez. Sadece firmanın size izin verdiği CSS/HTML kısımlarını veya modülleri sürükle-bırak ile kurabilirsiniz. Veritabanı sorgularını (performans için) optimize edemez veya yeni bir özel ödeme ağ geçidi çekirdeğe entegre edemezsiniz." },
+  { question: "E-ticaret enflasyon oranına karşı kiralık değil mülk edinmenin farkı nedir?", answer: "Kira sözleşmeniz her yıl enflasyon (TÜFE/ÜFE) oranında artar. Başlangıçta 20.000 TL olan paket, 3. yılda 100.000 TL bedellere ulaşabilir. Satın almada lisans parası tek seferlik peşin ödenir, sadece sunucu maliyeti ödenir ve enflasyon şoklarından etkilenmez." }
+]} />

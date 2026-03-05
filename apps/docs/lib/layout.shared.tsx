@@ -6,7 +6,7 @@ import { MoyduzIcon } from '@/app/layout.client';
 export const linkItems: LinkItemType[] = [
   {
     type: 'icon',
-    url: 'https://github.com/burrakkozcaan/dash-docs-moyduz',
+    url: 'https://github.com/',
     label: 'github',
     text: 'GitHub',
     icon: (

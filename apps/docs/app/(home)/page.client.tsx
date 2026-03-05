@@ -14,9 +14,9 @@ import {
 import { ArrowRight, PanelTop, TerminalIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import Image from 'next/image';
-import MainImg from './main.png';
-import OpenAPIImg from './openapi.png';
-import NotebookImg from './notebook.png';
+import MainImg from './ecommerce_dashboard.png';
+import OpenAPIImg from './ecommerce_analytics.png';
+import NotebookImg from './ecommerce_storefront.png';
 import { cva } from 'class-variance-authority';
 import HeroImage from './hero-preview.jpeg';
 import { useTheme } from 'next-themes';
@@ -137,37 +137,37 @@ export function CreateAppAnimation() {
 
   if (tick > timeCommandRun)
     lines.push(
-     <Fragment key="command_response">
-  {tick > timeCommandRun + 1 && (
-    <>
-      <span className="font-bold">◇ Hizmet</span>
-    <span>│ Her sektöre %100 özel</span> 
-    <span>│ Hazır paket yok – sizin işinize göre sıfırdan tasarlanır</span>
-    </> 
-  )}
+      <Fragment key="command_response">
+        {tick > timeCommandRun + 1 && (
+          <>
+            <span className="font-bold">◇ Hizmet</span>
+            <span>│ Her sektöre %100 özel</span>
+            <span>│ Hazır paket yok – sizin işinize göre sıfırdan tasarlanır</span>
+          </>
+        )}
 
-  {tick > timeCommandRun + 3 && (
-    <>
-      <span className="font-bold">◆ Aşamalar</span>
-    </>
-  )}
+        {tick > timeCommandRun + 3 && (
+          <>
+            <span className="font-bold">◆ Aşamalar</span>
+          </>
+        )}
 
-  {tick > timeCommandRun + 4 && (
-    <div className="ml-2">
-      <span>→ 1. Onboarding</span>
-      <span className="text-gray-500 ml-2">Sorular → ihtiyaç analizi</span>
-    </div>
-  )}
+        {tick > timeCommandRun + 4 && (
+          <div className="ml-2">
+            <span>→ 1. Onboarding</span>
+            <span className="text-gray-500 ml-2">Sorular → ihtiyaç analizi</span>
+          </div>
+        )}
 
-  {tick > timeCommandRun + 5 && (
-    <div className="ml-2">
-      <span>→ 2. Paket seçimi</span>
-      <span className="text-gray-500 ml-2">Paket seçimi + sorular → fiyat</span>
-    </div>
-  )}
+        {tick > timeCommandRun + 5 && (
+          <div className="ml-2">
+            <span>→ 2. Paket seçimi</span>
+            <span className="text-gray-500 ml-2">Paket seçimi + sorular → fiyat</span>
+          </div>
+        )}
 
-  
-</Fragment>
+
+      </Fragment>
     );
 
   return (
@@ -226,15 +226,15 @@ export function PreviewImages(props: ComponentProps<'div'>) {
   const previews = [
     {
       image: MainImg,
-      name: 'Docs',
+      name: 'Panel',
     },
     {
       image: NotebookImg,
-      name: 'Notebook',
+      name: 'Vitrin',
     },
     {
       image: OpenAPIImg,
-      name: 'OpenAPI',
+      name: 'Analiz',
     },
   ];
 
@@ -298,10 +298,10 @@ export function Writing({
   return (
     <div className="col-span-full my-20">
       <h2 className="text-4xl text-brand mb-8 text-center font-medium tracking-tight">
-         Moyduz Dokümantasyon
+        Moyduz Dokümantasyon
       </h2>
       <p className="text-center mb-8 mx-auto w-full max-w-[800px]">
-         Bulut tabanlı dokümantasyon platformu
+        Bulut tabanlı dokümantasyon platformu
       </p>
       <div className="flex justify-center items-center gap-4 text-fd-muted-foreground mb-6">
         {WritingTabs.map((item) => (

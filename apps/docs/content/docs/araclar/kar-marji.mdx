@@ -1,0 +1,82 @@
+---
+title: E-Ticaret Kâr Marjı Hesaplama (2026)
+description: E-ticaret platformu ve pazar yeri komisyon kesintilerinin net kârınıza olan etkisini detaylı hesaplayın. Gerçek kazancınız nedir?
+icon: Calculator
+---
+
+<Callout type="tip">
+**Canlı Hesaplama Aracı:** Ürün maliyeti, komisyon ve kargo girerek anında net kâr görün → [moyduz.com/tools/e-ticaret-kar-hesaplama](https://moyduz.com/tools/e-ticaret-kar-hesaplama)
+</Callout>
+
+# E-Ticaret Gerçek Kâr Marjı Hesaplama Aracı
+
+<EEATCard 
+  lastUpdated="Mart 2026" 
+  author="Moyduz E-Ticaret Finans Ekibi" 
+/>
+
+<AboveTheFoldVerdict 
+  scenario1={{
+    profile: "Sadece Pazaryeri Üzerinden Net Kâr Arayanlar",
+    recommendation: "Pazaryerlerinde Çok Yüksek Brüt Satış Fiyatı",
+    reason: "Pazaryeri komisyonları, gizli kargo iade payları ve reklam harcamaları ancak fahiş brüt marjlarla telafi edilebilir."
+  }}
+  scenario2={{
+    profile: "Bağımsız Kendi Markasını (D2C) Yönetenler",
+    recommendation: "Açık Özel E-Ticaret Altyapısı",
+    reason: "Kendi e-ticaret sitenizde sadece Sanal POS (Örn: %1.5) masrafınız vardır. Geri kalan kâr (TrendYol payı) size kalır."
+  }}
+/>
+
+Bir ürünü satarken ekranda gördüğünüz "Brüt Kâr" sizi yanıltmasın. Platform giderleri, Sanal POS ödemeleri ve kargo anlaşmaları kesildiğinde "Net Kâr Marjınız" tamamen sıfırlanabilir. 
+
+Bu araçla pazaryerinin gizli giderlerini görüp, **kendi sitenizi açmanın** kâr marjınızı nasıl uçurduğunu anlayacaksınız.
+
+## Pazaryeri Komisyonları vs Kendi Siteniz
+
+Kendi kârlılığınızı aşağıdaki simülatördeki oranlara ve %0 Komisyon yapısına göre tekrar değerlendirin:
+
+<SanalPosKomisyonCalculator />
+
+## Bilmeniz Gereken Ciro ve Kârlılık Kavramları
+
+<SemanticKnowledgeBox 
+  title="Kârlılık Formülü"
+  concepts={[
+    { term: "Brüt Kâr Marjı", definition: "Ürünün satış fiyatından, yalın alış fiyatının çıkarılmasıyla elde edilen orandır." },
+    { term: "Net Kâr Marjı (Net Margin)", definition: "Pazaryeri komisyonu, kargo, reklam bütçesi (ROAS) ve vergi düşüldükten sonra cebinize giren reel tutar." },
+    { term: "Müşteri Edinme Maliyeti (CAC)", definition: "Bir müşteriye tek bir ürün satmak için dijital reklamlara harcadığınız bütçe payı." },
+    { term: "D2C (Direct to Consumer)", definition: "Aracı pazar yerlerini (Trendyol vb.) devreden çıkararak kendi sitenizden müşteriye aracısız satış yapmak." }
+  ]} 
+/>
+
+## Kârınızı Sıfıra Çeken 3 Ölümcül Hata
+
+<RiskAnalysis title="Gizli Gider Tuzakları">
+  **1. Yüksek İade Oranlarını Yok Saymak:** Satılan ürün geri döndüğünde gidiş dönüş kargo ücretlerini siz ödersiniz. Hem satışı kaybeder hem de zarar edersiniz. Giyim sektöründe iade hesaba katılmazsa kâr marjı çöker.  
+  **2. Fiyat Savaşlarına Girmek:** Pazaryerindeki algoritmada üste çıkmak için "Buy Box" yarışlarına girmek sizi kâr etmediğiniz zararına satışlara sürükler (Görünürde çok satış, ay sonu sıfır bakiye).  
+  **3. Kiralık Altyapı Ciro Kesintileri:** Bazı hazır sistemler satış oldukça cironuzdan %1-%3 ekstra pay alabilir. Bu kesinti her satılan ürünün kârından doğrudan bir ortaktur.
+</RiskAnalysis>
+
+## İşletmeniz İçin Kârlılık Kararı
+
+<DecisionMatrix scenarios={[
+  {
+    name: "Kendi Bağımsız Altyapınız (D2C)",
+    description: "Markalaşıp kâr marjını maksimize etmek isteyen bağımsız e-ticaret siteleri.",
+    pros: ["Komisyonlar size kalır", "Müşteri verisi size aittir, tekrar satış bedavadır", "Ödemeler ertesi gün yatar"],
+    cons: ["Pazarlamayı sitenize sizin çekmeniz gerekir."],
+    winner: true
+  },
+  {
+    name: "Sadece Pazar Yeri Odaklılık",
+    description: "Müşteri listesini önemsemeyip hızlı erimeli ciro yapanlar.",
+    pros: ["Reklam yapmanıza gerek kalmadan hazır organik trafik gelir."],
+    cons: ["Batan komisyon oranları ve iade maliyetleri net kârı kuşa çevirir."]
+  }
+]} />
+
+<FAQSchema faqs={[
+  { question: "E-ticarette ideal net kâr marjı nedir?", answer: "Sektöre göre değişmekle birlikte her türlü operasyon gideri eklendikten sonra %15-%25 bandında bir net kâr (%100 RoI üzerinde brüt kâr ile başlanan sektörlerde) sağlıklı kabul edilir." },
+  { question: "Pazaryeri mi kendi e-ticaret sitem mi daha fazla kâr bırakır?", answer: "Kendi siteniz D2C (aracısız satış) sağladığı için pazaryerinin kestiği %15-20 arası fahiş komisyon sizin kârınıza eklenir. Marka bağlılığı yarattığınız an kendi sitenizin kârlılığı rakipsizdir." }
+]} />

@@ -6,9 +6,7 @@
   "pages": [
     "index",
     "trendyol-komisyon-hesaplama",
-    "kar-marji-hesaplama",
-    "kiralama-vs-sahiplik",
-    "tahsilat-gecikme-maliyeti",
-    "e-ticaret-maliyet-hesaplayici"
+    "kar-marji",
+    "tco-hesaplayici"
   ]
 }
