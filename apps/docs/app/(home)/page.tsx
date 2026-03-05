@@ -23,7 +23,6 @@ import {
   Hero,
   AgnosticBackground,
   CreateAppAnimation,
-  PreviewImages,
   Writing,
   ContentAdoptionBackground,
 } from '@/app/(home)/page.client';
@@ -132,7 +131,7 @@ function Aesthetics() {
           }),
         )}
       >
-        <PreviewImages />
+        {/* <PreviewImages /> */}
       </div>
       <div className={cn(cardVariants(), 'flex flex-col')}>
         <h3 className={cn(headingVariants({ variant: 'h3', className: 'mb-6' }))}>
@@ -222,25 +221,21 @@ function AnybodyCanWrite() {
 
 const feedback = [
   {
-    avatar: 'https://avatars.githubusercontent.com/u/124599',
     user: 'Ahmet Y.',
     role: 'Giyim Markası Sahibi',
     message: `İkas ve Ticimax arasında kalmıştım ama buradaki fiyat/performans gerçekten harika. Satışlarım %30 arttı.`,
   },
   {
-    avatar: 'https://avatars.githubusercontent.com/u/35677084',
     user: 'Ayşe K.',
     role: 'Ev Dekorasyon',
     message: `Teknik bilgim hiç yoktu ama panel o kadar kolay ki mağazamı 1 günde açtım. Müşteri desteği de süper.`,
   },
   {
     user: 'Mehmet T.',
-    avatar: 'https://avatars.githubusercontent.com/u/38025074',
     role: 'Elektronik Mağazası',
     message: 'Pazaryeri entegrasyonları sorunsuz çalışıyor. Stok takibi derdinden kurtuldum.',
   },
   {
-    avatar: 'https://avatars.githubusercontent.com/u/10645823',
     user: 'Zeynep S.',
     role: 'Butik Sahibi',
     message: `Mobil temalar çok şık, müşterilerimden sürekli övgü alıyorum. Teşekkürler!`,
@@ -279,14 +274,9 @@ function Feedback() {
               <p className="text-sm whitespace-pre-wrap">{item.message}</p>
 
               <div className="mt-auto flex flex-row items-center gap-2 pt-4">
-                <Image
-                  src={item.avatar}
-                  alt="avatar"
-                  width="32"
-                  height="32"
-                  unoptimized
-                  className="size-8 rounded-full"
-                />
+                <div className="size-8 rounded-full bg-fd-accent flex items-center justify-center text-xs font-medium">
+                  {item.user.charAt(0)}
+                </div>
                 <div>
                   <p className="text-sm font-medium">{item.user}</p>
                   <p className="text-xs text-fd-muted-foreground">{item.role}</p>
@@ -403,38 +393,8 @@ function ForEngineers() {
           lang="ts"
         />
       </div>
-      <div className={cn(cardVariants({ className: 'relative overflow-hidden min-h-[400px]' }))}>
-        <ContentAdoptionBackground className="absolute inset-0" />
-        <div className="absolute top-8 left-4 w-[70%] flex flex-col bg-neutral-50/80 backdrop-blur-lg border text-neutral-800 p-2 rounded-xl shadow-lg shadow-black dark:bg-neutral-900/80 dark:text-neutral-200">
-          <p className="px-2 pb-2 font-medium border-b mb-2 text-neutral-500 dark:text-neutral-400">
-            Yönetim Paneli
-          </p>
-          {['Siparişler', 'Ürünler', 'Müşteriler', 'Raporlar'].map((page) => (
-            <div
-              key={page}
-              className="flex items-center gap-2 p-2 rounded-lg hover:bg-neutral-400/20"
-            >
-              <FileIcon className="stroke-neutral-500 size-4 dark:stroke-neutral-400" />
-              <span className="text-sm">{page}</span>
-              <div className="px-3 py-1 font-mono rounded-full bg-brand text-xs text-brand-foreground ms-auto">
-                Aktif
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="absolute bottom-8 right-4 w-[70%] flex flex-col bg-neutral-100 text-neutral-800 rounded-xl border shadow-lg shadow-black dark:bg-neutral-900 dark:text-neutral-200">
-          <div className="px-4 py-2 text-neutral-500 border-b font-medium dark:text-neutral-400">
-            Satış Özeti
-          </div>
-          <pre className="text-base text-neutral-800 overflow-auto p-4 dark:text-neutral-400">
-            {`Bugünkü Satış: 12.500 TL
-Bekleyen Sipariş: 15
-Yeni Üye: 8`}
-          </pre>
-        </div>
-      </div>
-      <div className={cn(cardVariants(), 'flex flex-col max-md:pb-0')}>
+  
+      {/* <div className={cn(cardVariants(), 'flex flex-col max-md:pb-0')}>
         <h3 className={cn(headingVariants({ variant: 'h3', className: 'mb-6' }))}>
           Akıllı Arama
         </h3>
@@ -446,7 +406,7 @@ Yeni Üye: 8`}
           Detayları Gör
         </Link>
         <Search />
-      </div>
+      </div> */}
       {/* <div className={cn(cardVariants(), 'flex flex-col p-0 overflow-hidden')}>
         <div className="p-6 mb-2">
           <h3 className={cn(headingVariants({ variant: 'h3', className: 'mb-6' }))}>

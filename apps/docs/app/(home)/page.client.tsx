@@ -213,65 +213,7 @@ export function CreateAppAnimation() {
 //   );
 // }
 
-const previewButtonVariants = cva('w-20 h-8 text-sm font-medium transition-colors rounded-full', {
-  variants: {
-    active: {
-      true: 'text-fd-primary-foreground',
-      false: 'text-fd-muted-foreground',
-    },
-  },
-});
-export function PreviewImages(props: ComponentProps<'div'>) {
-  const [active, setActive] = useState(0);
-  const previews = [
-    {
-      image: MainImg,
-      name: 'Panel',
-    },
-    {
-      image: NotebookImg,
-      name: 'Vitrin',
-    },
-    {
-      image: OpenAPIImg,
-      name: 'Analiz',
-    },
-  ];
 
-  return (
-    <div {...props} className={cn('relative grid', props.className)}>
-      <div className="absolute flex flex-row left-1/2 -translate-1/2 bottom-0 z-2 p-0.5 rounded-full bg-fd-card border shadow-xl">
-        <div
-          role="none"
-          className="absolute bg-fd-primary rounded-full w-20 h-8 transition-transform z-[-1]"
-          style={{
-            transform: `translateX(calc(var(--spacing) * 20 * ${active}))`,
-          }}
-        />
-        {previews.map((item, i) => (
-          <button
-            key={i}
-            className={cn(previewButtonVariants({ active: active === i }))}
-            onClick={() => setActive(i)}
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
-      {previews.map((item, i) => (
-        <Image
-          key={i}
-          src={item.image}
-          alt="preview"
-          className={cn(
-            'col-start-1 row-start-1 select-none',
-            active === i ? 'animate-in fade-in slide-in-from-bottom-12 duration-800' : 'invisible',
-          )}
-        />
-      ))}
-    </div>
-  );
-}
 
 const WritingTabs = [
   {
