@@ -9,8 +9,20 @@ export async function GET() {
   const scanned: string[] = [];
   scanned.push('# Moyduz Dokümantasyonu');
   const map = new Map<string, string[]>();
+  const sectionOrder = [
+    'Docs',
+    'Karar Motoru',
+    'Maliyet Analizi',
+    'Altyapı Taşıma',
+    'Teknik Mimari',
+    'Araçlar',
+    'Karşılaştırmalar',
+    'Blog',
+    'Diğer Sayfalar',
+  ];
 
   for (const page of source.getPages()) {
+    if (page.data.type === 'openapi') continue;
     const section = getSection(page.slugs[0]);
     const list = map.get(section) ?? [];
     list.push(`- [${page.data.title}](${url(page.url)}): ${page.data.description || 'Dokümantasyon sayfası'}`);
@@ -27,13 +39,12 @@ export async function GET() {
   }
 
   // Add Specific Pages
-  const extraList = [
-    `- [Showcase](${url('/showcase')}): Moyduz kullanan örnek siteler`,
-    `- [Ana Sayfa](${url('/')}): Moyduz Dokümantasyon Sistemi Ana Sayfası`,
-  ];  
+  const extraList = [`- [Ana Sayfa](${url('/')}): Moyduz Dokümantasyon Sistemi ana sayfası`];
   map.set('Diğer Sayfalar', extraList);
 
-  for (const [key, value] of map) {
+  for (const key of sectionOrder) {
+    const value = map.get(key);
+    if (!value || value.length === 0) continue;
     scanned.push(`## ${key}`);
     scanned.push(value.join('\n'));
   }

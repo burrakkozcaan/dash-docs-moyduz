@@ -8,7 +8,7 @@ export async function getSuggestions(pathname: string): Promise<Suggestion[]> {
     datasources: [DataSourceId],
     groupBy: {
       properties: ['url'],
-      max_results: 1,
+      maxResult: 1,
     },
   });
 
