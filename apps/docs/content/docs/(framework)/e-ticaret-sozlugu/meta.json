@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "E-Ticaret Sözlüğü",
+  "description": "E-ticaret ve dijital pazarlama terimlerinin kapsamlı açıklamaları.",
+  "icon": "BookOpen",
+  "pages": [
+    "index",
+    "fiyat-hesaplama",
+    "siparis-akisi",
+    "teknik-rehber"
+  ]
+}

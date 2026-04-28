@@ -1,0 +1,141 @@
+---
+title: 'E-Ticaret Teknik Altyapı Rehberi: Hosting, Güvenlik ve Performans (2026)'
+description: E-ticaret sitesi kurarken hosting seçimi, SSL, PCI DSS uyumu, Core Web Vitals ve ölçeklenebilirlik. Gereksinimleri kategoriye ve hacme göre karşılaştırdık.
+---
+
+Bir e-ticaret sitesinin teknik altyapısı, görünmez ama her şeyi etkiliyor: güvenlik açığı müşteri verisi kaybı demek, yavaş sayfa her 1 saniyelik gecikmede %7 dönüşüm kaybı demek.
+
+Hangi hosting'i seçeceğiniz, güvenliği nasıl kuracağınız ve performansı nasıl optimize edeceğiniz bu rehberde.
+
+## Teknik Altyapı Nedir?
+
+E-ticaret teknik altyapısı, sitenizin güvenli, hızlı ve kesintisiz çalışmasını sağlayan tüm teknik bileşenlerdir.
+
+## Hosting ve Sunucu
+
+### Hosting Türleri
+
+| Tür | Avantaj | Dezavantaj | Uygunluk |
+|-----|---------|------------|----------|
+| Shared | Ucuz | Yavaş, sınırlı | Başlangıç |
+| VPS | Orta fiyat, esnek | Yönetim gerekir | Orta ölçek |
+| Dedicated | Tam kontrol | Pahalı | Büyük ölçek |
+| Cloud | Ölçeklenebilir | Karmaşık | Kurumsal |
+
+### Sunucu Gereksinimleri
+
+| Bileşen | Minimum | Önerilen |
+|---------|---------|----------|
+| CPU | 2 core | 4+ core |
+| RAM | 4 GB | 8+ GB |
+| Depolama | 50 GB SSD | 100+ GB NVMe |
+| Bandwidth | 1 TB/ay | Unlimited |
+
+<Callout type="tip">
+**Shared hosting tuzağı:** Aylık 50-100 TL'ye cazip görünen shared hosting, yoğun dönemlerde (Kara Cuma, 11.11) site çöküşüne yol açıyor. Aylık 200+ TL fazla ödemek yerine kaybedilen satışı hesaplayın.
+</Callout>
+
+## Güvenlik
+
+### SSL/TLS
+
+```
+HTTP → HTTPS yönlendirme zorunlu
+TLS 1.3 tercih edilmeli
+HSTS header aktif
+```
+
+### Güvenlik Önlemleri
+
+| Önlem | Açıklama |
+|-------|----------|
+| WAF | Web Application Firewall |
+| DDoS koruma | Saldırı engelleme |
+| SQL injection | Parametreli sorgular |
+| XSS | Input sanitization |
+| CSRF | Token doğrulama |
+| Rate limiting | İstek sınırlama |
+
+### PCI DSS Uyumu
+
+Kredi kartı işleyen siteler için zorunlu:
+
+- Kart verisi depolamayın
+- 3D Secure kullanın
+- Tokenization tercih edin
+- Düzenli güvenlik taraması
+
+<Callout type="warning">
+**PCI DSS ihlalinin maliyeti:** Veri ihlali durumunda banka cezaları, müşteri tazminatları ve itibar kaybı bir araya gelince küçük işletmeler için yüz binlerce TL'ye ulaşabiliyor. Ödeme sayfasını kendiniz geliştirmeyin — iFrame POS çözümü kullanın.
+</Callout>
+
+## Performans
+
+### Core Web Vitals Hedefleri
+
+| Metrik | Hedef | Ölçüm |
+|--------|-------|-------|
+| LCP | < 2.5s | En büyük içerik |
+| FID/INP | < 100ms | Etkileşim yanıtı |
+| CLS | < 0.1 | Görsel kararlılık |
+
+### Performans Optimizasyonu
+
+**Frontend:**
+- Görsel optimizasyonu (WebP, lazy load)
+- CSS/JS minification
+- Critical CSS inline
+- Code splitting
+
+**Backend:**
+- Veritabanı indexleme
+- Redis cache
+- Query optimizasyonu
+- Background job'lar
+
+**Altyapı:**
+- CDN kullanımı
+- Edge caching
+- HTTP/2 veya HTTP/3
+- Gzip/Brotli sıkıştırma
+
+## Ölçeklenebilirlik
+
+### Trafik Yönetimi
+
+| Durum | Çözüm |
+|-------|-------|
+| Normal trafik | Tek sunucu |
+| Mevsimsel zirve | Horizontal scaling |
+| Sürekli büyüme | Load balancer |
+| Global kullanıcı | Multi-region |
+
+### Veritabanı Ölçekleme
+
+```
+Tek DB (başlangıç)
+    ↓
+Read replica (orta)
+    ↓
+Sharding (büyük ölçek)
+    ↓
+Distributed DB (enterprise)
+```
+
+## Hazır Platform vs Özel Yazılım
+
+| Teknik Özellik | Hazır Platform | Özel Yazılım |
+|----------------|----------------|--------------|
+| Hosting kontrolü | Yok | Tam |
+| Performans ayarı | Sınırlı | Tam |
+| Güvenlik yapılandırma | Kısıtlı | Tam |
+| Ölçeklenme | Plan bağımlı | Sınırsız |
+| Maliyet tahmini | Değişken | Sabit |
+
+---
+
+## İlgili Sayfalar
+
+- [Teknik Mimari: Kaynak Kod Teslimi](/docs/teknik-mimari/kaynak-kod-teslimi-ve-ozgurluk) — Özel yazılımda sahiplik
+- [Maliyet Analizi: TCO](/docs/maliyet-analizi/3-yillik-sahip-olma-maliyeti-tco) — 3 yıllık toplam maliyet
+- [Karşılaştırmalar](/docs/karsilastirmalar/moyduz-vs-ikas) — Platform karşılaştırması

@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "Rehberler",
+  "description": "E-Ticaret ve Özel Yazılım Rehberi",
+  "icon": "Building",
+  "root": true,
+  "pages": [
+    "---Giriş---",
+    "index",
+    "ozel-e-ticaret-sitesi-nedir",
+    "comparisons",
+    "---Karar Rehberleri---",
+    "...karar-rehberi",
+    "page-conventions",
+    "versioning",
+    "---İş Fikirleri---",
+    "...is-fikirleri",
+    "---Rehber---",
+    "...rehber",
+    "---Teknik Rehberler---",
+    "...guides",
+    "navigation",
+    "...markdown",
+    "---E-Ticaret Sözlüğü---",
+    "...e-ticaret-sozlugu",
+    "---Diğer---",
+    "deploying",
+    "...search",
+    "...integrations"
+  ]
+}

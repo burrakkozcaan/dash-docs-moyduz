@@ -11,10 +11,10 @@ import { NextProvider } from 'fumadocs-core/framework/next';
 
 export const metadata = createMetadata({
   title: {
-    template: '%s | Moyduz Docs',
-    default: 'Moyduz Docs',
+    template: '%s | Moyduz Dokümantasyon Sistemi',
+    default: 'Moyduz Dokümantasyon Sistemi',
   },
-  description: 'Moyduz Docs, firmalara özel geliştirilen e-ticaret sistemleri için teknik ve stratejik rehberler sunar.',
+  description: 'Moyduz Dokümantasyon Sistemi, firmalara özel geliştirilen e-ticaret sistemleri için teknik ve stratejik rehberler sunar.',
   metadataBase: baseUrl,
 });
 

@@ -29,8 +29,8 @@ export async function GET() {
   // Add Specific Pages
   const extraList = [
     `- [Showcase](${url('/showcase')}): Moyduz kullanan örnek siteler`,
-    `- [Ana Sayfa](${url('/')}): Moyduz Docs Ana Sayfası`,
-  ];
+    `- [Ana Sayfa](${url('/')}): Moyduz Dokümantasyon Sistemi Ana Sayfası`,
+  ];  
   map.set('Diğer Sayfalar', extraList);
 
   for (const [key, value] of map) {

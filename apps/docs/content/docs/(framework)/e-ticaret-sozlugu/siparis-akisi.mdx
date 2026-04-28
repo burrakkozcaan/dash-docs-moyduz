@@ -1,0 +1,176 @@
+---
+title: 'E-Ticaret Sipariş Akışı: B2C ve B2B Süreç Rehberi (2026)'
+description: Sepetten teslimatına kadar her adım. B2C standart akış, B2B onay mekanizmaları, ödeme entegrasyonu ve kargo süreçleri. Gerçek sipariş akışı rehberi.
+---
+
+Sipariş akışı, müşterinin sepete ürün eklemesinden teslimatın tamamlanmasına kadar geçen tüm süreçtir.
+
+B2C'de bu süreç 5-7 adım. B2B'de kredi limit kontrolü, yönetici onayı ve cari hesap yönetimiyle 12+ adıma çıkıyor. Aradaki fark, platform seçimini doğrudan etkiliyor.
+
+## B2C Sipariş Akışı
+
+### Standart Akış
+
+```
+Sepete Ekle
+    ↓
+Sepet Görüntüle
+    ↓
+Checkout (Ödeme Sayfası)
+    ↓
+Adres Bilgileri
+    ↓
+Kargo Seçimi
+    ↓
+Ödeme
+    ↓
+Sipariş Onayı
+    ↓
+Hazırlık
+    ↓
+Kargoya Teslim
+    ↓
+Teslimat
+```
+
+### Sipariş Durumları
+
+| Durum | Açıklama |
+|-------|----------|
+| Beklemede | Ödeme bekleniyor |
+| Onaylandı | Ödeme alındı |
+| Hazırlanıyor | Paketleme aşamasında |
+| Kargoda | Kargo firmasına teslim |
+| Teslim Edildi | Müşteriye ulaştı |
+| İptal | Sipariş iptal edildi |
+| İade | İade süreci başladı |
+
+## B2B Sipariş Akışı
+
+B2B'de süreç daha karmaşıktır:
+
+### Onay Mekanizmalı Akış
+
+```
+Sepete Ekle
+    ↓
+Teklif İste (Opsiyonel)
+    ↓
+Teklif Onayı
+    ↓
+Sipariş Oluştur
+    ↓
+Kredi Limit Kontrolü
+    ↓
+Yönetici Onayı (Tutar bazlı)
+    ↓
+Sipariş Onayı
+    ↓
+Hazırlık
+    ↓
+Sevkiyat
+    ↓
+Fatura Kesimi
+    ↓
+Teslimat
+```
+
+### B2B Onay Kuralları
+
+| Sipariş Tutarı | Onay Gereksinimi |
+|----------------|------------------|
+| 0-10.000 TL | Otomatik |
+| 10.000-50.000 TL | Satış temsilcisi |
+| 50.000+ TL | Satış müdürü |
+
+<Callout type="warning">
+**Hazır platformların B2B sınırı:** Çoğu hazır e-ticaret paketi B2B onay mekanizmasını desteklemiyor. Müşteriye özel fiyat, kredi limit kontrolü ve çok katmanlı onay için özel yazılım gerekiyor.
+</Callout>
+
+## Ödeme Entegrasyonu
+
+### Ödeme Yöntemleri
+
+| Yöntem | B2C | B2B |
+|--------|-----|-----|
+| Kredi kartı | ✓ | ✓ |
+| Banka kartı | ✓ | ✓ |
+| Havale/EFT | ✓ | ✓ |
+| Kapıda ödeme | ✓ | ✗ |
+| Cari hesap | ✗ | ✓ |
+| Çek/Senet | ✗ | ✓ |
+
+### Sanal POS Akışı
+
+```
+Kart Bilgileri
+    ↓
+3D Secure (SMS doğrulama)
+    ↓
+Banka Onayı
+    ↓
+Provizyon
+    ↓
+Sipariş Tamamlandı
+```
+
+## Kargo Entegrasyonu
+
+### Kargo Seçimi
+
+| Kargo Tipi | Süre | Maliyet |
+|------------|------|---------|
+| Standart | 2-4 gün | Düşük |
+| Hızlı | 1-2 gün | Orta |
+| Aynı gün | Aynı gün | Yüksek |
+| Mağazadan teslim | - | Ücretsiz |
+
+### Kargo Entegrasyon Akışı
+
+```
+Sipariş Onayı
+    ↓
+Barkod Oluştur
+    ↓
+Manifest Gönder
+    ↓
+Kargo Teslim
+    ↓
+Takip Numarası Al
+    ↓
+Müşteriye Bildirim
+```
+
+## İade Süreci
+
+### B2C İade Akışı
+
+```
+İade Talebi
+    ↓
+Onay
+    ↓
+Kargo (alıcı öder veya ücretsiz)
+    ↓
+Ürün İnceleme
+    ↓
+Para İadesi veya Değişim
+```
+
+### İade Maliyeti
+
+İade oranı kategoriye göre %2-25 arasında değişiyor:
+- Elektronik: %5-8
+- Giyim: %15-25
+- Kozmetik: %2-5
+- Mobilya: %3-7
+
+Her iade ortalama kargo + personel + ürün değer kaybıyla sipariş değerinin %15-30'una mal oluyor.
+
+---
+
+## İlgili Sayfalar
+
+- [E-Ticaret Fiyat Hesaplama](/docs/e-ticaret-sozlugu/fiyat-hesaplama) — Komisyon ve kargo dahil fiyat formülü
+- [Entegrasyonlar](/docs/entegrasyonlar) — Ödeme ve kargo entegrasyon rehberi
+- [B2B E-Ticaret Gerekli mi?](/docs/karar-motoru/b2b-e-ticaret-gerekli-mi) — B2B karar rehberi
